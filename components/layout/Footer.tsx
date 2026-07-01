@@ -20,22 +20,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Navigation */}
-          <nav aria-label="Footer navigation">
-            <ul className="flex flex-col gap-2">
-              {NAV_LINKS.map(({ label, href }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-sm hover:text-[#37C6F4] transition-colors"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
           {/* Contact / social */}
           <div className="flex flex-col gap-3 text-sm">
             <a

@@ -1,7 +1,7 @@
 import type { StructureResolver } from 'sanity/structure'
 
-// Singletons: homePage, aboutPage, otherInfos — only one document of each should exist
-const SINGLETONS = ['homePage', 'aboutPage', 'otherInfos']
+// All types that are explicitly listed above — excluded from the auto-generated fallback
+const EXPLICITLY_LISTED = ['homePage', 'aboutPage', 'otherInfos', 'project', 'calendarEvent', 'ironuPost']
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -30,8 +30,8 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // Filter out singletons from the default "All documents" list
+      // Auto-append any future schema types not already listed above
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() != null && !SINGLETONS.includes(item.getId()!)
+        (item) => item.getId() != null && !EXPLICITLY_LISTED.includes(item.getId()!)
       ),
     ])
