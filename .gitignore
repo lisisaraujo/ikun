@@ -31,6 +31,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# sanity cli auth (stores local login tokens)
+.sanity/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
