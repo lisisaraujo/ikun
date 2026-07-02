@@ -13,7 +13,7 @@ import type {
 export async function getAllProjects(): Promise<SanityProject[]> {
   return sanityClient.fetch(
     `*[_type == "project"] | order(year desc) {
-      _id, _createdAt, title, slug, year,
+      _id, _createdAt, title, slug, year, location,
       coverImage, shortDescription, youtubeUrl, collaborators
     }`
   )
@@ -22,7 +22,7 @@ export async function getAllProjects(): Promise<SanityProject[]> {
 export async function getProjectBySlug(slug: string): Promise<SanityProject | null> {
   return sanityClient.fetch(
     `*[_type == "project" && slug.current == $slug][0] {
-      _id, _createdAt, title, slug, year,
+      _id, _createdAt, title, slug, year, location,
       coverImage, shortDescription, fullDescription,
       youtubeUrl, collaborators
     }`,

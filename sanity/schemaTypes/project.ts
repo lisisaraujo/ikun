@@ -49,6 +49,12 @@ export default defineType({
       type: 'url',
     }),
     defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+      description: 'City, venue or country where the project was presented',
+    }),
+    defineField({
       name: 'collaborators',
       title: 'Collaborators',
       type: 'array',
