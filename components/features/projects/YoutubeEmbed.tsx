@@ -1,7 +1,7 @@
 'use client'
 
 import YouTube from 'react-youtube'
-import { extractYouTubeId } from '@/components/features/home/HeroVideo'
+import { extractYouTubeId } from '@/lib/youtube'
 
 interface YoutubeEmbedProps {
   url: string
