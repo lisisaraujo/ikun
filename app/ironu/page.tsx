@@ -6,7 +6,7 @@ import Container from '@/components/layout/Container'
 import Section from '@/components/layout/Section'
 
 export const metadata: Metadata = {
-  title: 'Irònú',
+  title: 'Ìrònú',
   description: 'Personal reflections and essays by Mufutau Yusuf.',
 }
 
@@ -16,15 +16,17 @@ export default async function IronuPage() {
   return (
     <>
       <PageHeader
-        title="Irònú"
-        subtitle="Personal reflections and essays by Mufutau Yusuf."
+        title="Ìrònú"
+        subtitle="Personal reflections and essays."
       />
       <Section className="bg-[#F3F1EB]">
         <Container>
           {posts.length === 0 ? (
-            <p className="text-[#0B0B0B]/50 text-sm">No posts yet.</p>
+            <p className="text-[#0B0B0B]/40 text-sm uppercase tracking-widest">
+              No posts yet.
+            </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-4xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
               {posts.map((post) => (
                 <IronuCard key={post._id} post={post} />
               ))}

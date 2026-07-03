@@ -7,13 +7,14 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
-    <div className="bg-[#1C2433] pt-32 pb-14">
+    <div className="bg-[#1C2433] pt-32 pb-16 border-b border-[#C9C9C9]/10">
       <Container>
-        <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-5xl lg:text-6xl font-800 text-[#F3F1EB] mb-3">
+        <div className="w-10 h-[2px] bg-[#8B5F3C] mb-8" aria-hidden="true" />
+        <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-5xl lg:text-6xl font-800 text-[#F3F1EB] leading-tight mb-4">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[#C9C9C9] text-base md:text-lg max-w-xl">{subtitle}</p>
+          <p className="text-[#C9C9C9]/60 text-sm md:text-base max-w-xl leading-relaxed">{subtitle}</p>
         )}
       </Container>
     </div>

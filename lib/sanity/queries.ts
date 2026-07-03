@@ -6,6 +6,7 @@ import type {
   AboutPage,
   HomePage,
   OtherInfos,
+  GlobalSettings,
 } from '@/types/sanity'
 
 // ── Projects ──────────────────────────────────────────────────────────────────
@@ -24,6 +25,10 @@ export async function getProjectBySlug(slug: string): Promise<SanityProject | nu
     `*[_type == "project" && slug.current == $slug][0] {
       _id, _createdAt, title, slug, year, location,
       coverImage, shortDescription, fullDescription,
+      credits[] { _key, role, name },
+      performanceDates[] { _key, date, venue, city },
+      reviews[] { _key, quote, reviewer, publication },
+      images[] { _key, asset, hotspot, crop, caption },
       youtubeUrl, collaborators
     }`,
     { slug }
@@ -54,7 +59,7 @@ export async function getAllIronuPosts(): Promise<IronuPost[]> {
 export async function getIronuPostBySlug(slug: string): Promise<IronuPost | null> {
   return sanityClient.fetch(
     `*[_type == "ironuPost" && slug.current == $slug][0] {
-      _id, _createdAt, title, slug, date, coverImage, body
+      _id, _createdAt, title, slug, date, coverImage, videoUrl, body
     }`,
     { slug }
   )
@@ -83,9 +88,17 @@ export async function getOtherInfos(): Promise<OtherInfos | null> {
     `*[_type == "otherInfos" && _id == "otherInfos"][0] {
       _id,
       pressItems[] { _key, publication, headline, url, date },
-      partners[] { _key, name, logo, url },
+      partners[] { _key, name, category, showInFooter, logo, url },
       governance,
       miscContent
+    }`
+  )
+}
+
+export async function getGlobalSettings(): Promise<GlobalSettings | null> {
+  return sanityClient.fetch(
+    `*[_type == "globalSettings"][0] {
+      _id, email, instagramUrl, youtubeUrl, vimeoUrl, privacyPolicy
     }`
   )
 }

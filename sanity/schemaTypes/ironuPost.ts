@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'ironuPost',
-  title: 'Irònú Post',
+  title: 'Ìrònú Post',
   type: 'document',
   fields: [
     defineField({
@@ -29,6 +29,12 @@ export default defineType({
       title: 'Cover Image (optional)',
       type: 'image',
       options: { hotspot: true },
+    }),
+    defineField({
+      name: 'videoUrl',
+      title: 'Video URL (optional)',
+      type: 'url',
+      description: 'YouTube or Vimeo URL — displayed below the body text',
     }),
     defineField({
       name: 'body',

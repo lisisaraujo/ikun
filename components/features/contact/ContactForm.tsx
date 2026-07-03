@@ -4,8 +4,14 @@ import { useState } from 'react'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
+const fieldClass =
+  'w-full bg-transparent border-0 border-b border-[#1C2433]/15 py-3 text-sm text-[#0B0B0B] placeholder-[#0B0B0B]/30 focus:outline-none focus:border-[#37C6F4] transition-colors duration-200'
+
+const labelClass =
+  'block text-[10px] uppercase tracking-widest text-[#0B0B0B]/40 mb-1'
+
 export default function ContactForm() {
-  const [status, setStatus] = useState<Status>('idle')
+  const [status, setStatus]     = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -15,8 +21,8 @@ export default function ContactForm() {
 
     const form = e.currentTarget
     const data = {
-      name: (form.elements.namedItem('name') as HTMLInputElement).value,
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      name:    (form.elements.namedItem('name')    as HTMLInputElement).value,
+      email:   (form.elements.namedItem('email')   as HTMLInputElement).value,
       message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
     }
 
@@ -37,64 +43,49 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div className="rounded bg-[#37C6F4]/10 border border-[#37C6F4]/30 p-6">
-        <p className="text-[#1C2433] font-medium">Thank you — your message has been sent.</p>
-      </div>
+      <p className="text-sm text-[#1C2433] py-6 border-b border-[#C9C9C9]/40">
+        Thank you — your message has been sent.
+      </p>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-[#1C2433] mb-1.5">
-          Name
-        </label>
+        <label htmlFor="name" className={labelClass}>Name</label>
         <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          className="w-full rounded border border-[#C9C9C9] bg-white px-4 py-3 text-sm text-[#0B0B0B] placeholder-[#C9C9C9] focus:outline-none focus:border-[#1C2433] transition-colors"
+          id="name" name="name" type="text" required
+          className={fieldClass}
           placeholder="Your name"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-[#1C2433] mb-1.5">
-          Email
-        </label>
+        <label htmlFor="email" className={labelClass}>Email</label>
         <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="w-full rounded border border-[#C9C9C9] bg-white px-4 py-3 text-sm text-[#0B0B0B] placeholder-[#C9C9C9] focus:outline-none focus:border-[#1C2433] transition-colors"
+          id="email" name="email" type="email" required
+          className={fieldClass}
           placeholder="your@email.com"
         />
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-[#1C2433] mb-1.5">
-          Message
-        </label>
+        <label htmlFor="message" className={labelClass}>Message</label>
         <textarea
-          id="message"
-          name="message"
-          required
-          rows={6}
-          className="w-full rounded border border-[#C9C9C9] bg-white px-4 py-3 text-sm text-[#0B0B0B] placeholder-[#C9C9C9] focus:outline-none focus:border-[#1C2433] transition-colors resize-y"
+          id="message" name="message" required rows={5}
+          className={`${fieldClass} resize-none`}
           placeholder="Your message…"
         />
       </div>
 
       {status === 'error' && (
-        <p className="text-red-600 text-sm">{errorMsg}</p>
+        <p className="text-red-500 text-xs">{errorMsg}</p>
       )}
 
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="rounded bg-[#1C2433] px-8 py-3 text-sm font-semibold text-[#F3F1EB] transition-colors hover:bg-[#37C6F4] hover:text-[#0B0B0B] disabled:opacity-50"
+        className="text-xs uppercase tracking-widest text-[#F3F1EB] bg-[#1C2433] px-8 py-3.5 hover:bg-[#37C6F4] hover:text-[#0B0B0B] transition-colors duration-200 disabled:opacity-40"
       >
         {status === 'loading' ? 'Sending…' : 'Send Message'}
       </button>

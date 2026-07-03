@@ -36,8 +36,23 @@ export default defineType({
           name: 'partner',
           fields: [
             defineField({ name: 'name', title: 'Name', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({
+              name: 'category',
+              title: 'Category',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Funder', value: 'funder' },
+                  { title: 'Partner', value: 'partner' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'partner',
+              validation: (Rule) => Rule.required(),
+            }),
             defineField({ name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true } }),
             defineField({ name: 'url', title: 'Website', type: 'url' }),
+            defineField({ name: 'showInFooter', title: 'Show in footer', type: 'boolean', initialValue: false }),
           ],
           preview: {
             select: { title: 'name', media: 'logo' },

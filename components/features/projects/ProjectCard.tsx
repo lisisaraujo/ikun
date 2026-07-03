@@ -17,7 +17,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
     <Link
       href={`/projects/${project.slug.current}`}
       className={`group block overflow-hidden rounded-sm transition-shadow hover:shadow-xl ${
-        dark ? 'bg-[#0B0B0B]/40' : 'bg-white'
+        dark ? 'bg-[#0B0B0B]/40' : 'bg-[#F3F1EB]'
       }`}
     >
       {/* Cover image */}
@@ -39,7 +39,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
 
       {/* Content */}
       <div className="p-5">
-        <p className="text-xs font-medium text-[#37C6F4] mb-1 uppercase tracking-wider">
+        <p className="text-xs font-medium text-[#8B5F3C] mb-1 uppercase tracking-wider">
           {project.year}
         </p>
         <h3

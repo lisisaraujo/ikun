@@ -27,6 +27,32 @@ export interface SanitySlug {
   current: string
 }
 
+// Project sub-types
+export interface ProjectCredit {
+  _key: string
+  role: string
+  name: string
+}
+
+export interface ProjectPerformanceDate {
+  _key: string
+  date: string   // ISO date string YYYY-MM-DD
+  venue?: string
+  city?: string
+}
+
+export interface ProjectReview {
+  _key: string
+  quote: string
+  reviewer?: string
+  publication?: string
+}
+
+export interface GalleryImage extends SanityImage {
+  _key: string
+  caption?: string
+}
+
 // Project
 export interface SanityProject {
   _id: string
@@ -34,11 +60,15 @@ export interface SanityProject {
   title: string
   slug: SanitySlug
   year: number
+  location?: string
   coverImage?: SanityImage
   shortDescription: string
   fullDescription?: PortableTextBlock[]
+  credits?: ProjectCredit[]
+  performanceDates?: ProjectPerformanceDate[]
+  reviews?: ProjectReview[]
+  images?: GalleryImage[]
   youtubeUrl?: string
-  location?: string
   collaborators?: string[]
 }
 
@@ -58,7 +88,7 @@ export interface CalendarEvent {
   description?: string
 }
 
-// Irònú Post
+// Ìrònú Post
 export interface IronuPost {
   _id: string
   _createdAt: string
@@ -66,7 +96,8 @@ export interface IronuPost {
   slug: SanitySlug
   date: string
   coverImage?: SanityImage
-  body: PortableTextBlock[]
+  videoUrl?: string
+  body?: PortableTextBlock[]
 }
 
 // About Page (singleton)
@@ -97,8 +128,19 @@ export interface PressItem {
 export interface Partner {
   _key: string
   name: string
+  category: 'funder' | 'partner'
   logo?: SanityImage
   url?: string
+  showInFooter?: boolean
+}
+
+export interface GlobalSettings {
+  _id: string
+  email?: string
+  instagramUrl?: string
+  youtubeUrl?: string
+  vimeoUrl?: string
+  privacyPolicy?: import('@portabletext/types').PortableTextBlock[]
 }
 
 export interface OtherInfos {

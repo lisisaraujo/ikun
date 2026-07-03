@@ -96,7 +96,7 @@ function BigListView({ projects }: { projects: SanityProject[] }) {
               className="absolute inset-0 z-10 flex flex-col justify-end px-8 pb-24 md:px-16 md:pb-20 lg:px-24"
             >
               {meta && (
-                <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#37C6F4] mb-4">
+                <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#8B5F3C] mb-4">
                   {meta}
                 </p>
               )}
@@ -178,7 +178,7 @@ function GalleryView({ projects }: { projects: SanityProject[] }) {
                 <div className="absolute inset-0 bg-[#0B0B0B]/0 group-hover:bg-[#0B0B0B]/70 transition-colors duration-400 flex flex-col justify-end p-6">
                   <div className="translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                     {meta && (
-                      <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#37C6F4] mb-2">
+                      <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#8B5F3C] mb-2">
                         {meta}
                       </p>
                     )}

@@ -4,12 +4,20 @@
 /* ── Brand design tokens ──────────────────────────────────────────────── */
 @theme inline {
   /* Colors */
-  --color-brand-black:      #0B0B0B;
-  --color-brand-navy:       #1C2433;
-  --color-brand-brown:      #8B5F3C;
-  --color-brand-blue:       #37C6F4;
-  --color-brand-grey:       #C9C9C9;
-  --color-brand-offwhite:   #F3F1EB;
+  --color-ikun-offwhite:  #F3F1EB;  /* primary background */
+  --color-ikun-black:     #0B0B0B;  /* primary text */
+  --color-ikun-navy:      #1C2433;  /* footer, dark sections */
+  --color-ikun-brown:     #8B5F3C;  /* accents, markers, hover — warm detail */
+  --color-ikun-blue:      #37C6F4;  /* hero accent, logo hover, social icons — use sparingly */
+  --color-ikun-grey:      #C9C9C9;  /* captions, meta, borders */
+
+  /* Legacy aliases kept so existing [#HEX] inline classes still resolve */
+  --color-brand-black:    #0B0B0B;
+  --color-brand-navy:     #1C2433;
+  --color-brand-brown:    #8B5F3C;
+  --color-brand-blue:     #37C6F4;
+  --color-brand-grey:     #C9C9C9;
+  --color-brand-offwhite: #F3F1EB;
 
   /* Fonts — Nunito substitutes Sofia Pro Soft, Montserrat substitutes Gotham */
   --font-heading: 'Nunito', sans-serif;
@@ -26,8 +34,8 @@ html {
 }
 
 body {
-  background-color: var(--color-brand-offwhite);
-  color: var(--color-brand-black);
+  background-color: var(--color-ikun-offwhite);
+  color: var(--color-ikun-black);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.6;
@@ -79,17 +87,24 @@ img, video {
 }
 
 .prose-ikun blockquote {
-  border-left: 3px solid var(--color-brand-blue);
+  border-left: 3px solid var(--color-ikun-brown);
   padding-left: 1.25rem;
   margin-left: 0;
   font-style: italic;
-  color: #4a5568;
+  color: var(--color-ikun-black);
+  opacity: 0.7;
 }
 
 .prose-ikun a {
-  color: var(--color-brand-blue);
+  color: var(--color-ikun-brown);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.prose-ikun a:hover {
+  text-decoration-color: var(--color-ikun-brown);
 }
 
 .prose-ikun strong {
@@ -98,4 +113,22 @@ img, video {
 
 .prose-ikun em {
   font-style: italic;
+}
+
+/* ── Utility: underline-slide (brown underline grows from left on hover) ── */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 1px;
+  background: var(--color-ikun-brown);
+  transition: width 0.25s ease;
+}
+.link-underline:hover::after {
+  width: 100%;
 }

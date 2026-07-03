@@ -6,7 +6,8 @@ import ironuPost from './ironuPost'
 import aboutPage from './aboutPage'
 import homePage from './homePage'
 import otherInfos from './otherInfos'
+import globalSettings from './globalSettings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [project, calendarEvent, ironuPost, aboutPage, homePage, otherInfos],
+  types: [project, calendarEvent, ironuPost, aboutPage, homePage, otherInfos, globalSettings],
 }

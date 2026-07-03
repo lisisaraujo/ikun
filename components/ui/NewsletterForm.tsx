@@ -34,7 +34,7 @@ export default function NewsletterForm() {
 
   if (status === 'success') {
     return (
-      <p className="text-[#37C6F4] text-sm font-medium">
+      <p className="text-[#8B5F3C] text-sm font-medium">
         You&apos;re subscribed. Thank you.
       </p>
     )
@@ -57,7 +57,7 @@ export default function NewsletterForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="rounded bg-[#37C6F4] px-5 py-2.5 text-sm font-semibold text-[#0B0B0B] transition-opacity hover:opacity-80 disabled:opacity-50"
+        className="rounded bg-[#37C6F4] px-5 py-2.5 text-sm font-semibold text-[#0B0B0B] transition-opacity hover:opacity-85 disabled:opacity-50"
       >
         {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
       </button>

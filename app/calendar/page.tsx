@@ -21,12 +21,16 @@ export default async function CalendarPage({ searchParams }: Props) {
   const { type } = await searchParams
   const allEvents = await getAllEvents()
 
-  const filtered = type && type !== 'all'
-    ? allEvents.filter((e) => e.eventType === (type as EventType))
-    : allEvents
+  const now = new Date()
+  now.setHours(0, 0, 0, 0)
 
-  const upcoming = filtered.filter((e) => new Date(e.date) >= new Date())
-  const past = filtered.filter((e) => new Date(e.date) < new Date())
+  const filtered =
+    type && type !== 'all'
+      ? allEvents.filter((e) => e.eventType === (type as EventType))
+      : allEvents
+
+  const upcoming = filtered.filter((e) => new Date(e.date) >= now)
+  const past     = filtered.filter((e) => new Date(e.date) <  now)
 
   return (
     <>
@@ -34,40 +38,39 @@ export default async function CalendarPage({ searchParams }: Props) {
         title="Calendar"
         subtitle="Shows, workshops, talks and other events."
       />
+
       <Section className="bg-[#F3F1EB]">
         <Container>
           <Suspense>
             <EventFilter />
           </Suspense>
 
+          {filtered.length === 0 && (
+            <p className="text-[#0B0B0B]/40 text-sm uppercase tracking-widest">
+              No events found.
+            </p>
+          )}
+
           {upcoming.length > 0 && (
-            <div className="mb-16">
-              <h2 className="font-[family-name:var(--font-heading)] text-xl font-700 text-[#1C2433] mb-2 uppercase tracking-widest text-sm">
+            <section className="mb-16">
+              <h2 className="text-[10px] uppercase tracking-widest text-[#8B5F3C] font-semibold mb-0">
                 Upcoming
               </h2>
-              <div className="divide-y divide-[#C9C9C9]">
-                {upcoming.map((event) => (
-                  <EventRow key={event._id} event={event} />
-                ))}
-              </div>
-            </div>
+              {upcoming.map((event) => (
+                <EventRow key={event._id} event={event} past={false} />
+              ))}
+            </section>
           )}
 
           {past.length > 0 && (
-            <div>
-              <h2 className="font-[family-name:var(--font-heading)] text-xl font-700 text-[#1C2433] mb-2 uppercase tracking-widest text-sm">
-                Past
+            <section>
+              <h2 className="text-[10px] uppercase tracking-widest text-[#0B0B0B]/30 font-semibold mb-0 mt-2">
+                {upcoming.length > 0 ? 'Past' : 'Past events'}
               </h2>
-              <div className="divide-y divide-[#C9C9C9]">
-                {past.map((event) => (
-                  <EventRow key={event._id} event={event} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {filtered.length === 0 && (
-            <p className="text-[#0B0B0B]/50 text-sm">No events found.</p>
+              {past.map((event) => (
+                <EventRow key={event._id} event={event} past={true} />
+              ))}
+            </section>
           )}
         </Container>
       </Section>
