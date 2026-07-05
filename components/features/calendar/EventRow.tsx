@@ -68,7 +68,7 @@ export default function EventRow({ event, past = false }: EventRowProps) {
             href={event.ticketLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="sm:hidden inline-flex items-center gap-1.5 mt-3 text-xs uppercase tracking-widest text-[#37C6F4] transition-colors"
+            className="sm:hidden inline-flex items-center gap-1.5 mt-3 text-xs uppercase tracking-widest text-[#37C6F4] transition-opacity"
           >
             {past ? 'View' : 'Tickets'}
             <svg viewBox="0 0 24 24" className="w-3 h-3 stroke-current fill-none stroke-2" aria-hidden="true">
@@ -85,7 +85,7 @@ export default function EventRow({ event, past = false }: EventRowProps) {
             href={event.ticketLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#1C2433] hover:text-[#37C6F4] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 transition-opacity"
           >
             {past ? 'View' : 'Tickets'}
             <svg viewBox="0 0 24 24" className="w-3 h-3 stroke-current fill-none stroke-2" aria-hidden="true">

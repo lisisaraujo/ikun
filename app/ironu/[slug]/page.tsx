@@ -38,11 +38,11 @@ export default async function IronuPostPage({ params }: Props) {
   return (
     <div className="bg-[#F3F1EB] min-h-screen">
       {/* Back link — floats above content */}
-      <div className="fixed top-0 left-0 right-0 z-40 pointer-events-none">
+      <div className="fixed top-16 left-0 right-0 z-40 pointer-events-none">
         <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16 pt-5">
           <Link
             href="/ironu"
-            className="pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] opacity-60 hover:opacity-100 text-[10px] uppercase tracking-widest transition-opacity duration-200"
+            className="pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-[10px] uppercase tracking-widest transition-opacity duration-200"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none" strokeWidth={2} aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -64,10 +64,10 @@ export default async function IronuPostPage({ params }: Props) {
             <div>
               {prevPost && (
                 <Link href={`/ironu/${prevPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
                     ← Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {prevPost.title}
                   </p>
                 </Link>
@@ -76,10 +76,10 @@ export default async function IronuPostPage({ params }: Props) {
             <div className="text-right">
               {nextPost && (
                 <Link href={`/ironu/${nextPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
                     Newer →
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {nextPost.title}
                   </p>
                 </Link>

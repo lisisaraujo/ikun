@@ -35,18 +35,18 @@ function ListIcon() {
   )
 }
 
-function ChevronUp() {
+function ChevronLeft() {
   return (
-    <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-current fill-none stroke-2" aria-hidden="true">
-      <path d="M5 15l7-7 7 7" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" className="w-7 h-7 stroke-current fill-none stroke-2" aria-hidden="true">
+      <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
-function ChevronDown() {
+function ChevronRight() {
   return (
-    <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-current fill-none stroke-2" aria-hidden="true">
-      <path d="M5 9l7 7 7-7" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" className="w-7 h-7 stroke-current fill-none stroke-2" aria-hidden="true">
+      <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -54,84 +54,76 @@ function ChevronDown() {
 // ── Big List View ─────────────────────────────────────────────────────────────
 
 function BigListView({ projects }: { projects: SanityProject[] }) {
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [index, setIndex] = useState(0)
+  const total = projects.length
+  const project = projects[index]
 
-  const scrollTo = (index: number) => {
-    itemRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  const imageSrc = project.coverImage
+    ? urlFor(project.coverImage).width(1600).height(900).fit('crop').auto('format').url()
+    : null
+  const meta = [project.year, project.location].filter(Boolean).join(' · ')
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-mandatory">
-      {projects.map((project, i) => {
-        const imageSrc = project.coverImage
-          ? urlFor(project.coverImage).width(1600).height(900).fit('crop').auto('format').url()
-          : null
+    <div className="relative h-[calc(100vh-4rem)] bg-[#0B0B0B] overflow-hidden">
+      {/* Background image — key forces remount + fade on change */}
+      {imageSrc && (
+        <Image
+          key={project._id}
+          src={imageSrc}
+          alt={project.title}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-75 animate-fadeIn"
+        />
+      )}
 
-        const meta = [project.year, project.location].filter(Boolean).join(' · ')
+      {/* Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
 
-        return (
-          <div
-            key={project._id}
-            ref={(el) => { itemRefs.current[i] = el }}
-            className="relative h-screen w-full snap-start overflow-hidden bg-[#0B0B0B]"
-          >
-            {/* Background image */}
-            {imageSrc && (
-              <Image
-                src={imageSrc}
-                alt={project.title}
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className="object-cover opacity-75"
-              />
-            )}
+      {/* Clickable content */}
+      <Link
+        key={project._id + '-content'}
+        href={`/projects/${project.slug.current}`}
+        className="absolute inset-0 z-10 flex flex-col justify-end px-8 pb-24 md:px-16 md:pb-20 lg:px-24 animate-fadeIn"
+      >
+        {meta && (
+          <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#8B5F3C] mb-4">
+            {meta}
+          </p>
+        )}
+        <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl lg:text-8xl font-black text-[#F3F1EB] leading-tight mb-6">
+          {project.title}
+        </h2>
+        <p className="text-[#C9C9C9] text-base md:text-lg leading-relaxed max-w-xl">
+          {project.shortDescription}
+        </p>
+      </Link>
 
-            {/* Gradient: dark at bottom for text, subtle at top */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
+      {/* Prev arrow */}
+      <button
+        onClick={() => setIndex((i) => i - 1)}
+        disabled={index === 0}
+        aria-label="Previous project"
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 disabled:opacity-15 transition-opacity duration-200"
+      >
+        <ChevronLeft />
+      </button>
 
-            {/* Clickable content area — links to project page */}
-            <Link
-              href={`/projects/${project.slug.current}`}
-              className="absolute inset-0 z-10 flex flex-col justify-end px-8 pb-24 md:px-16 md:pb-20 lg:px-24"
-            >
-              {meta && (
-                <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.2em] text-[#8B5F3C] mb-4">
-                  {meta}
-                </p>
-              )}
-              <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl lg:text-8xl font-black text-[#F3F1EB] leading-tight mb-6">
-                {project.title}
-              </h2>
-              <p className="text-[#C9C9C9] text-base md:text-lg leading-relaxed max-w-xl">
-                {project.shortDescription}
-              </p>
-            </Link>
+      {/* Next arrow */}
+      <button
+        onClick={() => setIndex((i) => i + 1)}
+        disabled={index === total - 1}
+        aria-label="Next project"
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 disabled:opacity-15 transition-opacity duration-200"
+      >
+        <ChevronRight />
+      </button>
 
-            {/* Up arrow */}
-            {i > 0 && (
-              <button
-                onClick={() => scrollTo(i - 1)}
-                aria-label="Previous project"
-                className="absolute top-24 left-1/2 -translate-x-1/2 z-20 text-[#F3F1EB] opacity-25 hover:opacity-75 transition-opacity duration-200"
-              >
-                <ChevronUp />
-              </button>
-            )}
-
-            {/* Down arrow */}
-            {i < projects.length - 1 && (
-              <button
-                onClick={() => scrollTo(i + 1)}
-                aria-label="Next project"
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-[#F3F1EB] opacity-25 hover:opacity-75 transition-opacity duration-200"
-              >
-                <ChevronDown />
-              </button>
-            )}
-          </div>
-        )
-      })}
+      {/* Counter */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-[#F3F1EB]/40 text-xs uppercase tracking-widest tabular-nums">
+        {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+      </div>
     </div>
   )
 }

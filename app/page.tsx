@@ -31,7 +31,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative h-screen min-h-[500px] bg-[#0B0B0B]">
+      <section className="relative h-screen min-h-[500px] bg-[#0B0B0B] -mt-16">
         {/* Video + gradient — overflow-hidden scoped here so text isn't clipped */}
         <div className="absolute inset-0 overflow-hidden">
           {homeData?.heroVideoUrl ? (
@@ -42,7 +42,7 @@ export default async function HomePage() {
 
         {/* Logo + name */}
         <div className="absolute top-20 left-8 z-20 md:left-10 lg:left-16">
-          <h1 className="flex items-center gap-5 md:gap-7">
+          <h1 className="flex items-center gap-0 md:gap-7">
             {/* Wrapper div controls size; image fills it */}
             <div className="flex-shrink-0 h-36 md:h-52 lg:h-64" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
               <Image
@@ -70,7 +70,7 @@ export default async function HomePage() {
             <div className="mt-12 flex justify-end">
               <Link
                 href="/about"
-                className="group inline-flex items-center gap-3 text-[#37C6F4] opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
+                className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
               >
                 About
                 <svg

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NAV_LINKS } from '@/constants/nav'
@@ -10,12 +10,33 @@ export default function Navbar() {
   const pathname  = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const lastYRef = useRef(0)
 
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 10) }
+    function onScroll() {
+      const currentY = window.scrollY
+      setScrolled(currentY > 10)
+
+      if (currentY <= 0) {
+        setHidden(false)
+      } else if (currentY > lastYRef.current + 8 && !menuOpen) {
+        setHidden(true)
+      } else if (currentY < lastYRef.current - 8) {
+        setHidden(false)
+      }
+
+      lastYRef.current = currentY
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [menuOpen])
+
+  // Always reveal when menu opens
+  useEffect(() => {
+    if (menuOpen) setHidden(false)
+  }, [menuOpen])
 
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
@@ -43,7 +64,7 @@ export default function Navbar() {
   const burgerBar   = darkMode ? 'bg-[#F3F1EB]'    : 'bg-[#0B0B0B]'
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-10 lg:px-16">
 
         {/* Logo / wordmark */}

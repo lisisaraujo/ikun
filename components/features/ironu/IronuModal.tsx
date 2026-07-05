@@ -41,7 +41,7 @@ export default function IronuModal({ children, allPosts, currentSlug }: IronuMod
       <button
         onClick={() => router.back()}
         aria-label="Close"
-        className="fixed top-5 right-6 md:right-10 z-[70] flex items-center gap-2 text-[#0B0B0B]/40 hover:text-[#37C6F4] transition-colors duration-200 group"
+        className="fixed top-5 right-6 md:right-10 z-[70] flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 transition-opacity duration-200 group"
       >
         <span className="text-[10px] uppercase tracking-widest hidden sm:inline">Close</span>
         <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-current fill-none" strokeWidth={1.5} aria-hidden="true">
@@ -61,10 +61,10 @@ export default function IronuModal({ children, allPosts, currentSlug }: IronuMod
             <div>
               {prevPost && (
                 <Link href={`/ironu/${prevPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
                     ← Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {prevPost.title}
                   </p>
                 </Link>
@@ -73,10 +73,10 @@ export default function IronuModal({ children, allPosts, currentSlug }: IronuMod
             <div className="text-right">
               {nextPost && (
                 <Link href={`/ironu/${nextPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
                     Newer →
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {nextPost.title}
                   </p>
                 </Link>

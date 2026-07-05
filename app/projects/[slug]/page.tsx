@@ -1,13 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { getAllProjects, getProjectBySlug } from '@/lib/sanity/queries'
-import { urlFor } from '@/lib/sanity/image'
 import PortableText from '@/components/ui/PortableText'
 import YoutubeEmbed from '@/components/features/projects/YoutubeEmbed'
 import ReviewsCarousel from '@/components/features/projects/ReviewsCarousel'
-import ImageGallery from '@/components/features/projects/ImageGallery'
+import ProjectGalleryHero from '@/components/features/projects/ProjectGalleryHero'
 import Container from '@/components/layout/Container'
 
 interface Props {
@@ -35,64 +33,18 @@ export default async function ProjectPage({ params }: Props) {
 
   if (!project) notFound()
 
-  const imageSrc = project.coverImage
-    ? urlFor(project.coverImage).width(1600).height(900).fit('crop').auto('format').url()
-    : null
-
   return (
     <div className="bg-[#F3F1EB] min-h-screen">
-      {/* Hero */}
-      <div className="relative h-[60vh] md:h-[75vh] bg-[#1C2433] overflow-hidden">
-        {imageSrc ? (
-          <Image
-            src={imageSrc}
-            alt={project.title}
-            fill
-            priority
-            className="object-cover opacity-75"
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-[#1C2433]" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/20 to-transparent" />
-
-        {/* Back link */}
-        <div className="absolute top-24 left-0 right-0">
-          <Container>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 text-[#37C6F4] opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
-            >
-              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2" aria-hidden="true">
-                <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              All projects
-            </Link>
-          </Container>
-        </div>
-
-        {/* Title block */}
-        <div className="absolute bottom-0 left-0 right-0 pb-12">
-          <Container>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-1 mb-4">
-              {project.year && (
-                <span className="text-[#8B5F3C] text-xs uppercase tracking-widest">
-                  {project.year}
-                </span>
-              )}
-              {project.location && (
-                <span className="text-[#F3F1EB]/50 text-xs uppercase tracking-widest">
-                  {project.location}
-                </span>
-              )}
-            </div>
-            <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl lg:text-7xl font-800 text-[#F3F1EB] leading-tight">
-              {project.title}
-            </h1>
-          </Container>
-        </div>
-      </div>
+      {/* Hero — clickable cover that opens gallery lightbox */}
+      <ProjectGalleryHero
+        title={project.title}
+        year={project.year}
+        location={project.location}
+        coverImage={project.coverImage ?? null}
+        images={project.images ?? []}
+        backHref="/projects"
+        backLabel="All projects"
+      />
 
       {/* Body */}
       <Container className="py-16 md:py-24">
@@ -109,6 +61,16 @@ export default async function ProjectPage({ params }: Props) {
                 {project.shortDescription}
               </p>
             ) : null}
+
+                  {/* Video */}
+            {project.youtubeUrl && (
+              <section>
+                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
+                  Video
+                </h2>
+                <YoutubeEmbed url={project.youtubeUrl} title={project.title} />
+              </section>
+            )}
 
             {/* Performance dates */}
             {project.performanceDates && project.performanceDates.length > 0 && (
@@ -139,15 +101,7 @@ export default async function ProjectPage({ params }: Props) {
               </section>
             )}
 
-            {/* Video */}
-            {project.youtubeUrl && (
-              <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
-                  Video
-                </h2>
-                <YoutubeEmbed url={project.youtubeUrl} title={project.title} />
-              </section>
-            )}
+      
           </div>
 
           {/* Sidebar */}
@@ -200,26 +154,12 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* Image gallery — dark bg */}
-      {project.images && project.images.length > 0 && (
-        <section className="bg-[#0B0B0B]">
-          <div className="py-10 md:py-14">
-            <Container className="mb-8">
-              <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C]">
-                Gallery
-              </h2>
-            </Container>
-            <ImageGallery images={project.images} />
-          </div>
-        </section>
-      )}
-
       {/* Footer nav */}
       <div className="border-t border-[#C9C9C9]/40 py-10">
         <Container>
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-[#37C6F4] opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
+            className="inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2" aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />

@@ -70,7 +70,7 @@ export default function ContactPage() {
                 <SectionLabel>Email</SectionLabel>
                 <a
                   href={`mailto:${SITE_EMAIL}`}
-                  className="group inline-flex items-center gap-3 font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-[#1C2433] hover:text-[#37C6F4] transition-colors duration-300 break-all"
+                  className="group inline-flex items-center gap-3 font-[family-name:var(--font-heading)] text-2xl md:text-3xl text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-opacity duration-300 break-all"
                 >
                   {SITE_EMAIL}
                   <svg
@@ -95,9 +95,9 @@ export default function ContactPage() {
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group inline-flex items-center gap-3 text-sm text-[#1C2433] hover:text-[#37C6F4] transition-colors duration-200"
+                          className="group inline-flex items-center gap-3 text-sm text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 transition-opacity duration-200"
                         >
-                          <span className="text-[#1C2433]/40 group-hover:text-[#37C6F4] transition-colors duration-200">
+                          <span className="[@media(hover:hover)]:opacity-60 group-hover:opacity-100 transition-opacity duration-200">
                             {icon}
                           </span>
                           {label}
@@ -116,14 +116,7 @@ export default function ContactPage() {
                 </div>
               )}
 
-              {/* Newsletter */}
-              <div className="pt-2">
-                <SectionLabel>Newsletter</SectionLabel>
-                <p className="text-sm text-[#0B0B0B]/50 mb-6 leading-relaxed max-w-xs">
-                  Stay updated on new work, Ìrònú posts, and upcoming events.
-                </p>
-                <NewsletterForm />
-              </div>
+      
 
             </div>
 
