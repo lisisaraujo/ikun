@@ -49,7 +49,7 @@ export default function IronuCard({ post }: IronuCardProps) {
       </div>
 
       {/* Meta */}
-      <p className="text-[10px] uppercase tracking-widest text-[#0B0B0B]/35 mb-2">
+      <p className="text-[10px] uppercase tracking-widest text-[#8B5F3C]/35 mb-2">
         {formatDate(post.date)}
       </p>
 
@@ -59,7 +59,7 @@ export default function IronuCard({ post }: IronuCardProps) {
       </h3>
 
       {/* Read indicator */}
-      <div className="mt-4 flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#0B0B0B]/30 group-hover:text-[#37C6F4] transition-colors duration-300">
+      <div className="mt-4 flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#8B5F3C]/30 group-hover:text-[#37C6F4] transition-colors duration-300">
         <span>Read</span>
         <svg viewBox="0 0 24 24" className="w-3 h-3 stroke-current fill-none" strokeWidth={2} aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />

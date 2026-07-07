@@ -38,12 +38,12 @@ export default function ReviewsCarousel({ reviews }: ReviewsCarouselProps) {
         <div className="w-10 h-px bg-[#8B5F3C]" />
         <div>
           {review.reviewer && (
-            <p className="text-sm font-semibold text-[#0B0B0B] tracking-wide">
+            <p className="text-sm font-semibold text-[#8B5F3C] tracking-wide">
               {review.reviewer}
             </p>
           )}
           {review.publication && (
-            <p className="text-xs text-[#0B0B0B]/50 uppercase tracking-[0.15em] mt-0.5">
+            <p className="text-xs text-[#8B5F3C]/50 uppercase tracking-[0.15em] mt-0.5">
               {review.publication}
             </p>
           )}

@@ -35,8 +35,8 @@ export default function EventFilter() {
           onClick={() => setFilter(value)}
           className={`pb-3 -mb-px text-xs uppercase tracking-widest transition-colors border-b-2 ${
             active === value
-              ? 'border-[#37C6F4] text-[#0B0B0B] font-semibold'
-              : 'border-transparent text-[#0B0B0B]/40 hover:text-[#0B0B0B]/70 hover:border-[#C9C9C9]'
+              ? 'border-[#37C6F4] text-[#8B5F3C] font-semibold'
+              : 'border-transparent text-[#8B5F3C]/40 hover:text-[#0B0B0B]/70 hover:border-[#C9C9C9]'
           }`}
         >
           {label}

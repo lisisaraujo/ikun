@@ -49,7 +49,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
         >
           {project.title}
         </h3>
-        <p className={`text-sm leading-relaxed line-clamp-3 ${dark ? 'text-[#C9C9C9]' : 'text-[#0B0B0B]/70'}`}>
+        <p className={`text-sm leading-relaxed line-clamp-3 ${dark ? 'text-[#C9C9C9]' : 'text-[#8B5F3C]/70'}`}>
           {project.shortDescription}
         </p>
       </div>

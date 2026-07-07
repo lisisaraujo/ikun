@@ -46,7 +46,7 @@ export default async function CalendarPage({ searchParams }: Props) {
           </Suspense>
 
           {filtered.length === 0 && (
-            <p className="text-[#0B0B0B]/40 text-sm uppercase tracking-widest">
+            <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">
               No events found.
             </p>
           )}
@@ -64,7 +64,7 @@ export default async function CalendarPage({ searchParams }: Props) {
 
           {past.length > 0 && (
             <section>
-              <h2 className="text-[10px] uppercase tracking-widest text-[#0B0B0B]/30 font-semibold mb-0 mt-2">
+              <h2 className="text-[10px] uppercase tracking-widest text-[#8B5F3C]/30 font-semibold mb-0 mt-2">
                 {upcoming.length > 0 ? 'Past' : 'Past events'}
               </h2>
               {past.map((event) => (

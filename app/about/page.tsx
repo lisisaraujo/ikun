@@ -44,7 +44,7 @@ export default async function AboutPage() {
                       />
                     </div>
                     {about.photoCaption && (
-                      <figcaption className="mt-3 text-xs text-[#0B0B0B]/50">
+                      <figcaption className="mt-3 text-xs text-[#8B5F3C]/50">
                         {about.photoCaption}
                       </figcaption>
                     )}
@@ -53,7 +53,7 @@ export default async function AboutPage() {
               )}
             </div>
           ) : (
-            <p className="text-[#0B0B0B]/50 text-sm">Content coming soon.</p>
+            <p className="text-[#8B5F3C]/50 text-sm">Content coming soon.</p>
           )}
         </Container>
       </Section>

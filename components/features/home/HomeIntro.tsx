@@ -15,7 +15,7 @@ export default function HomeIntro({ heading, text }: HomeIntroProps) {
           {heading}
         </h2>
       )}
-      <div className="text-[#0B0B0B]/80 text-base md:text-lg leading-relaxed mb-8">
+      <div className="text-[#8B5F3C]/80 text-base md:text-lg leading-relaxed mb-8">
         <PortableText value={text} />
       </div>
     </div>

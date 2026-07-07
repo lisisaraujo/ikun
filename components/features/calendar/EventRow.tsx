@@ -39,14 +39,14 @@ export default function EventRow({ event, past = false }: EventRowProps) {
         <span className={`font-[family-name:var(--font-heading)] leading-none ${past ? 'text-3xl text-[#1C2433]/50' : 'text-3xl text-[#1C2433]'}`}>
           {date.day}
         </span>
-        <span className="text-[10px] uppercase tracking-widest text-[#0B0B0B]/40 mt-0.5">{date.month}</span>
-        <span className="text-[10px] tracking-wide text-[#0B0B0B]/30">{date.year}</span>
+        <span className="text-[10px] uppercase tracking-widest text-[#8B5F3C]/40 mt-0.5">{date.month}</span>
+        <span className="text-[10px] tracking-wide text-[#8B5F3C]/30">{date.year}</span>
       </div>
 
       {/* Content column */}
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
-          <h3 className={`font-[family-name:var(--font-heading)] text-lg leading-snug ${past ? 'text-[#0B0B0B]/70' : 'text-[#0B0B0B]'}`}>
+          <h3 className={`font-[family-name:var(--font-heading)] text-lg leading-snug ${past ? 'text-[#8B5F3C]/70' : 'text-[#8B5F3C]'}`}>
             {event.title}
           </h3>
           <span className="text-[10px] uppercase tracking-widest text-[#8B5F3C] font-medium shrink-0">
@@ -54,10 +54,10 @@ export default function EventRow({ event, past = false }: EventRowProps) {
           </span>
         </div>
         {location && (
-          <p className="text-sm text-[#0B0B0B]/40 leading-snug">{location}</p>
+          <p className="text-sm text-[#8B5F3C]/40 leading-snug">{location}</p>
         )}
         {event.description && (
-          <p className="text-sm text-[#0B0B0B]/55 mt-1.5 leading-relaxed line-clamp-2 max-w-prose">
+          <p className="text-sm text-[#8B5F3C]/55 mt-1.5 leading-relaxed line-clamp-2 max-w-prose">
             {event.description}
           </p>
         )}

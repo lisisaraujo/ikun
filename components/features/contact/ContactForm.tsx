@@ -5,10 +5,10 @@ import { useState } from 'react'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const fieldClass =
-  'w-full bg-transparent border-0 border-b border-[#1C2433]/15 py-3 text-sm text-[#0B0B0B] placeholder-[#0B0B0B]/30 focus:outline-none focus:border-[#37C6F4] transition-colors duration-200'
+  'w-full bg-transparent border-0 border-b border-[#1C2433]/15 py-3 text-sm text-[#8B5F3C] placeholder-[#8B5F3C]/30 focus:outline-none focus:border-[#37C6F4] transition-colors duration-200'
 
 const labelClass =
-  'block text-[10px] uppercase tracking-widest text-[#0B0B0B]/40 mb-1'
+  'block text-[10px] uppercase tracking-widest text-[#8B5F3C]/40 mb-1'
 
 export default function ContactForm() {
   const [status, setStatus]     = useState<Status>('idle')

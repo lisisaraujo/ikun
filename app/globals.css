@@ -36,12 +36,17 @@
 
   body {
     background-color: var(--color-ikun-offwhite);
-    color: var(--color-ikun-black);
+    color: var(--color-ikun-brown);
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='58'%3E%3Cellipse cx='14' cy='29' rx='3.5' ry='25' fill='%2337C6F4' opacity='0.18' transform='rotate(-35 14 29)'/%3E%3Cellipse cx='14' cy='29' rx='2' ry='20' fill='%2337C6F4' opacity='0.9' transform='rotate(-35 14 29)'/%3E%3C/svg%3E") 14 29, auto;
+  }
+
+  a, button, [role="button"], select, label[for] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='58'%3E%3Cellipse cx='14' cy='29' rx='3.5' ry='25' fill='%2337C6F4' opacity='0.18' transform='rotate(-35 14 29)'/%3E%3Cellipse cx='14' cy='29' rx='2' ry='20' fill='%2337C6F4' opacity='0.9' transform='rotate(-35 14 29)'/%3E%3C/svg%3E") 14 29, pointer;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -60,6 +65,7 @@
     max-width: 100%;
     height: auto;
     display: block;
+    border-radius: 4px;
   }
 }
 
@@ -115,6 +121,21 @@
 
 .prose-ikun em {
   font-style: italic;
+}
+
+/* ── Nav active accent mark ───────────────────────────────────────────── */
+.nav-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 58px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='58'%3E%3Cellipse cx='14' cy='29' rx='3.5' ry='25' fill='%2337C6F4' opacity='0.18' transform='rotate(-35 14 29)'/%3E%3Cellipse cx='14' cy='29' rx='2' ry='20' fill='%2337C6F4' opacity='0.9' transform='rotate(-35 14 29)'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
 }
 
 /* ── Animations ───────────────────────────────────────────────────────── */

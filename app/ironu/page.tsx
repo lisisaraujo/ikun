@@ -22,7 +22,7 @@ export default async function IronuPage() {
       <Section className="bg-[#F3F1EB]">
         <Container>
           {posts.length === 0 ? (
-            <p className="text-[#0B0B0B]/40 text-sm uppercase tracking-widest">
+            <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">
               No posts yet.
             </p>
           ) : (

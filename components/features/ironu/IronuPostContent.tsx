@@ -45,7 +45,7 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
         </p>
 
         {/* Date */}
-        <p className="text-xs uppercase tracking-widest text-[#0B0B0B]/40 mb-6">
+        <p className="text-xs uppercase tracking-widest text-[#8B5F3C]/40 mb-6">
           {formatDate(post.date)}
         </p>
 

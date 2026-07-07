@@ -117,19 +117,19 @@ export default async function OtherInfosPage() {
                     <li key={item._key} className="flex flex-col gap-1">
                       <span className="text-[10px] uppercase tracking-widest text-[#8B5F3C]">
                         {item.publication}
-                        {item.date && <span className="text-[#0B0B0B]/30"> · {new Date(item.date).getFullYear()}</span>}
+                        {item.date && <span className="text-[#8B5F3C]/30"> · {new Date(item.date).getFullYear()}</span>}
                       </span>
                       {item.url ? (
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-[#0B0B0B] hover:text-[#37C6F4] transition-colors duration-200 underline-offset-2 hover:underline"
+                          className="text-sm text-[#8B5F3C] hover:text-[#37C6F4] transition-colors duration-200 underline-offset-2 hover:underline"
                         >
                           {item.headline}
                         </a>
                       ) : (
-                        <span className="text-sm text-[#0B0B0B]">{item.headline}</span>
+                        <span className="text-sm text-[#8B5F3C]">{item.headline}</span>
                       )}
                     </li>
                   ))}
@@ -153,7 +153,7 @@ export default async function OtherInfosPage() {
             )}
 
             {!data && (
-              <p className="text-[#0B0B0B]/40 text-sm uppercase tracking-widest">
+              <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">
                 Content coming soon.
               </p>
             )}

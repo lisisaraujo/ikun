@@ -53,11 +53,11 @@ export default async function ProjectPage({ params }: Props) {
           <div className="lg:col-span-2 space-y-12">
             {/* Description */}
             {project.fullDescription ? (
-              <div className="prose prose-lg max-w-none text-[#0B0B0B]/80 leading-relaxed">
+              <div className="prose prose-lg max-w-none text-[#8B5F3C]/80 leading-relaxed">
                 <PortableText value={project.fullDescription} />
               </div>
             ) : project.shortDescription ? (
-              <p className="text-[#0B0B0B]/80 text-lg leading-relaxed">
+              <p className="text-[#8B5F3C]/80 text-lg leading-relaxed">
                 {project.shortDescription}
               </p>
             ) : null}
@@ -81,13 +81,13 @@ export default async function ProjectPage({ params }: Props) {
                 <ul className="divide-y divide-[#C9C9C9]/40">
                   {project.performanceDates.map((pd) => (
                     <li key={pd._key} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4">
-                      <span className="text-[#0B0B0B] font-light">
+                      <span className="text-[#8B5F3C] font-light">
                         {pd.venue && <span className="font-medium">{pd.venue}</span>}
-                        {pd.venue && pd.city && <span className="text-[#0B0B0B]/40 mx-2">·</span>}
-                        {pd.city && <span className="text-[#0B0B0B]/60">{pd.city}</span>}
+                        {pd.venue && pd.city && <span className="text-[#8B5F3C]/40 mx-2">·</span>}
+                        {pd.city && <span className="text-[#8B5F3C]/60">{pd.city}</span>}
                       </span>
                       {pd.date && (
-                        <time className="text-sm text-[#0B0B0B]/40 tabular-nums whitespace-nowrap">
+                        <time className="text-sm text-[#8B5F3C]/40 tabular-nums whitespace-nowrap">
                           {new Date(pd.date).toLocaleDateString('en-IE', {
                             day: 'numeric',
                             month: 'long',
@@ -115,10 +115,10 @@ export default async function ProjectPage({ params }: Props) {
                 <dl className="space-y-3">
                   {project.credits.map((credit) => (
                     <div key={credit._key} className="flex flex-col gap-0.5">
-                      <dt className="text-xs uppercase tracking-widest text-[#0B0B0B]/40 font-medium">
+                      <dt className="text-xs uppercase tracking-widest text-[#8B5F3C]/40 font-medium">
                         {credit.role}
                       </dt>
-                      <dd className="text-sm text-[#0B0B0B]">{credit.name}</dd>
+                      <dd className="text-sm text-[#8B5F3C]">{credit.name}</dd>
                     </div>
                   ))}
                 </dl>
@@ -133,7 +133,7 @@ export default async function ProjectPage({ params }: Props) {
                 </h2>
                 <ul className="space-y-1">
                   {project.collaborators.map((c) => (
-                    <li key={c} className="text-sm text-[#0B0B0B]/70">{c}</li>
+                    <li key={c} className="text-sm text-[#8B5F3C]/70">{c}</li>
                   ))}
                 </ul>
               </section>

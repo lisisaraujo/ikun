@@ -54,7 +54,7 @@ function DefaultPolicy({ email }: { email: string }) {
 
   return (
     <div className="max-w-2xl space-y-10">
-      <p className="text-sm text-[#0B0B0B]/50 pb-6 border-b border-[#C9C9C9]/40">
+      <p className="text-sm text-[#8B5F3C]/50 pb-6 border-b border-[#C9C9C9]/40">
         Last updated: July 2025
       </p>
       {sections.map((s) => (
@@ -62,7 +62,7 @@ function DefaultPolicy({ email }: { email: string }) {
           <h2 className="font-[family-name:var(--font-heading)] text-lg text-[#1C2433] mb-3">
             {s.heading}
           </h2>
-          <p className="text-sm text-[#0B0B0B]/70 leading-relaxed">{s.body}</p>
+          <p className="text-sm text-[#8B5F3C]/70 leading-relaxed">{s.body}</p>
         </div>
       ))}
     </div>

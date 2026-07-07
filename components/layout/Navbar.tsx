@@ -4,14 +4,21 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NAV_LINKS } from '@/constants/nav'
-import { SITE_NAME } from '@/constants/site'
 
 export default function Navbar() {
-  const pathname  = usePathname()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [hidden, setHidden]     = useState(false)
+  const pathname = usePathname()
+  const [menuOpen, setMenuOpen]       = useState(false)
+  const [scrolled, setScrolled]       = useState(false)
+  const [hidden, setHidden]           = useState(false)
+  const [prevPathname, setPrevPathname] = useState(pathname)
   const lastYRef = useRef(0)
+
+  // Close menu when navigating — setState during render is React's recommended
+  // pattern for syncing state to a changing prop without an effect.
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname)
+    setMenuOpen(false)
+  }
 
   useEffect(() => {
     function onScroll() {
@@ -23,9 +30,8 @@ export default function Navbar() {
       if (currentY <= 0) {
         setHidden(false)
       } else if (wasAtTop) {
-        // Leaving y=0: batch hidden+scrolled in the same render to avoid a bg flash
         setHidden(true)
-      } else if (currentY > lastYRef.current + 8 && !menuOpen) {
+      } else if (currentY > lastYRef.current + 8) {
         setHidden(true)
       } else if (currentY < lastYRef.current - 8) {
         setHidden(false)
@@ -36,33 +42,18 @@ export default function Navbar() {
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [menuOpen])
+  }, [])
 
-  useEffect(() => { if (menuOpen) setHidden(false) }, [menuOpen])
-  useEffect(() => { setMenuOpen(false) }, [pathname])
+  const effectiveHidden = hidden && !menuOpen
 
   const isHome   = pathname === '/'
   const darkMode = isHome && !scrolled && !menuOpen
 
-  const navBg = darkMode
-    ? 'bg-transparent'
-    : 'bg-[#F3F1EB] border-b border-[#0B0B0B]/8'
-
-  const logoClass     = darkMode ? 'text-[#F3F1EB] hover:text-[#37C6F4]' : 'text-[#0B0B0B] hover:text-[#37C6F4]'
-  const baseLinkClass = darkMode ? 'text-[#F3F1EB]/75 hover:text-[#37C6F4]' : 'text-[#0B0B0B]/65 hover:text-[#37C6F4]'
-  const burgerBar     = darkMode ? 'bg-[#F3F1EB]' : 'bg-[#0B0B0B]'
+  const burgerBar = darkMode ? 'bg-[#F3F1EB]' : 'bg-[#0B0B0B]'
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg} ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-10 lg:px-16">
-
-        {/* Logo */}
-        <Link
-          href="/"
-          className={`font-[family-name:var(--font-heading)] text-xl font-800 tracking-tight transition-colors duration-200 ${logoClass}`}
-        >
-          {SITE_NAME}
-        </Link>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent ${effectiveHidden ? '-translate-y-full' : 'translate-y-0'}`}>
+      <div className="mx-auto flex max-w-6xl items-center justify-end pr-6 py-4 md:pr-10 lg:pr-16">
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
@@ -74,13 +65,12 @@ export default function Navbar() {
                 href={href}
                 className={`relative inline-block text-sm font-medium tracking-wide transition-colors duration-200
                   hover:text-[#37C6F4]
-                  after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-[2px]
-                  after:bg-[#37C6F4] after:transition-[transform,opacity] after:duration-200 after:origin-left
                   ${isActive
-                    ? 'text-[#37C6F4] after:scale-x-100 after:opacity-100'
-                    : `${darkMode ? 'text-[#F3F1EB]/75' : 'text-[#0B0B0B]/65'} after:scale-x-0 after:opacity-0 hover:after:scale-x-100 hover:after:opacity-100`
+                    ? `text-[#37C6F4]`
+                    : `${darkMode ? 'text-[#F3F1EB]/75' : 'text-[#8B5F3C]/65'}`
                   }`}
               >
+                {isActive && <span className="nav-mark" aria-hidden="true" />}
                 {label}
               </Link>
             )
@@ -100,7 +90,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu — solid background for readability */}
+      {/* Mobile menu */}
       {menuOpen && (
         <nav
           className="md:hidden border-t border-[#0B0B0B]/8 bg-[#F3F1EB] px-6 pb-6 pt-3"
@@ -114,10 +104,9 @@ export default function Navbar() {
                   <Link
                     href={href}
                     className={`flex items-center gap-3 text-base font-medium transition-colors duration-200 ${
-                      isActive ? 'text-[#37C6F4]' : 'text-[#0B0B0B]/65 hover:text-[#37C6F4]'
+                      isActive ? 'text-[#37C6F4]' : 'text-[#8B5F3C]/65 hover:text-[#37C6F4]'
                     }`}
                   >
-                    {/* Left accent bar replaces the dot */}
                     <span
                       className={`inline-block w-[2px] h-4 flex-shrink-0 rounded-full transition-colors duration-200 ${
                         isActive ? 'bg-[#37C6F4]' : 'bg-[#C9C9C9]/50'
