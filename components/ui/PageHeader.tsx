@@ -9,10 +9,7 @@ export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
     <div className="pt-2 pb-2 border-b border-[#C9C9C9]/10">
       <Container>
-        <div className="w-10 h-[2px] bg-[#8B5F3C] mb-8" aria-hidden="true" />
-        <h1 className="font-[family-name:var(--font-heading)] text-[#8B5F3C] text-4xl md:text-5xl lg:text-6xl font-800 leading-tight mb-4">
-          {title}
-        </h1>
+    
         {subtitle && (
           <p className="text-[#C9C9C9]/60 text-sm md:text-base max-w-xl leading-relaxed">{subtitle}</p>
         )}

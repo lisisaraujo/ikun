@@ -19,7 +19,7 @@ export default function LogoMark() {
   const useWhite = isHome && !scrolled
 
   return (
-    <div className="fixed top-0 left-0 z-[60] p-3">
+    <div className="fixed top--2 left-0 z-[60] flex items-start pt-1 pl-6 md:pl-10 lg:pl-16">
       <Link href="/" aria-label="Home" className="block transition-opacity duration-200 hover:opacity-70">
         <div className="h-28 md:h-32" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
           <Image

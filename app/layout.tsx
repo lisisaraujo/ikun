@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
-import LogoMark from '@/components/layout/LogoMark'
+import SideNav from '@/components/layout/SideNav'
 import Footer from '@/components/layout/Footer'
 import { SITE_NAME, SITE_TAGLINE } from '@/constants/site'
 
@@ -22,9 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col bg-[#F3F1EB] text-[#8B5F3C]" suppressHydrationWarning>
-        <LogoMark />
         <Navbar />
-        <main className="flex-1 pt-16">{children}</main>
+        <SideNav />
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

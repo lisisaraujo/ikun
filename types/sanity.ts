@@ -116,14 +116,6 @@ export interface HomePage {
   introText: PortableTextBlock[]
 }
 
-// Other Infos (singleton)
-export interface PressItem {
-  _key: string
-  publication: string
-  headline: string
-  url?: string
-  date?: string
-}
 
 export interface Partner {
   _key: string
@@ -143,10 +135,3 @@ export interface GlobalSettings {
   privacyPolicy?: import('@portabletext/types').PortableTextBlock[]
 }
 
-export interface OtherInfos {
-  _id: string
-  pressItems?: PressItem[]
-  partners?: Partner[]
-  governance?: PortableTextBlock[]
-  miscContent?: PortableTextBlock[]
-}

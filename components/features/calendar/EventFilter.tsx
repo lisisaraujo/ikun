@@ -28,15 +28,15 @@ export default function EventFilter() {
   }
 
   return (
-    <nav aria-label="Filter events by type" className="flex flex-wrap items-center gap-x-8 gap-y-2 border-b border-[#C9C9C9]/40 mb-14">
+    <nav aria-label="Filter events by type" className="flex flex-wrap items-center gap-x-6 gap-y-2">
       {FILTERS.map(({ label, value }) => (
         <button
           key={value}
           onClick={() => setFilter(value)}
-          className={`pb-3 -mb-px text-xs uppercase tracking-widest transition-colors border-b-2 ${
+          className={`text-[10px] uppercase tracking-[0.25em] transition-colors pb-1 border-b ${
             active === value
-              ? 'border-[#37C6F4] text-[#8B5F3C] font-semibold'
-              : 'border-transparent text-[#8B5F3C]/40 hover:text-[#0B0B0B]/70 hover:border-[#C9C9C9]'
+              ? 'border-[#37C6F4] text-[#37C6F4] font-semibold'
+              : 'border-transparent text-[#8B5F3C]/40 hover:text-[#8B5F3C]'
           }`}
         >
           {label}
