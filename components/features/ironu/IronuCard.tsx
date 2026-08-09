@@ -23,7 +23,7 @@ export default function IronuCard({ post }: IronuCardProps) {
   return (
     <Link href={`/ironu/${post.slug.current}`} className="group block">
       {/* Image */}
-      <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-[#1C2433]/8 mb-5">
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1C2433]/8 mb-5">
         {imageSrc ? (
           <>
             <Image

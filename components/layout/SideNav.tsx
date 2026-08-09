@@ -63,7 +63,15 @@ export default function SideNav() {
     setOpen(false)
     if (isHome) {
       const el = document.getElementById(s.id)
-      if (el) { el.scrollIntoView({ behavior: 'smooth' }); return }
+      // Sections are `position: sticky` and stacked several deep. A native
+      // *smooth* scroll that jumps across multiple of them at once can leave
+      // their stuck/unstuck state out of sync mid-animation (some browsers
+      // don't fully recompute every sticky element on each animation frame),
+      // which is what caused two unrelated sections to render on screen at
+      // once. An instant jump has no "mid-animation" for that to happen in —
+      // the browser only ever has to get the final, single scroll position
+      // right, which it always does correctly.
+      if (el) { window.scrollTo({ top: el.offsetTop, behavior: 'auto' }); return }
     }
     router.push(s.href)
   }

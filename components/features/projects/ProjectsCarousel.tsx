@@ -13,6 +13,69 @@ interface ProjectsCarouselProps {
 // How far (px) an off-center card sinks below the chain, at maximum distance
 const SINK = 56
 
+// Concentric rings — irregular dash rhythm per ring so it reads as
+// hand-worked rather than a machine-uniform pattern
+const RINGS = [
+  { r: 24, dasharray: '4 9' },
+  { r: 43, dasharray: '3 6 7 9' },
+  { r: 64, dasharray: '5 10 3 8' },
+]
+
+// The stitched-thread dial that floats beneath each card, tilted flat via
+// perspective and spinning constantly. rotateX squashes it visually to
+// ~47% height without shrinking the box it occupies in layout, so a
+// negative margin pulls the empty reserved half out from under the card
+// instead of leaving a gap. `focus` (0–1) shrinks it for off-center cards,
+// so the centered card's dial reads largest and the ones either side get
+// visibly smaller companions rather than all matching in size.
+function SpinnerDial({ focus }: { focus: number }) {
+  const scale = 0.5 + focus * 0.5
+
+  return (
+    <div className="flex justify-center" style={{ perspective: '700px' }}>
+      <div
+        className="w-[170px] h-[170px] sm:w-[220px] sm:h-[220px] md:w-[270px] md:h-[270px] lg:w-[320px] lg:h-[320px] mt-[-30px] sm:mt-[-44px] md:mt-[-58px] lg:mt-[-71px] mb-[-30px] sm:mb-[-44px] md:mb-[-58px] lg:mb-[-71px]"
+        style={{
+          transform: `scale(${scale}) rotateX(62deg)`,
+          filter: 'drop-shadow(0 22px 16px rgba(11,11,11,0.45)) drop-shadow(0 8px 6px rgba(11,11,11,0.3))',
+          transition: 'transform 0.3s ease-out',
+        }}
+      >
+        <svg
+          viewBox="0 0 200 200"
+          aria-hidden="true"
+          className="w-full h-full pointer-events-none animate-spin-slow"
+        >
+          {RINGS.map(({ r, dasharray }) => (
+            <circle
+              key={r}
+              cx={100}
+              cy={100}
+              r={r}
+              fill="none"
+              stroke="#37C6F4"
+              strokeOpacity={0.45}
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              strokeDasharray={dasharray}
+            />
+          ))}
+          {/* centered seal mark — a bounded medallion, not an empty coil */}
+          <rect
+            x={95}
+            y={95}
+            width={10}
+            height={10}
+            transform="rotate(45 100 100)"
+            fill="#37C6F4"
+            fillOpacity={0.55}
+          />
+        </svg>
+      </div>
+    </div>
+  )
+}
+
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([])
@@ -47,6 +110,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       if (!raf) raf = requestAnimationFrame(update)
     }
 
+    // Center the second card (not the first) on load, so there's already
+    // one card before and one after it in view from the start
+    const initial = cardRefs.current[Math.min(1, projects.length - 1)]
+    if (initial) {
+      el.scrollLeft = initial.offsetLeft + initial.offsetWidth / 2 - el.clientWidth / 2
+    }
+
     update()
     el.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
@@ -75,11 +145,11 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     <div className="relative">
       <div
         ref={scrollerRef}
-        className="relative flex gap-8 md:gap-10 overflow-x-auto snap-x snap-mandatory scroll-smooth pt-2 pb-2 px-[calc(50%-110px)] sm:px-[calc(50%-140px)] md:px-[calc(50%-170px)] lg:px-[calc(50%-200px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="relative flex gap-8 md:gap-10 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth pt-2 pb-2 px-[calc(50%-110px)] sm:px-[calc(50%-145px)] md:px-[calc(50%-180px)] lg:px-[calc(50%-210px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
         {projects.map((project, i) => {
           const coverUrl = project.coverImage
-            ? urlFor(project.coverImage).width(800).height(1000).auto('format').url()
+            ? urlFor(project.coverImage).width(960).height(1200).auto('format').url()
             : null
           const dist = distMap[i] ?? 0
           const scale = 1 - dist * 0.35
@@ -91,7 +161,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
               key={project._id}
               ref={(el) => { cardRefs.current[i] = el }}
               href={`/projects/${project.slug.current}`}
-              className="group relative shrink-0 snap-center w-[220px] sm:w-[280px] md:w-[340px] lg:w-[400px]"
+              className="group relative shrink-0 snap-center w-[220px] sm:w-[290px] md:w-[360px] lg:w-[420px]"
               style={{
                 transform: `translateY(${sink}px) scale(${scale})`,
                 transformOrigin: 'top center',
@@ -99,24 +169,27 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                 transition: 'transform 0.3s ease-out, opacity 0.3s ease-out',
               }}
             >
-              <div className="relative rounded-lg shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)] transition-[transform,box-shadow] duration-300 ease-out [@media(hover:hover)]:group-hover:-translate-y-1.5 [@media(hover:hover)]:group-hover:shadow-[0_25px_35px_-12px_rgba(58,38,20,0.5)]">
-                <div className="relative aspect-[3/4] rounded-lg overflow-hidden bg-[#1C2433]">
+              <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)] transition-[transform,box-shadow] duration-300 ease-out [@media(hover:hover)]:group-hover:-translate-y-1.5 [@media(hover:hover)]:group-hover:shadow-[0_25px_35px_-12px_rgba(58,38,20,0.5)]">
+                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
                   {coverUrl && (
                     <Image
                       src={coverUrl}
                       alt={project.title}
                       fill
-                      sizes="(max-width: 768px) 220px, (max-width: 1024px) 340px, 400px"
+                      sizes="(max-width: 768px) 220px, (max-width: 1024px) 360px, 420px"
                       className="object-cover"
                     />
                   )}
 
                   {/* info overlay — always visible on touch devices (no hover to rely on),
-                      hidden until hover on devices that actually support it */}
+                      hidden until hover on devices that actually support it. Anchored
+                      below the bottom edge so it reads as washing up from the spinner
+                      dial that sits just beneath the card, rather than from the card's
+                      own center. */}
                   <div
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-100 transition-opacity duration-300 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-100 transition-opacity duration-500 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
                     style={{
-                      background: 'radial-gradient(circle at center, rgba(28,36,51,0.85) 0%, rgba(28,36,51,0.55) 70%, transparent 100%)',
+                      background: 'radial-gradient(circle at 50% 115%, rgba(28,36,51,0.92) 0%, rgba(28,36,51,0.6) 55%, transparent 100%)',
                     }}
                   >
                     <p className="text-[10px] uppercase tracking-[0.2em] text-[#37C6F4] mb-1">{project.year}</p>
@@ -129,6 +202,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                   </div>
                 </div>
               </div>
+
+              <SpinnerDial focus={1 - dist} />
             </Link>
           )
         })}

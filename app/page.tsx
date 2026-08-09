@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
-import { getHomePage, getAboutPage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
+import { getHomePage, getAboutPage, getAllProjects, getAllIronuPosts, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
 import HeroSection from '@/components/features/home/HeroSection'
 import HeroVideo from '@/components/features/home/HeroVideo'
 import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
 import AboutContent from '@/components/features/about/AboutContent'
 import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import IronuSpiral from '@/components/features/ironu/IronuSpiral'
+import IronuCarousel from '@/components/features/ironu/IronuCarousel'
 import SectionSeam from '@/components/layout/SectionSeam'
+import SectionBackdrop from '@/components/layout/SectionBackdrop'
 import MagneticLink from '@/components/ui/MagneticLink'
 import Reveal from '@/components/ui/Reveal'
 import { extractYouTubeId } from '@/lib/youtube'
@@ -18,10 +20,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [homeData, about, projects, events, settings] = await Promise.all([
+  const [homeData, about, projects, ironuPosts, events, settings] = await Promise.all([
     getHomePage(),
     getAboutPage(),
     getAllProjects(),
+    getAllIronuPosts(),
     getAllEvents(),
     getGlobalSettings(),
   ])
@@ -53,23 +56,26 @@ export default async function HomePage() {
       </HeroSection>
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
-      <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center px-8 md:px-24 lg:px-40 py-32">
+      <section id="about" className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
+        <SectionBackdrop id="about" color="#1C2433" />
         <SectionSeam />
         {about ? (
           <AboutContent about={about} />
         ) : (
-          <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">About content coming soon.</p>
+          <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-8 md:px-24 lg:px-40">About content coming soon.</p>
         )}
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-24">
+      <section id="projects" className="sticky top-0 z-20 min-h-screen flex flex-col justify-center py-24">
+        <SectionBackdrop id="projects" color="#8B5F3C" />
         <SectionSeam />
         <ProjectsCarousel projects={projects} />
       </section>
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}
-      <section id="calendar" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+      <section id="calendar" className="sticky top-0 z-30 min-h-screen flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+        <SectionBackdrop id="calendar" color="#1C2433" />
         <SectionSeam />
         {upcomingEvents.length === 0 ? (
           <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">No upcoming events.</p>
@@ -123,29 +129,16 @@ export default async function HomePage() {
       </section>
 
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
-      <section id="ironu" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="ironu" className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
+        <SectionBackdrop id="ironu" color="#8B5F3C" />
         <SectionSeam />
         <IronuSpiral />
-        <Reveal>
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Dance journal</p>
-          <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-8 leading-tight">Ìrònú</h2>
-          <p className="text-[#F3F1EB]/60 max-w-xl leading-relaxed mb-14">
-            A journal of reflection, process and practice — writings, videos and visual notes from the studio.
-          </p>
-        </Reveal>
-        <MagneticLink
-          href="/ironu"
-          className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200 self-start"
-        >
-          Explore
-          <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
-            <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </MagneticLink>
+        <IronuCarousel posts={ironuPosts} />
       </section>
 
       {/* ── CONTACT ──────────────────────────────────────────── */}
-      <section id="contact" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="contact" className="sticky top-0 z-50 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+        <SectionBackdrop id="contact" color="#1C2433" />
         <SectionSeam />
         <Reveal>
           <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>

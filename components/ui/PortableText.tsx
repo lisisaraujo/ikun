@@ -18,7 +18,7 @@ const components = {
           alt={value.alt ?? ''}
           width={900}
           height={600}
-          className="rounded-sm"
+          className="rounded-2xl"
           style={{ objectFit: 'cover' }}
         />
       </figure>

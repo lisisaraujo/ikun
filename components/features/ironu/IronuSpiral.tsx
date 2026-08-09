@@ -25,7 +25,7 @@ export default function IronuSpiral() {
     >
       <svg
         viewBox="0 0 200 200"
-        className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] md:w-[720px] md:h-[720px] animate-spin-slow"
+        className="w-[680px] h-[680px] sm:w-[820px] sm:h-[820px] md:w-[960px] md:h-[960px] animate-spin-slow"
         style={{ animationDuration: '40s' }}
       >
         <path
