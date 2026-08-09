@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useScrollDirection } from '@/hooks/useScrollDirection'
 
 export default function Navbar() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
+  const direction = useScrollDirection()
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 0) }
@@ -17,6 +19,9 @@ export default function Navbar() {
 
   const isHome   = pathname === '/'
   const useWhite = isHome && !scrolled
+  // Stay visible near the very top regardless of direction, otherwise hide
+  // on the way down and reappear as soon as the user scrolls back up
+  const hidden = scrolled && direction === 'down'
 
   function handleLogoClick(e: React.MouseEvent) {
     if (isHome) {
@@ -26,7 +31,10 @@ export default function Navbar() {
   }
 
   return (
-    <div className="fixed top-0 left-1/2 -translate-x-1/2 z-[60] pt-1 pointer-events-none">
+    <div
+      className="fixed top-0 left-1/2 z-[60] pt-1 pointer-events-none transition-transform duration-300 ease-out"
+      style={{ transform: hidden ? 'translate(-50%, -100%)' : 'translate(-50%, 0)' }}
+    >
       <Link
         href="/"
         aria-label="Home"

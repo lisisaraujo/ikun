@@ -54,7 +54,7 @@ export default function SectionSeam() {
     >
       {/* thread */}
       <div
-        className="h-px bg-[#37C6F4]/20"
+        className="h-px bg-[#37C6F4]/28"
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
@@ -62,11 +62,11 @@ export default function SectionSeam() {
       />
       {/* stitches — the cursor accent mark, tiled, small and soft */}
       <div
-        className="absolute inset-x-0 -top-1.5 h-3 opacity-60"
+        className="absolute inset-x-0 -top-2 h-4 opacity-75"
         style={{
           backgroundImage: 'url(/cursor-accent.png)',
           backgroundRepeat: 'repeat-x',
-          backgroundSize: '13px 15px',
+          backgroundSize: '16px 19px',
           backgroundPosition: 'center',
           maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
           WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',

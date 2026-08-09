@@ -5,6 +5,7 @@ import HeroVideo from '@/components/features/home/HeroVideo'
 import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
 import AboutContent from '@/components/features/about/AboutContent'
 import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
+import IronuSpiral from '@/components/features/ironu/IronuSpiral'
 import SectionSeam from '@/components/layout/SectionSeam'
 import MagneticLink from '@/components/ui/MagneticLink'
 import Reveal from '@/components/ui/Reveal'
@@ -124,6 +125,7 @@ export default async function HomePage() {
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
       <section id="ironu" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
         <SectionSeam />
+        <IronuSpiral />
         <Reveal>
           <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Dance journal</p>
           <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-8 leading-tight">Ìrònú</h2>
