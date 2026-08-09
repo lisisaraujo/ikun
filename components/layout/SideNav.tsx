@@ -86,9 +86,8 @@ export default function SideNav() {
           <span className="font-heading text-[10px] tabular-nums text-[#37C6F4]/50 group-hover:text-[#37C6F4]/80 transition-colors duration-300">
             0{currentIndex + 1}
           </span>
-          <span className="relative font-heading uppercase tracking-[0.25em] leading-none select-none font-semibold text-sm text-[#37C6F4] transition-colors duration-300">
+          <span className="font-heading uppercase tracking-[0.25em] leading-none select-none font-semibold text-sm text-[#37C6F4] transition-colors duration-300">
             {current.label}
-            <span className="absolute left-0 -bottom-1.5 h-px w-full bg-[#37C6F4]/40 group-hover:bg-[#37C6F4] transition-colors duration-300" />
           </span>
         </button>
 

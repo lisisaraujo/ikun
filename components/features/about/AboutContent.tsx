@@ -9,27 +9,27 @@ interface AboutContentProps {
 
 export default function AboutContent({ about }: AboutContentProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
-      <div className="lg:col-span-3">
-        <h2 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl font-light text-[#F3F1EB] mb-3 leading-tight">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+      <div className="lg:col-span-7">
+        <h2 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl font-light text-[#F3F1EB] mb-4 leading-tight">
           Mufutau Yusuf
         </h2>
-        <p className="text-[#F3F1EB]/70 text-base md:text-lg font-light mb-10 leading-relaxed">
+        <p className="font-[family-name:var(--font-heading)] italic font-light text-[#F3F1EB]/80 text-xl md:text-2xl mb-10 leading-snug max-w-md">
           Performer, Choreographer, Teacher.
         </p>
         <PortableText value={about.bio} className="prose-ikun-editorial text-[#F3F1EB]/85 text-base md:text-lg" />
       </div>
 
       {about.photo && (
-        <div className="lg:col-span-2">
-          <figure className="lg:sticky lg:top-32">
-            <div className="relative aspect-[3/4] rounded-sm overflow-hidden">
+        <div className="lg:col-span-5">
+          <figure className="lg:sticky lg:top-32 lg:mt-20 lg:mr-[-2rem] xl:mr-[-4rem]">
+            <div className="relative aspect-[4/5]">
               <Image
-                src={urlFor(about.photo).width(600).height(800).fit('crop').auto('format').url()}
+                src={urlFor(about.photo).width(700).height(875).fit('crop').auto('format').url()}
                 alt={about.photoCaption ?? 'Mufutau Yusuf'}
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
+                sizes="(max-width: 1024px) 100vw, 45vw"
               />
             </div>
             {about.photoCaption && (

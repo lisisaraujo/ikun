@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getHomePage, getAboutPage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
-import { urlFor } from '@/lib/sanity/image'
 import HeroSection from '@/components/features/home/HeroSection'
 import HeroVideo from '@/components/features/home/HeroVideo'
 import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
 import AboutContent from '@/components/features/about/AboutContent'
+import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import SectionSeam from '@/components/layout/SectionSeam'
 import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
@@ -24,8 +23,6 @@ export default async function HomePage() {
     getAllEvents(),
     getGlobalSettings(),
   ])
-
-  const featuredProjects = projects.slice(0, 3)
 
   const now = new Date(); now.setHours(0, 0, 0, 0)
   const upcomingEvents = events
@@ -64,41 +61,13 @@ export default async function HomePage() {
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section id="projects" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+      <section id="projects" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24">
         <SectionSeam />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {featuredProjects.map((project) => {
-            const coverUrl = project.coverImage
-              ? urlFor(project.coverImage).width(800).height(500).auto('format').url()
-              : null
-            return (
-              <Link
-                key={project._id}
-                href={`/projects/${project.slug.current}`}
-                className="group block"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#1C2433] mb-4">
-                  {coverUrl && (
-                    <Image
-                      src={coverUrl}
-                      alt={project.title}
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                    />
-                  )}
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#37C6F4] mb-1">{project.year}</p>
-                <h3 className="font-[family-name:var(--font-heading)] text-lg font-light text-[#F3F1EB] group-hover:text-[#37C6F4] transition-colors duration-200">
-                  {project.title}
-                </h3>
-                {project.location && (
-                  <p className="text-sm text-[#F3F1EB]/50 mt-1">{project.location}</p>
-                )}
-              </Link>
-            )
-          })}
+        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10 px-8 md:px-16 lg:px-24">Selected work</p>
+        <div className="pl-8 md:pl-16 lg:pl-24">
+          <ProjectsCarousel projects={projects} />
         </div>
-        <div className="mt-14 flex justify-end">
+        <div className="mt-14 flex justify-end px-8 md:px-16 lg:px-24">
           <Link
             href="/projects"
             className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
