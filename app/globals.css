@@ -208,6 +208,65 @@
   margin-bottom: 0.5rem;
 }
 
+/* ── Editorial variant: drop cap + blue paragraph marks ─────────────────
+   Used for long-form bio copy where we want the brand's blue accent to
+   give the text rhythm without depending on any particular content shape. */
+.prose-ikun-editorial {
+  max-width: 62ch;
+}
+
+.prose-ikun-editorial p:first-of-type::first-letter {
+  font-family: var(--font-heading);
+  font-size: 3.75rem;
+  line-height: 0.75;
+  font-weight: 700;
+  color: var(--color-ikun-blue);
+  float: left;
+  padding-right: 0.5rem;
+  padding-top: 0.3rem;
+}
+
+.prose-ikun-editorial p {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.prose-ikun-editorial p::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--color-ikun-blue);
+  opacity: 0.55;
+}
+
+.prose-ikun-editorial p:first-of-type::before {
+  content: none;
+}
+
+/* Scoped overrides so this variant reads on the translucent brown background,
+   without touching .prose-ikun's colors used elsewhere on lighter surfaces */
+.prose-ikun-editorial a {
+  color: var(--color-ikun-offwhite);
+  text-decoration-color: transparent;
+}
+
+.prose-ikun-editorial a:hover {
+  text-decoration-color: var(--color-ikun-offwhite);
+}
+
+.prose-ikun-editorial strong {
+  color: var(--color-ikun-offwhite);
+}
+
+.prose-ikun-editorial blockquote {
+  border-left-color: var(--color-ikun-blue);
+  color: var(--color-ikun-offwhite);
+}
+
 .prose-ikun blockquote {
   border-left: 3px solid var(--color-ikun-brown);
   padding-left: 1.25rem;

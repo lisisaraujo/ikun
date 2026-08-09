@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { getAboutPage } from '@/lib/sanity/queries'
-import { urlFor } from '@/lib/sanity/image'
-import PortableText from '@/components/ui/PortableText'
+import AboutContent from '@/components/features/about/AboutContent'
 import PageHeader from '@/components/ui/PageHeader'
 import Container from '@/components/layout/Container'
 import Section from '@/components/layout/Section'
@@ -21,39 +19,12 @@ export default async function AboutPage() {
         title="About"
         subtitle="Mufutau Yusuf — Performer, Choreographer, Teacher."
       />
-      <Section className="bg-[#F3F1EB]">
+      <Section className="bg-[#8B5F3C]">
         <Container>
           {about ? (
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
-              {/* Bio text */}
-              <div className="lg:col-span-3">
-                <PortableText value={about.bio} />
-              </div>
-
-              {/* Photo */}
-              {about.photo && (
-                <div className="lg:col-span-2">
-                  <figure>
-                    <div className="relative aspect-[3/4] rounded-sm overflow-hidden">
-                      <Image
-                        src={urlFor(about.photo).width(600).height(800).fit('crop').auto('format').url()}
-                        alt={about.photoCaption ?? 'Mufutau Yusuf'}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 40vw"
-                      />
-                    </div>
-                    {about.photoCaption && (
-                      <figcaption className="mt-3 text-xs text-[#8B5F3C]/50">
-                        {about.photoCaption}
-                      </figcaption>
-                    )}
-                  </figure>
-                </div>
-              )}
-            </div>
+            <AboutContent about={about} />
           ) : (
-            <p className="text-[#8B5F3C]/50 text-sm">Content coming soon.</p>
+            <p className="text-[#F3F1EB]/50 text-sm">Content coming soon.</p>
           )}
         </Container>
       </Section>

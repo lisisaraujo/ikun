@@ -3,9 +3,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getHomePage, getAboutPage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
+import HeroSection from '@/components/features/home/HeroSection'
 import HeroVideo from '@/components/features/home/HeroVideo'
 import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
-import PortableText from '@/components/ui/PortableText'
+import AboutContent from '@/components/features/about/AboutContent'
+import SectionSeam from '@/components/layout/SectionSeam'
 import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 
@@ -30,16 +32,16 @@ export default async function HomePage() {
     .filter((e) => new Date(e.date) >= now)
     .slice(0, 4)
 
-  const email    = settings?.email ?? SITE_EMAIL
-  const insta    = settings?.instagramUrl
-  const youtube  = settings?.youtubeUrl
-  const vimeo    = settings?.vimeoUrl
+  const email = settings?.email ?? SITE_EMAIL
+  const insta = settings?.instagramUrl
+  const youtube = settings?.youtubeUrl
+  const vimeo = settings?.vimeoUrl
 
   return (
     <div className="block">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section id="hero" className="sticky top-0 z-0 h-screen bg-[#0B0B0B]">
+      <HeroSection>
         <div className="absolute inset-0 overflow-hidden">
           {homeData?.heroVideoUrl && (
             <HeroVideo videoId={extractYouTubeId(homeData.heroVideoUrl)} />
@@ -49,51 +51,21 @@ export default async function HomePage() {
         {homeData?.introText && (
           <HeroIntroOverlay heading={homeData.introHeading} text={homeData.introText} />
         )}
-      </section>
+      </HeroSection>
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
-      <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center bg-[#F3F1EB] border-t-2 border-[#37C6F4] px-8 md:px-24 lg:px-40 py-32">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10">About</p>
+      <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center bg-[#8B5F3C] px-8 md:px-24 lg:px-40 py-32">
+        <SectionSeam />
         {about ? (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
-            <div className="lg:col-span-3">
-              <p className="text-[#8B5F3C] text-lg md:text-xl font-light mb-8 leading-relaxed">
-                Mufutau Yusuf — Performer, Choreographer, Teacher.
-              </p>
-              <div className="text-[#8B5F3C]/80 text-base md:text-lg leading-relaxed">
-                <PortableText value={about.bio} />
-              </div>
-            </div>
-
-            {about.photo && (
-              <div className="lg:col-span-2">
-                <figure>
-                  <div className="relative aspect-[3/4] rounded-sm overflow-hidden">
-                    <Image
-                      src={urlFor(about.photo).width(600).height(800).fit('crop').auto('format').url()}
-                      alt={about.photoCaption ?? 'Mufutau Yusuf'}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                    />
-                  </div>
-                  {about.photoCaption && (
-                    <figcaption className="mt-3 text-xs text-[#8B5F3C]/50">
-                      {about.photoCaption}
-                    </figcaption>
-                  )}
-                </figure>
-              </div>
-            )}
-          </div>
+          <AboutContent about={about} />
         ) : (
-          <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">About content coming soon.</p>
+          <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">About content coming soon.</p>
         )}
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section id="projects" className="relative z-10 min-h-screen bg-[#0B0B0B] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10">Selected work</p>
+      <section id="projects" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+        <SectionSeam />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {featuredProjects.map((project) => {
             const coverUrl = project.coverImage
@@ -120,7 +92,7 @@ export default async function HomePage() {
                   {project.title}
                 </h3>
                 {project.location && (
-                  <p className="text-sm text-[#C9C9C9]/40 mt-1">{project.location}</p>
+                  <p className="text-sm text-[#F3F1EB]/50 mt-1">{project.location}</p>
                 )}
               </Link>
             )
@@ -140,17 +112,17 @@ export default async function HomePage() {
       </section>
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}
-      <section id="calendar" className="relative z-10 min-h-screen bg-[#F3F1EB] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10">Upcoming</p>
+      <section id="calendar" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+        <SectionSeam />
         {upcomingEvents.length === 0 ? (
-          <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">No upcoming events.</p>
+          <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">No upcoming events.</p>
         ) : (
-          <div className="divide-y divide-[#8B5F3C]/15">
+          <div className="divide-y divide-[#F3F1EB]/15">
             {upcomingEvents.map((event) => {
-              const d   = new Date(event.date)
+              const d = new Date(event.date)
               const day = String(d.getDate()).padStart(2, '0')
               const mon = String(d.getMonth() + 1).padStart(2, '0')
-              const yr  = d.getFullYear()
+              const yr = d.getFullYear()
               const loc = [event.city, event.country].filter(Boolean).join(', ')
               return (
                 <div key={event._id} className="py-7 grid grid-cols-[80px_1fr_auto] gap-8 items-start">
@@ -160,8 +132,8 @@ export default async function HomePage() {
                   </p>
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
-                    <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#8B5F3C]">{event.title}</h3>
-                    {loc && <p className="text-sm text-[#8B5F3C]/45 mt-1">{loc}</p>}
+                    <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#F3F1EB]">{event.title}</h3>
+                    {loc && <p className="text-sm text-[#F3F1EB]/50 mt-1">{loc}</p>}
                   </div>
                   {event.ticketLink && (
                     <a
@@ -192,10 +164,11 @@ export default async function HomePage() {
       </section>
 
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
-      <section id="ironu" className="relative z-10 min-h-screen bg-[#1C2433] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="ironu" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+        <SectionSeam />
         <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Dance journal</p>
         <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-8 leading-tight">Ìrònú</h2>
-        <p className="text-[#C9C9C9]/60 max-w-xl leading-relaxed mb-14">
+        <p className="text-[#F3F1EB]/60 max-w-xl leading-relaxed mb-14">
           A journal of reflection, process and practice — writings, videos and visual notes from the studio.
         </p>
         <Link
@@ -210,9 +183,10 @@ export default async function HomePage() {
       </section>
 
       {/* ── CONTACT ──────────────────────────────────────────── */}
-      <section id="contact" className="relative z-10 min-h-screen bg-[#F3F1EB] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="contact" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+        <SectionSeam />
         <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
-        <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#8B5F3C] mb-12 leading-tight">Contact</h2>
+        <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-12 leading-tight">Contact</h2>
         <a
           href={`mailto:${email}`}
           className="text-2xl md:text-3xl text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-opacity duration-200 mb-12 font-light"
@@ -222,19 +196,19 @@ export default async function HomePage() {
         <div className="flex items-center gap-8">
           {insta && (
             <a href={insta} target="_blank" rel="noopener noreferrer"
-              className="text-[11px] uppercase tracking-widest text-[#8B5F3C]/50 hover:text-[#37C6F4] transition-colors duration-200">
+              className="text-[11px] uppercase tracking-widest text-[#F3F1EB]/50 hover:text-[#37C6F4] transition-colors duration-200">
               Instagram
             </a>
           )}
           {youtube && (
             <a href={youtube} target="_blank" rel="noopener noreferrer"
-              className="text-[11px] uppercase tracking-widest text-[#8B5F3C]/50 hover:text-[#37C6F4] transition-colors duration-200">
+              className="text-[11px] uppercase tracking-widest text-[#F3F1EB]/50 hover:text-[#37C6F4] transition-colors duration-200">
               YouTube
             </a>
           )}
           {vimeo && (
             <a href={vimeo} target="_blank" rel="noopener noreferrer"
-              className="text-[11px] uppercase tracking-widest text-[#8B5F3C]/50 hover:text-[#37C6F4] transition-colors duration-200">
+              className="text-[11px] uppercase tracking-widest text-[#F3F1EB]/50 hover:text-[#37C6F4] transition-colors duration-200">
               Vimeo
             </a>
           )}

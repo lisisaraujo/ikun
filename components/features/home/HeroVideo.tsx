@@ -11,6 +11,9 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
   const [playing, setPlaying] = useState(true)
   const [revealed, setRevealed] = useState(false)
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Tracks whether the current paused state was caused by scrolling away
+  // (vs. the user clicking pause), so scrolling back never overrides a manual pause
+  const autoPaused = useRef(false)
 
   // Schedule the cover to lift after `delay` ms, cancelling any prior pending reveal
   const scheduleReveal = (delay: number) => {
@@ -38,6 +41,7 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
     if (playing) {
       sendCommand('pauseVideo')
       setPlaying(false)
+      autoPaused.current = false
     } else {
       // Re-apply the cover briefly so the resume title card is never visible
       setRevealed(false)
@@ -46,6 +50,31 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
       setPlaying(true)
     }
   }
+
+  // Stops playback once the hero has scrolled fully out of view (it's sticky,
+  // so it would otherwise keep playing behind every other section forever),
+  // and resumes it if scrolled back — unless the user paused it themselves
+  useEffect(() => {
+    const onScroll = () => {
+      const pastHero = window.scrollY >= window.innerHeight
+
+      if (pastHero && playing) {
+        sendCommand('pauseVideo')
+        setPlaying(false)
+        autoPaused.current = true
+      } else if (!pastHero && !playing && autoPaused.current) {
+        setRevealed(false)
+        scheduleReveal(1500)
+        sendCommand('playVideo')
+        setPlaying(true)
+        autoPaused.current = false
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing])
 
   // All params baked into the URL so controls=0 is guaranteed to be applied.
   // disablekb/fs/cc_load_policy strip the remaining interactive chrome; the
