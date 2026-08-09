@@ -16,10 +16,26 @@ export default function HeroIntroOverlay({ heading, text }: HeroIntroOverlayProp
   // Starts collapsed into the logo, then beams down after a beat on first load
   const [shown, setShown] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const fieldRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const t = setTimeout(() => setShown(true), 1100)
     return () => clearTimeout(t)
+  }, [])
+
+  // Subtle cursor-follow parallax on the whole text field — a few px of
+  // drift opposite the cursor's offset from center, nothing that fights
+  // the entrance/scroll-focus transforms already happening inside it
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const el = fieldRef.current
+      if (!el) return
+      const x = (e.clientX / window.innerWidth - 0.5) * -12
+      const y = (e.clientY / window.innerHeight - 0.5) * -8
+      el.style.transform = `translate(${x}px, ${y}px)`
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   // Dims paragraphs the further they sit from the frame's vertical center as the user scrolls
@@ -72,7 +88,11 @@ export default function HeroIntroOverlay({ heading, text }: HeroIntroOverlayProp
       />
 
       {/* text field: relative wrapper sized to match the frame, so the toggle can anchor to its corner */}
-      <div className="relative mt-6 sm:mt-8 max-w-[92vw] sm:max-w-xl md:max-w-2xl lg:max-w-3xl w-full mx-auto">
+      <div
+        ref={fieldRef}
+        className="relative mt-6 sm:mt-8 max-w-[92vw] sm:max-w-xl md:max-w-2xl lg:max-w-3xl w-full mx-auto"
+        style={{ transition: 'transform 0.3s ease-out' }}
+      >
         <button
           onClick={() => setShown((v) => !v)}
           className={`pointer-events-auto absolute -top-9 right-1 sm:right-2 rounded-full backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-200 ${

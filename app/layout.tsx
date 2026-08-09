@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import SideNav from '@/components/layout/SideNav'
+import BackgroundPattern from '@/components/layout/BackgroundPattern'
+import CursorGlow from '@/components/layout/CursorGlow'
 import Footer from '@/components/layout/Footer'
 import { SITE_NAME, SITE_TAGLINE } from '@/constants/site'
 
@@ -21,7 +23,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col bg-[#F3F1EB] text-[#8B5F3C]" suppressHydrationWarning>
+      <body className="flex min-h-full flex-col text-[#8B5F3C]" suppressHydrationWarning>
+        <BackgroundPattern />
+        <CursorGlow />
         <Navbar />
         <SideNav />
         <main className="flex-1">{children}</main>

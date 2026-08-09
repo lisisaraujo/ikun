@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { getHomePage, getAboutPage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
 import HeroSection from '@/components/features/home/HeroSection'
 import HeroVideo from '@/components/features/home/HeroVideo'
@@ -7,6 +6,8 @@ import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
 import AboutContent from '@/components/features/about/AboutContent'
 import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import SectionSeam from '@/components/layout/SectionSeam'
+import MagneticLink from '@/components/ui/MagneticLink'
+import Reveal from '@/components/ui/Reveal'
 import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 
@@ -51,7 +52,7 @@ export default async function HomePage() {
       </HeroSection>
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
-      <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center bg-[#8B5F3C] px-8 md:px-24 lg:px-40 py-32">
+      <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center px-8 md:px-24 lg:px-40 py-32">
         <SectionSeam />
         {about ? (
           <AboutContent about={about} />
@@ -61,52 +62,54 @@ export default async function HomePage() {
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <section id="projects" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24">
+      <section id="projects" className="relative z-10 min-h-screen flex flex-col justify-center py-24">
         <SectionSeam />
         <ProjectsCarousel projects={projects} />
       </section>
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}
-      <section id="calendar" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
+      <section id="calendar" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-16 lg:px-24">
         <SectionSeam />
         {upcomingEvents.length === 0 ? (
           <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">No upcoming events.</p>
         ) : (
           <div className="divide-y divide-[#F3F1EB]/15">
-            {upcomingEvents.map((event) => {
+            {upcomingEvents.map((event, i) => {
               const d = new Date(event.date)
               const day = String(d.getDate()).padStart(2, '0')
               const mon = String(d.getMonth() + 1).padStart(2, '0')
               const yr = d.getFullYear()
               const loc = [event.city, event.country].filter(Boolean).join(', ')
               return (
-                <div key={event._id} className="py-7 grid grid-cols-[80px_1fr_auto] gap-8 items-start">
-                  <p className="text-4xl font-light text-[#37C6F4] font-[family-name:var(--font-heading)] tabular-nums leading-none">
-                    {day}
-                    <span className="block text-[11px] tracking-widest text-[#37C6F4]/50 mt-1 font-normal">{mon}.{yr}</span>
-                  </p>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
-                    <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#F3F1EB]">{event.title}</h3>
-                    {loc && <p className="text-sm text-[#F3F1EB]/50 mt-1">{loc}</p>}
+                <Reveal key={event._id} delay={i * 80}>
+                  <div className="py-7 grid grid-cols-[80px_1fr_auto] gap-8 items-start">
+                    <p className="text-4xl font-light text-[#37C6F4] font-[family-name:var(--font-heading)] tabular-nums leading-none">
+                      {day}
+                      <span className="block text-[11px] tracking-widest text-[#37C6F4]/50 mt-1 font-normal">{mon}.{yr}</span>
+                    </p>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
+                      <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#F3F1EB]">{event.title}</h3>
+                      {loc && <p className="text-sm text-[#F3F1EB]/50 mt-1">{loc}</p>}
+                    </div>
+                    {event.ticketLink && (
+                      <a
+                        href={event.ticketLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 hover:opacity-100 transition-opacity mt-1"
+                      >
+                        Book ↗
+                      </a>
+                    )}
                   </div>
-                  {event.ticketLink && (
-                    <a
-                      href={event.ticketLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 hover:opacity-100 transition-opacity mt-1"
-                    >
-                      Book ↗
-                    </a>
-                  )}
-                </div>
+                </Reveal>
               )
             })}
           </div>
         )}
         <div className="mt-14 flex justify-end">
-          <Link
+          <MagneticLink
             href="/calendar"
             className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
           >
@@ -114,19 +117,21 @@ export default async function HomePage() {
             <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </Link>
+          </MagneticLink>
         </div>
       </section>
 
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
-      <section id="ironu" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="ironu" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
         <SectionSeam />
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Dance journal</p>
-        <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-8 leading-tight">Ìrònú</h2>
-        <p className="text-[#F3F1EB]/60 max-w-xl leading-relaxed mb-14">
-          A journal of reflection, process and practice — writings, videos and visual notes from the studio.
-        </p>
-        <Link
+        <Reveal>
+          <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Dance journal</p>
+          <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-8 leading-tight">Ìrònú</h2>
+          <p className="text-[#F3F1EB]/60 max-w-xl leading-relaxed mb-14">
+            A journal of reflection, process and practice — writings, videos and visual notes from the studio.
+          </p>
+        </Reveal>
+        <MagneticLink
           href="/ironu"
           className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200 self-start"
         >
@@ -134,14 +139,16 @@ export default async function HomePage() {
           <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </Link>
+        </MagneticLink>
       </section>
 
       {/* ── CONTACT ──────────────────────────────────────────── */}
-      <section id="contact" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
+      <section id="contact" className="relative z-10 min-h-screen flex flex-col justify-center py-24 px-8 md:px-24 lg:px-40">
         <SectionSeam />
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
-        <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-12 leading-tight">Contact</h2>
+        <Reveal>
+          <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
+          <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-12 leading-tight">Contact</h2>
+        </Reveal>
         <a
           href={`mailto:${email}`}
           className="text-2xl md:text-3xl text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-opacity duration-200 mb-12 font-light"
@@ -169,7 +176,7 @@ export default async function HomePage() {
           )}
         </div>
         <div className="mt-16">
-          <Link
+          <MagneticLink
             href="/contact"
             className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
           >
@@ -177,7 +184,7 @@ export default async function HomePage() {
             <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </Link>
+          </MagneticLink>
         </div>
       </section>
 

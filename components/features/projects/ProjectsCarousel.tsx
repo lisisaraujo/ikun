@@ -29,6 +29,82 @@ function buildSpiralPath(turns = 2.25, maxR = 92, cx = 100, cy = 100, steps = 14
 }
 const SPIRAL_PATH = buildSpiralPath()
 
+// Concentric rings — irregular dash rhythm per ring so it reads as
+// hand-worked rather than a machine-uniform pattern
+const RINGS = [
+  { r: 30, dasharray: '4 9' },
+  { r: 54, dasharray: '3 6 7 9' },
+  { r: 80, dasharray: '5 10 3 8' },
+]
+
+// The stitched-thread dial, tilted flat via perspective and spinning
+// constantly. rotateX squashes it visually to ~47% height without
+// shrinking the box it occupies in layout, so a negative margin pulls the
+// empty reserved half out from under (or above) the card instead of
+// leaving a gap — which side depends on which face of the "sandwich" it's on.
+// Top and bottom use related but distinct marks (a coil vs. nested rings,
+// out of phase with each other) so the pair reads as two carved seals
+// rather than one dial copy-pasted twice.
+function SpinnerDial({ edge }: { edge: 'top' | 'bottom' }) {
+  const pull = edge === 'top'
+    ? 'mb-[-44px] sm:mb-[-60px] md:mb-[-76px] lg:mb-[-92px]'
+    : 'mt-[-44px] sm:mt-[-60px] md:mt-[-76px] lg:mt-[-92px]'
+  const isSpiral = edge === 'top'
+
+  return (
+    <div className="flex justify-center" style={{ perspective: '700px' }}>
+      <div
+        className={`w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[340px] md:h-[340px] lg:w-[400px] lg:h-[400px] ${pull}`}
+        style={{ transform: 'rotateX(62deg)' }}
+      >
+        <svg
+          viewBox="0 0 200 200"
+          aria-hidden="true"
+          className="w-full h-full pointer-events-none animate-spin-slow"
+          style={{ animationDelay: isSpiral ? '0s' : '-5s' }}
+        >
+          {isSpiral ? (
+            <path
+              d={SPIRAL_PATH}
+              fill="none"
+              stroke="#37C6F4"
+              strokeOpacity={0.65}
+              strokeWidth={4}
+              strokeLinecap="round"
+              strokeDasharray="4 7 2 9"
+            />
+          ) : (
+            RINGS.map(({ r, dasharray }) => (
+              <circle
+                key={r}
+                cx={100}
+                cy={100}
+                r={r}
+                fill="none"
+                stroke="#37C6F4"
+                strokeOpacity={0.6}
+                strokeWidth={4}
+                strokeLinecap="round"
+                strokeDasharray={dasharray}
+              />
+            ))
+          )}
+          {/* centered seal mark — a bounded medallion, not an empty coil */}
+          <rect
+            x={93}
+            y={93}
+            width={14}
+            height={14}
+            transform="rotate(45 100 100)"
+            fill="#37C6F4"
+            fillOpacity={0.75}
+          />
+        </svg>
+      </div>
+    </div>
+  )
+}
+
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLAnchorElement | null)[]>([])
@@ -89,6 +165,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
 
   return (
     <div className="relative">
+      {/* top dial removed from view here (kept in SpinnerDial's code above for reuse elsewhere) */}
+
       <div
         ref={scrollerRef}
         className="relative flex gap-8 md:gap-10 overflow-x-auto snap-x snap-mandatory scroll-smooth pt-2 pb-2 px-[calc(50%-110px)] sm:px-[calc(50%-140px)] md:px-[calc(50%-170px)] lg:px-[calc(50%-200px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -127,9 +205,10 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                     />
                   )}
 
-                  {/* hover overlay — desktop/mouse only; touch devices get the static caption below instead */}
+                  {/* info overlay — always visible on touch devices (no hover to rely on),
+                      hidden until hover on devices that actually support it */}
                   <div
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-0 transition-opacity duration-300 [@media(hover:hover)]:group-hover:opacity-100"
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 opacity-100 transition-opacity duration-300 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
                     style={{
                       background: 'radial-gradient(circle at center, rgba(28,36,51,0.85) 0%, rgba(28,36,51,0.55) 70%, transparent 100%)',
                     }}
@@ -144,56 +223,12 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                   </div>
                 </div>
               </div>
-
-              {/* static caption for touch devices, where hover can't be relied on */}
-              <div className="mt-3 text-center [@media(hover:hover)]:hidden">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#37C6F4] mb-1">{project.year}</p>
-                <h3 className="font-[family-name:var(--font-heading)] text-lg font-light text-[#F3F1EB]">
-                  {project.title}
-                </h3>
-                {project.location && (
-                  <p className="text-sm text-[#F3F1EB]/60 mt-1">{project.location}</p>
-                )}
-              </div>
             </Link>
           )
         })}
       </div>
 
-      {/* a 3D dial of the same stitched thread, tucked in close behind the centered
-          card so it peeks out like a floating status ring — tilted flat via
-          perspective, spinning constantly like something idling under your hand */}
-      <div
-        className="hidden sm:flex justify-center"
-        style={{ perspective: '700px' }}
-      >
-        {/* static tilt lives on this wrapper; the svg inside only ever spins,
-            so the CSS animation's transform doesn't fight the inline tilt.
-            Sized to match the focused card's own width at each breakpoint.
-            rotateX squashes it visually to ~47% height without shrinking the
-            box it occupies in layout, so a negative margin pulls the empty
-            reserved space out from under the card instead of leaving a gap. */}
-        <div
-          className="w-[280px] h-[280px] md:w-[340px] md:h-[340px] lg:w-[400px] lg:h-[400px] -mt-[60px] md:-mt-[76px] lg:-mt-[92px]"
-          style={{ transform: 'rotateX(62deg)' }}
-        >
-          <svg
-            viewBox="0 0 200 200"
-            aria-hidden="true"
-            className="w-full h-full pointer-events-none animate-spin-slow"
-          >
-            <path
-              d={SPIRAL_PATH}
-              fill="none"
-              stroke="#37C6F4"
-              strokeOpacity={0.65}
-              strokeWidth={4}
-              strokeLinecap="round"
-              strokeDasharray="3 8"
-            />
-          </svg>
-        </div>
-      </div>
+      <SpinnerDial edge="bottom" />
 
       {canScrollLeft && (
         <button

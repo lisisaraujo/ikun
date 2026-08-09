@@ -19,7 +19,7 @@ export default async function AboutPage() {
         title="About"
         subtitle="Mufutau Yusuf — Performer, Choreographer, Teacher."
       />
-      <Section className="bg-[#8B5F3C]">
+      <Section>
         <Container>
           {about ? (
             <AboutContent about={about} />
