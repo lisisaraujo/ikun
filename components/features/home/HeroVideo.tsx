@@ -47,11 +47,15 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
     }
   }
 
-  // All params baked into the URL so controls=0 is guaranteed to be applied
+  // All params baked into the URL so controls=0 is guaranteed to be applied.
+  // disablekb/fs/cc_load_policy strip the remaining interactive chrome; the
+  // click-blocking overlay below stops any of it (or YouTube's own hover
+  // watermark) from ever receiving pointer events in the first place.
   const src =
     `https://www.youtube.com/embed/${videoId}` +
     `?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}` +
     `&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3` +
+    `&disablekb=1&fs=0&cc_load_policy=0` +
     `&enablejsapi=1&playsinline=1`
 
   return (
@@ -75,11 +79,14 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
           className="w-full h-full border-0"
           allow="autoplay; encrypted-media"
           title="Hero background video"
+          tabIndex={-1}
         />
       </div>
 
-      {/* Blocks pointer events reaching YouTube's own UI inside the iframe */}
-      <div className="absolute inset-0 z-10" />
+      {/* Blocks pointer events (mouse, touch, keyboard focus) from ever reaching
+          YouTube's own UI inside the iframe, so no hover watermark, title card,
+          or "watch on YouTube" link can be triggered or clicked */}
+      <div className="absolute inset-0 z-10 pointer-events-auto" />
 
       {/* Black cover — lifted after the YouTube title/overlay has cleared */}
       <div
@@ -88,11 +95,11 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
         }`}
       />
 
-      {/* z-[51] puts this above the fixed Navbar at z-50 */}
+      {/* Sits where SideNav appears once scrolled past the hero — z-[51] puts this above the fixed Navbar at z-50 */}
       <button
         onClick={togglePlay}
         aria-label={playing ? 'Pause video' : 'Play video'}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[51] flex items-center justify-center w-12 h-12 rounded-full bg-black/40 text-[#F3F1EB] hover:bg-black/60 transition-colors"
+        className="absolute top-6 right-6 md:right-10 lg:right-14 z-[51] flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-[#F3F1EB] hover:bg-black/60 transition-colors"
       >
         {playing ? (
           <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">

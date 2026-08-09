@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:3000 -o /tmp/existing.html -w \"%{http_code}\\\\n\")",
+      "Read(//tmp/**)",
+      "Bash(ps -p 11246 -o command=)",
+      "Bash(sleep 2; cat /tmp/ikun-dev.log)",
+      "Read(//private/tmp/**)"
+    ]
+  }
+}

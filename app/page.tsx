@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getHomePage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
+import { getHomePage, getAboutPage, getAllProjects, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
 import HeroVideo from '@/components/features/home/HeroVideo'
-import HomeIntro from '@/components/features/home/HomeIntro'
+import HeroIntroOverlay from '@/components/features/home/HeroIntroOverlay'
+import PortableText from '@/components/ui/PortableText'
 import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 
@@ -14,8 +15,9 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [homeData, projects, events, settings] = await Promise.all([
+  const [homeData, about, projects, events, settings] = await Promise.all([
     getHomePage(),
+    getAboutPage(),
     getAllProjects(),
     getAllEvents(),
     getGlobalSettings(),
@@ -44,25 +46,46 @@ export default async function HomePage() {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
         </div>
+        {homeData?.introText && (
+          <HeroIntroOverlay heading={homeData.introHeading} text={homeData.introText} />
+        )}
       </section>
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
       <section id="about" className="relative z-10 min-h-screen flex flex-col justify-center bg-[#F3F1EB] border-t-2 border-[#37C6F4] px-8 md:px-24 lg:px-40 py-32">
-        {homeData?.introText ? (
-          <>
-            <HomeIntro heading={homeData.introHeading} text={homeData.introText} />
-            <div className="mt-14 flex justify-end">
-              <Link
-                href="/about"
-                className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
-              >
-                Full bio
-                <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
+        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10">About</p>
+        {about ? (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+            <div className="lg:col-span-3">
+              <p className="text-[#8B5F3C] text-lg md:text-xl font-light mb-8 leading-relaxed">
+                Mufutau Yusuf — Performer, Choreographer, Teacher.
+              </p>
+              <div className="text-[#8B5F3C]/80 text-base md:text-lg leading-relaxed">
+                <PortableText value={about.bio} />
+              </div>
             </div>
-          </>
+
+            {about.photo && (
+              <div className="lg:col-span-2">
+                <figure>
+                  <div className="relative aspect-[3/4] rounded-sm overflow-hidden">
+                    <Image
+                      src={urlFor(about.photo).width(600).height(800).fit('crop').auto('format').url()}
+                      alt={about.photoCaption ?? 'Mufutau Yusuf'}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 40vw"
+                    />
+                  </div>
+                  {about.photoCaption && (
+                    <figcaption className="mt-3 text-xs text-[#8B5F3C]/50">
+                      {about.photoCaption}
+                    </figcaption>
+                  )}
+                </figure>
+              </div>
+            )}
+          </div>
         ) : (
           <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest">About content coming soon.</p>
         )}

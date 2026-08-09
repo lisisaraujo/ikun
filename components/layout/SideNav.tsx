@@ -11,32 +11,32 @@ const SECTIONS = [
   { id: 'contact',  label: 'Contact',  href: '/contact' },
 ]
 
-const ITEM_H = 38
-
 export default function SideNav() {
   const pathname = usePathname()
   const router   = useRouter()
   const isHome   = pathname === '/'
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [onDark, setOnDark] = useState(isHome)
+  const [visible, setVisible] = useState(!isHome)
+  const [open, setOpen] = useState(false)
 
   const detectSection = useCallback(() => {
-    const viewCenter = window.scrollY + window.innerHeight / 2
+    // Only switches once a section's top has fully reached the top of the viewport,
+    // i.e. the previous section has scrolled completely out of view
     let active = 0
     SECTIONS.forEach(({ id }, i) => {
       const el = document.getElementById(id)
       if (!el) return
-      if (el.offsetTop <= viewCenter) active = i
+      if (window.scrollY >= el.offsetTop) active = i
     })
     setCurrentIndex(active)
-    // Dark when still mostly on the hero (before about section)
+    // Only reveal once the hero has been scrolled past into the about section
     const aboutEl = document.getElementById('about')
-    setOnDark(!aboutEl || window.scrollY < aboutEl.offsetTop - window.innerHeight * 0.3)
+    setVisible(!!aboutEl && window.scrollY >= aboutEl.offsetTop - window.innerHeight * 0.3)
   }, [])
 
   useEffect(() => {
     if (!isHome) {
-      setOnDark(false)
+      setVisible(true)
       const idx = SECTIONS.findIndex(
         (s) => pathname.startsWith(s.href)
       )
@@ -50,6 +50,7 @@ export default function SideNav() {
 
   function handleClick(i: number) {
     const s = SECTIONS[i]
+    setOpen(false)
     if (isHome) {
       const el = document.getElementById(s.id)
       if (el) { el.scrollIntoView({ behavior: 'smooth' }); return }
@@ -57,45 +58,44 @@ export default function SideNav() {
     router.push(s.href)
   }
 
-  const translateY = -(currentIndex * ITEM_H + ITEM_H / 2)
+  const current = SECTIONS[currentIndex]
 
   return (
-    <div className="fixed right-6 md:right-10 lg:right-14 z-[60]" style={{ top: '50vh' }}>
+    <div
+      className={`fixed top-6 right-6 md:right-10 lg:right-14 z-[60] flex flex-col items-end transition-opacity duration-500 ${
+        visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="font-heading uppercase tracking-[0.25em] leading-none select-none font-semibold text-sm text-[#37C6F4] transition-colors duration-300"
+      >
+        {current.label}
+      </button>
+
       <div
-        className="flex flex-col items-end transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateY(${translateY}px)` }}
+        className={`mt-4 flex flex-col items-end gap-3 origin-top transition-all duration-300 ease-in-out ${
+          open
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-1 pointer-events-none'
+        }`}
       >
         {SECTIONS.map((section, i) => {
-          const dist = Math.abs(i - currentIndex)
-
-          const fontSize =
-            dist === 0 ? 'text-sm'     :
-            dist === 1 ? 'text-xs'     :
-            dist === 2 ? 'text-[11px]' :
-                         'text-[10px]'
-
-          const colour =
-            dist === 0
-              ? onDark ? 'text-white' : 'text-[#37C6F4]'
-              : onDark ? 'text-white' : 'text-[#8B5F3C]'
-
-          const opacity =
-            dist === 0 ? 1    :
-            dist === 1 ? 0.45 :
-            dist === 2 ? 0.25 :
-            dist === 3 ? 0.15 :
-                         0.08
+          const isCurrent = i === currentIndex
+          const colour = isCurrent ? 'text-[#37C6F4]' : 'text-[#8B5F3C]/80'
 
           return (
-            <div key={section.id} style={{ height: ITEM_H }} className="flex items-center justify-end">
-              <button
-                onClick={() => handleClick(i)}
-                style={{ opacity }}
-                className={`text-right uppercase tracking-widest transition-all duration-500 leading-none select-none font-medium hover:opacity-100 ${fontSize} ${colour}`}
-              >
-                {section.label}
-              </button>
-            </div>
+            <button
+              key={section.id}
+              onClick={() => handleClick(i)}
+              className={`uppercase tracking-widest transition-colors duration-300 leading-none select-none font-medium text-xs hover:opacity-100 ${
+                isCurrent ? 'opacity-100' : 'opacity-70'
+              } ${colour}`}
+            >
+              {section.label}
+            </button>
           )
         })}
       </div>
