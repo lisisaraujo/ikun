@@ -16,7 +16,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
   return (
     <Link
       href={`/projects/${project.slug.current}`}
-      className={`group block overflow-hidden rounded-sm transition-shadow hover:shadow-xl ${
+      className={`group block overflow-hidden rounded-lg transition-shadow hover:shadow-xl ${
         dark ? 'bg-[#0B0B0B]/40' : 'bg-[#F3F1EB]'
       }`}
     >

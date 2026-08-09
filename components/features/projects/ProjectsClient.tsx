@@ -149,7 +149,7 @@ function GalleryView({ projects }: { projects: SanityProject[] }) {
               <Link
                 key={project._id}
                 href={`/projects/${project.slug.current}`}
-                className="group relative block aspect-[4/5] overflow-hidden bg-[#1C2433]"
+                className="group relative block aspect-[4/5] rounded-lg overflow-hidden bg-[#1C2433]"
               >
                 {/* Image */}
                 {imageSrc ? (

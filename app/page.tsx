@@ -63,21 +63,7 @@ export default async function HomePage() {
       {/* ── PROJECTS ─────────────────────────────────────────── */}
       <section id="projects" className="relative z-10 min-h-screen bg-[#8B5F3C] flex flex-col justify-center py-24">
         <SectionSeam />
-        <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-10 px-8 md:px-16 lg:px-24">Selected work</p>
-        <div className="pl-8 md:pl-16 lg:pl-24">
-          <ProjectsCarousel projects={projects} />
-        </div>
-        <div className="mt-14 flex justify-end px-8 md:px-16 lg:px-24">
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
-          >
-            All projects
-            <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
-        </div>
+        <ProjectsCarousel projects={projects} />
       </section>
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}

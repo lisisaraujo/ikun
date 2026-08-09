@@ -337,6 +337,14 @@
   animation: fadeIn 0.4s ease-in-out;
 }
 
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 10s linear infinite;
+}
+
 /* ── Utility: underline-slide (brown underline grows from left on hover) ── */
 .link-underline {
   position: relative;

@@ -23,7 +23,7 @@ export default function AboutContent({ about }: AboutContentProps) {
       {about.photo && (
         <div className="lg:col-span-5">
           <figure className="lg:sticky lg:top-32 lg:mt-20 lg:mr-[-2rem] xl:mr-[-4rem]">
-            <div className="relative aspect-[4/5]">
+            <div className="relative aspect-[4/5] rounded-lg overflow-hidden">
               <Image
                 src={urlFor(about.photo).width(700).height(875).fit('crop').auto('format').url()}
                 alt={about.photoCaption ?? 'Mufutau Yusuf'}
