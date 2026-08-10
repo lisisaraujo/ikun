@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <div
-      className="fixed top-0 left-1/2 z-[60] pt-1 pointer-events-none transition-transform duration-300 ease-out"
+      className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none transition-transform duration-300 ease-out"
       style={{ transform: hidden ? 'translate(-50%, -100%)' : 'translate(-50%, 0)' }}
     >
       <Link

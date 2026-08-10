@@ -80,7 +80,7 @@ export default function SideNav() {
 
   return (
     <div
-      className={`fixed top-0 right-6 md:right-10 lg:right-14 z-[60] h-28 md:h-32 pt-1 flex flex-col items-end justify-center transition-opacity duration-500 ${
+      className={`fixed top-0 right-6 md:right-10 lg:right-14 z-[65] h-28 md:h-32 pt-1 flex flex-col items-end justify-center transition-opacity duration-500 ${
         visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       onMouseEnter={() => setOpen(true)}

@@ -126,6 +126,22 @@ export interface Partner {
   showInFooter?: boolean
 }
 
+export interface PressItem {
+  _key: string
+  publication: string
+  headline: string
+  url?: string
+  date?: string
+}
+
+export interface OtherInfos {
+  _id: string
+  pressItems?: PressItem[]
+  partners?: Partner[]
+  governance?: PortableTextBlock[]
+  miscContent?: PortableTextBlock[]
+}
+
 export interface GlobalSettings {
   _id: string
   email?: string
