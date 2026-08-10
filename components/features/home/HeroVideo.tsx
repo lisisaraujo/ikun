@@ -53,10 +53,13 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
 
   // Stops playback once the hero has scrolled fully out of view (it's sticky,
   // so it would otherwise keep playing behind every other section forever),
-  // and resumes it if scrolled back — unless the user paused it themselves
+  // and resumes it if scrolled back — unless the user paused it themselves.
+  // The intro-text section right after the hero is transparent (the video
+  // shows through it), so playback needs to survive that extra viewport of
+  // scroll too — hence *2 rather than just the hero's own height.
   useEffect(() => {
     const onScroll = () => {
-      const pastHero = window.scrollY >= window.innerHeight
+      const pastHero = window.scrollY >= window.innerHeight * 2
 
       if (pastHero && playing) {
         sendCommand('pauseVideo')

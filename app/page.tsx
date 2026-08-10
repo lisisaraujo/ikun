@@ -50,10 +50,18 @@ export default async function HomePage() {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
         </div>
-        {homeData?.introText && (
-          <HeroIntroOverlay heading={homeData.introHeading} text={homeData.introText} />
-        )}
       </HeroSection>
+
+      {/* ── INTRO TEXT ───────────────────────────────────────────
+          Its own page in the scroll stack, between the hero and About —
+          deliberately not in SideNav's SECTIONS list, so it's not a menu
+          destination. No background of its own, so the still-playing hero
+          video underneath keeps showing through as this scrolls up to cover it. */}
+      {homeData?.introText && (
+        <section className="sticky top-0 z-[5] h-screen pointer-events-none">
+          <HeroIntroOverlay heading={homeData.introHeading} text={homeData.introText} />
+        </section>
+      )}
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
       <section id="about" className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
