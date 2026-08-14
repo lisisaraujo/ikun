@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { useReducedMotion } from '@/lib/useReducedMotion'
+
+const PANEL_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)'
 
 // `routePrefix` maps a standalone route (a project, an Ìrònú post, or the
 // full calendar listing) back to the home section it belongs to, so the
@@ -23,6 +26,33 @@ export default function SideNav() {
   const [visible, setVisible] = useState(!isHome)
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const firstItemRef = useRef<HTMLButtonElement>(null)
+  const reducedMotion = useReducedMotion()
+
+  // Desktop panel's masked item reveal — resets the instant the panel
+  // starts closing (render-time "adjust state" pattern, not an effect,
+  // since the closing transition needs to start on the very same render).
+  const [itemsRevealed, setItemsRevealed] = useState(false)
+  const [prevOpen, setPrevOpen] = useState(open)
+  if (prevOpen !== open) {
+    setPrevOpen(open)
+    if (!open) setItemsRevealed(false)
+    else if (reducedMotion) setItemsRevealed(true)
+  }
+
+  useEffect(() => {
+    if (!open || reducedMotion) return
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setItemsRevealed(true))
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [open, reducedMotion])
+
+  // Moves focus into the panel for keyboard users — not a focus trap (this
+  // is navigation, not a modal), just a sensible landing spot on open.
+  useEffect(() => {
+    if (open) firstItemRef.current?.focus()
+  }, [open])
 
   // Closes the menu on an outside tap/click — the only reliable close signal
   // on touch devices, which never fire `mouseleave`.
@@ -137,75 +167,124 @@ export default function SideNav() {
 
   return (
     <div ref={rootRef}>
-      {/* ── Desktop / tablet — hover pill + dropdown card ─────────────── */}
-      <div
-        // Vertically centered on the Navbar logo's own center (pt-1 + half
-        // of its h-28/md:h-32), not the viewport — so it reads as sitting
-        // at the same top band as the logo rather than off in the middle
-        // of the page.
-        className={`hidden md:flex fixed top-[60px] md:top-[68px] right-0 z-[65] -translate-y-1/2 items-center transition-opacity duration-500 ${
+      {/* ── Desktop / tablet — quiet editorial trigger + slide-in panel ──
+          Click-only (no hover-to-open — a 600ms panel slide shouldn't fire
+          on an accidental mouse pass). The trigger stays fixed in the same
+          corner whether the panel is open or closed, just swapping its own
+          label/icon (section name + "+" → "Menu" + "×"), so it doubles as
+          the panel's own close control without a second, redundant button. */}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-controls="side-nav-panel"
+        aria-label={open ? 'Close menu' : undefined}
+        className={`group hidden md:flex fixed top-[60px] md:top-[68px] right-6 md:right-10 lg:right-14 z-[70] -translate-y-1/2 flex-col items-end py-1 focus-visible:outline-none transition-opacity duration-500 ${
           visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
       >
-        <div className="relative">
-          {/* Trigger — flush against the right edge with a ribbon-notch cut
-              into its left side (pointing into the page), so it reads as a
-              page marker clipped onto the edge of the site rather than a
-              floating pill. The chevron keeps it legible as a button that
-              expands, not a static label. */}
-          <button
-            onClick={() => setOpen(true)}
-            aria-haspopup="true"
-            aria-expanded={open}
-            aria-controls="side-nav-menu"
-            className="group flex items-center gap-2 border-y border-r border-[#37C6F4]/30 bg-[#0B0B0B]/70 backdrop-blur-md py-3 pl-7 pr-4 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.55)] hover:border-[#37C6F4]/60 hover:bg-[#0B0B0B]/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 transition-colors duration-300"
-            style={{ clipPath: 'polygon(14% 0, 100% 0, 100% 100%, 14% 100%, 0 50%)' }}
-          >
-            <span className="font-heading uppercase tracking-[0.2em] leading-none select-none font-semibold text-xs text-[#37C6F4] whitespace-nowrap">
+        <span className="flex items-center gap-3">
+          {!open && (
+            <span
+              className="font-heading uppercase tracking-[0.2em] leading-none select-none text-xs font-semibold text-[#37C6F4] whitespace-nowrap transition-transform duration-300 group-hover:-translate-x-1 group-focus-visible:-translate-x-1"
+              style={{ transitionTimingFunction: PANEL_EASE }}
+            >
               {current.label}
             </span>
-            <svg
-              viewBox="0 0 24 24"
-              className={`w-3.5 h-3.5 stroke-current text-[#37C6F4] transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-              fill="none" strokeWidth={2} aria-hidden="true"
-            >
-              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-
-          {/* Panel — a solid card, not floating bare text. */}
-          <div
-            id="side-nav-menu"
-            role="menu"
-            className={`absolute right-0 top-full mt-2 w-48 rounded-2xl border border-[#37C6F4]/20 bg-[#0B0B0B]/85 backdrop-blur-md shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6)] overflow-hidden origin-top-right transition-all duration-300 ease-in-out ${
-              open
-                ? 'opacity-100 scale-100 pointer-events-auto'
-                : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'
-            }`}
+          )}
+          <svg
+            viewBox="0 0 16 16"
+            className="w-3 h-3 shrink-0 text-[#37C6F4] transition-[transform,opacity] duration-300 group-hover:opacity-90"
+            style={{ transform: `rotate(${open ? 45 : 0}deg)`, transitionTimingFunction: PANEL_EASE }}
+            fill="none" aria-hidden="true"
           >
-            {SECTIONS.map((section, i) => {
-              const isCurrent = i === currentIndex
+            <line x1="8" y1="1" x2="8" y2="15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            <line x1="1" y1="8" x2="15" y2="8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+          </svg>
+        </span>
+      </button>
 
-              return (
-                <button
-                  key={section.id}
-                  role="menuitem"
-                  aria-current={isCurrent ? 'true' : undefined}
-                  onClick={() => handleClick(i)}
-                  className={`flex items-center justify-between gap-3 w-full px-4 py-3.5 text-left uppercase tracking-widest text-[13px] font-medium transition-colors duration-200 ${
-                    isCurrent
-                      ? 'text-[#37C6F4] bg-[#37C6F4]/10'
-                      : 'text-[#F3F1EB]/75 hover:text-[#F3F1EB] hover:bg-white/5'
-                  }`}
-                >
-                  {section.label}
-                  {isCurrent && <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-[#37C6F4]" />}
-                </button>
-              )
-            })}
-          </div>
+      {/* Backdrop — a hint that something opened, not a modal scrim. Purely
+          decorative (pointer-events-none): the existing outside-pointerdown
+          listener above already closes the panel no matter what element a
+          click lands on, so the page underneath stays fully interactive. */}
+      <div
+        aria-hidden="true"
+        className="hidden md:block fixed inset-0 z-[68] bg-black pointer-events-none"
+        style={{
+          opacity: open ? 0.15 : 0,
+          transition: reducedMotion ? 'opacity 200ms ease-out' : `opacity 500ms ${PANEL_EASE}`,
+        }}
+      />
+
+      {/* Panel — a narrow editorial slice of the page, not a dropdown card
+          or a full-screen takeover. Dark navy/black at ~95% opacity so the
+          site's own palette carries it rather than a generic modal surface. */}
+      <div
+        id="side-nav-panel"
+        role="menu"
+        aria-hidden={!open}
+        className="hidden md:flex fixed inset-y-0 right-0 z-[69] w-[340px] max-w-[85vw] flex-col border-l border-[#37C6F4]/15 bg-[#0B0B0B]/95 backdrop-blur-md px-8 pb-10 pt-28 lg:px-10"
+        style={{
+          transform: open ? 'translateX(0)' : 'translateX(100%)',
+          transition: reducedMotion ? 'transform 200ms ease-out' : `transform 600ms ${PANEL_EASE}`,
+          pointerEvents: open ? 'auto' : 'none',
+        }}
+      >
+        <nav className="flex flex-1 flex-col justify-center gap-8">
+          {SECTIONS.map((section, i) => {
+            const isCurrent = i === currentIndex
+            const delay = open ? 120 + i * 70 : 0
+
+            return (
+              <button
+                key={section.id}
+                ref={i === 0 ? firstItemRef : undefined}
+                role="menuitem"
+                aria-current={isCurrent ? 'true' : undefined}
+                onClick={() => handleClick(i)}
+                className="group flex items-center gap-4 text-left focus-visible:outline-none"
+              >
+                <span className="shrink-0 text-[10px] font-medium tracking-[0.3em] text-[#37C6F4]/70">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="block flex-1 overflow-hidden">
+                  <span
+                    className="flex items-center gap-3 font-[family-name:var(--font-heading)] uppercase tracking-[0.02em] text-2xl lg:text-[28px] font-light text-[#F3F1EB] transition-transform duration-300 ease-out group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
+                    style={{
+                      opacity: itemsRevealed ? 1 : 0,
+                      filter: reducedMotion ? 'none' : itemsRevealed ? 'blur(0px)' : 'blur(3px)',
+                      transform: reducedMotion ? 'none' : itemsRevealed ? 'translateY(0%)' : 'translateY(110%)',
+                      transition: reducedMotion
+                        ? 'opacity 200ms ease-out'
+                        : `transform 600ms ${PANEL_EASE} ${delay}ms, opacity 600ms ${PANEL_EASE} ${delay}ms, filter 600ms ${PANEL_EASE} ${delay}ms`,
+                    }}
+                  >
+                    {section.label}
+                    {isCurrent ? (
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#37C6F4]" />
+                    ) : (
+                      <span
+                        className="shrink-0 text-[#37C6F4] opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    )}
+                  </span>
+                </span>
+              </button>
+            )
+          })}
+        </nav>
+
+        {/* A single, quiet geometric mark — secondary to the typography,
+            still rather than spinning (see the carousel work's "stillness
+            is part of the composition too" principle). */}
+        <div className="mt-10 flex justify-center opacity-[0.16]" aria-hidden="true">
+          <svg viewBox="0 0 200 200" className="h-10 w-10">
+            <circle cx={100} cy={100} r={64} fill="none" stroke="#37C6F4" strokeWidth={2.5} strokeDasharray="5 10 3 8" strokeLinecap="round" />
+          </svg>
         </div>
       </div>
 
