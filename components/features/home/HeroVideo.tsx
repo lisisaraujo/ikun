@@ -19,27 +19,11 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
   // (vs. the user clicking pause), so scrolling back never overrides a manual pause
   const autoPaused = useRef(false)
 
-  // A one-time coach-mark teaching the "Aa" toggle exists — shows itself
-  // briefly after the text has had time to be noticed, then dismisses on
-  // its own or the moment the button is actually used.
-  const [showTextHint, setShowTextHint] = useState(false)
-  useEffect(() => {
-    if (!showTextToggle || !revealed) return
-    const showTimer = setTimeout(() => setShowTextHint(true), 1800)
-    const hideTimer = setTimeout(() => setShowTextHint(false), 6500)
-    return () => { clearTimeout(showTimer); clearTimeout(hideTimer) }
-  }, [revealed, showTextToggle])
-
   // The story begins when the protective YouTube cover has lifted and the
   // moving image is actually visible, rather than racing ahead on mount.
   useEffect(() => {
     if (revealed) onVideoVisible?.()
   }, [onVideoVisible, revealed])
-
-  const handleToggleText = () => {
-    setShowTextHint(false)
-    onToggleText?.()
-  }
 
   // Schedule the cover to lift after `delay` ms, cancelling any prior pending reveal
   const scheduleReveal = (delay: number) => {
@@ -152,37 +136,22 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
           past the hero — z-[51] puts this above the fixed Navbar at z-50 */}
       <div className="absolute top-6 right-6 md:right-10 lg:right-14 z-[51] flex items-center gap-2">
         {showTextToggle && (
-          <div className="relative">
-            {/* Coach-mark — points at the button once, teaches the gesture,
-                then gets out of the way for good (dismissed by its own timer
-                or the first tap, whichever comes first). */}
-            <div
-              role="status"
-              className={`absolute top-full right-0 mt-3 whitespace-nowrap rounded-full border border-[#37C6F4]/30 bg-black/70 backdrop-blur-sm px-3 py-1.5 text-[11px] text-[#F3F1EB] shadow-[0_4px_16px_-4px_rgba(0,0,0,0.6)] transition-all duration-500 ${
-                showTextHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 pointer-events-none'
-              }`}
-            >
-              Tap to hide the text
-            </div>
-
-            {/* Filled when text is showing, outlined when it's not — a
-                clearly "on/off" pair rather than a same-as-everything-else
-                icon, so it reads at a glance as a toggle. */}
-            <button
-              onClick={handleToggleText}
-              aria-pressed={textVisible}
-              aria-label={textVisible ? 'Hide intro text' : 'Show intro text'}
-              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 ${
-                textVisible
-                  ? 'bg-[#37C6F4] border-[#37C6F4] text-[#0B0B0B] hover:bg-[#F3F1EB]'
-                  : 'bg-black/40 border-[#37C6F4]/50 text-[#37C6F4] hover:bg-black/60'
-              }`}
-            >
-              <span className="font-heading text-[11px] font-semibold leading-none select-none" aria-hidden="true">
-                Aa
-              </span>
-            </button>
-          </div>
+          // A plain-language label rather than an icon-plus-tooltip — the
+          // button always says what it does, so meaning never depends on
+          // hover/focus to be discovered.
+          <button
+            onClick={onToggleText}
+            aria-pressed={textVisible}
+            className={`flex items-center justify-center h-10 rounded-full border px-4 text-[11px] font-semibold tracking-wide transition-[transform,background-color,border-color,color,opacity] duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 ${
+              textVisible
+                ? 'scale-100 bg-[#37C6F4] border-[#37C6F4] text-[#0B0B0B] hover:bg-[#F3F1EB]'
+                : 'scale-[0.92] bg-black/30 border-[#37C6F4]/35 text-[#37C6F4]/70 hover:bg-black/60 hover:text-[#37C6F4]'
+            }`}
+          >
+            <span className="font-heading select-none">
+              {textVisible ? 'Hide intro' : 'Show intro'}
+            </span>
+          </button>
         )}
         <button
           onClick={togglePlay}

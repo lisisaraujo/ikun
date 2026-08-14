@@ -58,15 +58,25 @@ export default function SideNav() {
     return () => { document.body.style.overflow = original }
   }, [open])
 
-  useEffect(() => {
+  // Off-home, the current section is a pure function of `pathname` — no DOM
+  // observation needed — so it's derived during render (React's documented
+  // "adjust state when a prop changes" pattern) rather than routed through
+  // an effect, which would apply it a render late for no benefit.
+  const [prevRouteKey, setPrevRouteKey] = useState(`${isHome}:${pathname}`)
+  const routeKey = `${isHome}:${pathname}`
+  if (prevRouteKey !== routeKey) {
+    setPrevRouteKey(routeKey)
     if (!isHome) {
       setVisible(true)
       const idx = SECTIONS.findIndex(
         (s) => s.routePrefix && pathname.startsWith(s.routePrefix)
       )
       setCurrentIndex(idx === -1 ? 0 : idx)
-      return
     }
+  }
+
+  useEffect(() => {
+    if (!isHome) return
 
     // A section counts as "entered" the instant its top edge crosses the top of
     // the viewport — the same geometric line the stitched SectionSeam sits on —
@@ -95,7 +105,7 @@ export default function SideNav() {
     })
 
     return () => observer.disconnect()
-  }, [isHome, pathname])
+  }, [isHome])
 
   function handleClick(i: number) {
     const s = SECTIONS[i]
@@ -129,24 +139,31 @@ export default function SideNav() {
     <div ref={rootRef}>
       {/* ── Desktop / tablet — hover pill + dropdown card ─────────────── */}
       <div
-        className={`hidden md:flex fixed top-0 right-6 md:right-10 lg:right-14 z-[65] h-28 md:h-32 pt-1 flex-col items-end justify-center transition-opacity duration-500 ${
+        // Vertically centered on the Navbar logo's own center (pt-1 + half
+        // of its h-28/md:h-32), not the viewport — so it reads as sitting
+        // at the same top band as the logo rather than off in the middle
+        // of the page.
+        className={`hidden md:flex fixed top-[60px] md:top-[68px] right-0 z-[65] -translate-y-1/2 items-center transition-opacity duration-500 ${
           visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         <div className="relative">
-          {/* Trigger — a bordered, filled pill so it unmistakably reads as a
-              button rather than a stray label, with a chevron that flips to
-              signal open/closed state. */}
+          {/* Trigger — flush against the right edge with a ribbon-notch cut
+              into its left side (pointing into the page), so it reads as a
+              page marker clipped onto the edge of the site rather than a
+              floating pill. The chevron keeps it legible as a button that
+              expands, not a static label. */}
           <button
             onClick={() => setOpen(true)}
             aria-haspopup="true"
             aria-expanded={open}
             aria-controls="side-nav-menu"
-            className="group flex items-center gap-2.5 rounded-full border border-[#37C6F4]/30 bg-[#0B0B0B]/55 backdrop-blur-md pl-3.5 pr-3 py-2.5 shadow-[0_4px_20px_-6px_rgba(0,0,0,0.5)] hover:border-[#37C6F4]/60 hover:bg-[#0B0B0B]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 transition-colors duration-300"
+            className="group flex items-center gap-2 border-y border-r border-[#37C6F4]/30 bg-[#0B0B0B]/70 backdrop-blur-md py-3 pl-7 pr-4 shadow-[0_8px_20px_-6px_rgba(0,0,0,0.55)] hover:border-[#37C6F4]/60 hover:bg-[#0B0B0B]/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 transition-colors duration-300"
+            style={{ clipPath: 'polygon(14% 0, 100% 0, 100% 100%, 14% 100%, 0 50%)' }}
           >
-            <span className="font-heading uppercase tracking-[0.2em] leading-none select-none font-semibold text-sm text-[#37C6F4]">
+            <span className="font-heading uppercase tracking-[0.2em] leading-none select-none font-semibold text-xs text-[#37C6F4] whitespace-nowrap">
               {current.label}
             </span>
             <svg
@@ -162,7 +179,7 @@ export default function SideNav() {
           <div
             id="side-nav-menu"
             role="menu"
-            className={`absolute right-0 top-full mt-3 w-48 rounded-2xl border border-[#37C6F4]/20 bg-[#0B0B0B]/85 backdrop-blur-md shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6)] overflow-hidden origin-top-right transition-all duration-300 ease-in-out ${
+            className={`absolute right-0 top-full mt-2 w-48 rounded-2xl border border-[#37C6F4]/20 bg-[#0B0B0B]/85 backdrop-blur-md shadow-[0_16px_40px_-8px_rgba(0,0,0,0.6)] overflow-hidden origin-top-right transition-all duration-300 ease-in-out ${
               open
                 ? 'opacity-100 scale-100 pointer-events-auto'
                 : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'

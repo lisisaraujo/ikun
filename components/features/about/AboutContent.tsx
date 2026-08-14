@@ -2,6 +2,7 @@ import Image from 'next/image'
 import PortableText from '@/components/ui/PortableText'
 import KineticHeading from '@/components/ui/KineticHeading'
 import SpiralRings from '@/components/features/projects/SpiralRings'
+import HeroOrbitText from '@/components/features/home/HeroOrbitText'
 import { urlFor } from '@/lib/sanity/image'
 import type { AboutPage } from '@/types/sanity'
 
@@ -12,14 +13,18 @@ interface AboutContentProps {
 // Static left, moving right — the specific tension named in the Ballet
 // National de Marseille reference. Bio text sits still and readable on the
 // left; the portrait never stops drifting on the right (a slow Ken Burns
-// zoom, plus a spiral turning behind it, echoing the same motif that spins
-// under the Projects cards). One deliberate structural swing, not a
-// site-wide pattern — every other section stays a single centered column.
+// zoom). The spiral motif (SpiralRings, same as under the Projects cards)
+// only appears as a placeholder when there's no photo — behind an actual
+// photo it would be fully hidden anyway, so it's not drawn there at all.
+// One deliberate structural swing, not a site-wide pattern — every other
+// section stays a single centered column.
 export default function AboutContent({ about }: AboutContentProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.85fr] gap-10 lg:gap-16 h-[82vh] md:h-[74vh]">
       {/* ── Static: name, subtitle, bio ─────────────────────────── */}
-      <div className="flex flex-col min-h-0 px-8 lg:pl-24 xl:pl-40 lg:pr-0">
+      <div className="relative flex flex-col min-h-0 px-8 lg:pl-24 xl:pl-40 lg:pr-0">
+        <HeroOrbitText />
+
         <div className="shrink-0 mb-6 md:mb-8 text-center lg:text-left">
           <KineticHeading
             as="h2"
@@ -65,13 +70,6 @@ export default function AboutContent({ about }: AboutContentProps) {
 
       {/* ── Moving: portrait, never still ───────────────────────── */}
       <div className="relative hidden lg:block min-h-0 overflow-hidden rounded-2xl">
-        <div
-          className="absolute -inset-8 opacity-[0.16] animate-spin-slower pointer-events-none"
-          aria-hidden="true"
-        >
-          <SpiralRings className="w-full h-full" />
-        </div>
-
         {about.photo ? (
           <>
             <div className="absolute inset-0 animate-ken-burns">

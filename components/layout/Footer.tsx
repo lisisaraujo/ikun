@@ -4,6 +4,7 @@ import { getGlobalSettings, getOtherInfos } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 import Container from './Container'
+import SectionBackdrop from './SectionBackdrop'
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -56,89 +57,66 @@ export default async function Footer() {
   ].filter(Boolean) as { label: string; url: string; icon: React.ReactNode }[]
 
   return (
-    <footer className="bg-[#1C2433] text-[#C9C9C9] border-t border-[#37C6F4]/15">
+    // `min-h-screen` + `relative overflow-hidden` mirrors the home page's
+    // own sticky sections (see app/page.tsx) so this reads as one more beat
+    // of that same composition rather than a bolted-on strip: same backdrop
+    // recipe (SectionBackdrop, same navy/blue as `contact`), same scale.
+    <footer id="footer" className="relative isolate flex min-h-screen flex-col overflow-hidden text-[#C9C9C9]">
+      <SectionBackdrop id="footer" color="#1C2433" glow="#37C6F4" />
 
-      {/* ── Middle: email + socials + logos ─────────────── */}
-      <Container className="py-10 border-b border-[#F3F1EB]/10">
-         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-heading)] text-base font-800 text-[#F3F1EB] hover:text-[#37C6F4] transition-colors duration-200 shrink-0"
-          >
-            {SITE_NAME}
-          </Link>
+   
+      {/* ── Middle: collaborator / funder logos — given real room to
+          breathe instead of a cramped row, since this is the one place on
+          the site they're shown. Fills all the height the top/bottom
+          strips don't need, which is most of it. ─────────────────────── */}
+      <div className="flex flex-1 flex-col items-center justify-center gap-10 py-16">
+        {footerLogos.length > 0 && (
+          <>
+            <p className="text-xs uppercase tracking-[0.2em] text-[#F3F1EB]/40">
+              Supported by
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-10 px-6">
+              {footerLogos.map((partner) => {
+                const logoUrl = partner.logo
+                  ? urlFor(partner.logo).height(96).auto('format').url()
+                  : null
 
-          {/* Email */}
-          <a
-            href={`mailto:${email}`}
-            className="text-sm text-[#F3F1EB]/70 hover:text-[#37C6F4] transition-colors duration-200"
-          >
-            {email}
-          </a>
+                const logoEl = logoUrl ? (
+                  <Image
+                    src={logoUrl}
+                    alt={partner.name}
+                    width={150}
+                    height={48}
+                    className="object-contain max-h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
+                  />
+                ) : (
+                  <span className="text-sm text-[#F3F1EB]/40 hover:text-[#F3F1EB]/70 transition-colors">
+                    {partner.name}
+                  </span>
+                )
 
-          {/* Social icons */}
-          {socials.length > 0 && (
-            <ul className="flex items-center gap-5">
-              {socials.map(({ label, url, icon }) => (
-                <li key={label}>
+                return partner.url ? (
                   <a
-                    href={url}
+                    key={partner._key}
+                    href={partner.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
-                    className="block text-[#F3F1EB]/50 hover:text-[#37C6F4] transition-colors duration-200"
+                    aria-label={partner.name}
+                    className="block"
                   >
-                    {icon}
+                    {logoEl}
                   </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Funder / partner logos */}
-        {footerLogos.length > 0 && (
-          <div className="flex flex-wrap items-center gap-8 pt-8 border-t border-[#F3F1EB]/10">
-            {footerLogos.map((partner) => {
-              const logoUrl = partner.logo
-                ? urlFor(partner.logo).height(64).auto('format').url()
-                : null
-
-              const logoEl = logoUrl ? (
-                <Image
-                  src={logoUrl}
-                  alt={partner.name}
-                  width={100}
-                  height={32}
-                  className="object-contain max-h-8 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
-                />
-              ) : (
-                <span className="text-xs text-[#F3F1EB]/40 hover:text-[#F3F1EB]/70 transition-colors">
-                  {partner.name}
-                </span>
-              )
-
-              return partner.url ? (
-                <a
-                  key={partner._key}
-                  href={partner.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={partner.name}
-                  className="block"
-                >
-                  {logoEl}
-                </a>
-              ) : (
-                <div key={partner._key}>{logoEl}</div>
-              )
-            })}
-          </div>
+                ) : (
+                  <div key={partner._key}>{logoEl}</div>
+                )
+              })}
+            </div>
+          </>
         )}
-      </Container>
+      </div>
 
       {/* ── Bottom: copyright + credit + privacy ────────── */}
-      <Container className="py-5">
+      <Container className="border-t border-[#F3F1EB]/10 py-5">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-[#F3F1EB]/40">
           <p>© {year} {SITE_NAME}. All rights reserved.</p>
           <p>Designed by Qusay &amp; Developed by Lísis Araújo</p>
@@ -147,7 +125,6 @@ export default async function Footer() {
           </Link>
         </div>
       </Container>
-
     </footer>
   )
 }

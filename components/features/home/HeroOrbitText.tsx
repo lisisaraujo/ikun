@@ -1,22 +1,46 @@
-// A ring of text slowly circling in the hero's side margin — Ikun's own
-// version of the rotating title effect on the Marseille reference, built
-// with the same "circle of things, always spinning" idea already used for
-// the spiral motif elsewhere (SpiralRings, ProjectsAmbient), just applied
-// to words instead of rings. Sits in the open margin beside the centered
-// intro text rather than around the logo — the logo's own band is too
-// short for a ring this size not to clip against the viewport's top edge.
-// Wide screens only: there's no equivalent open margin once the text
-// column fills the width on narrower viewports.
+'use client'
+
+import { useEffect, useState } from 'react'
+
+// A ring of text slowly circling behind the About section's bio column —
+// Ikun's own version of the rotating title effect on the Marseille
+// reference, built with the same "circle of things, always spinning" idea
+// already used for the spiral motif elsewhere (SpiralRings, ProjectsAmbient),
+// just applied to words instead of rings. Sized and centered to sit behind
+// the whole left (text) column, spilling slightly into the gap toward the
+// portrait rather than being contained by it — the same kind of open-margin
+// bleed it originally had in the hero. Wide screens only: there's no
+// distinct "column" to orbit once the layout stacks on narrower viewports.
 const ORBIT_WORDS = ['CHOREOGRAPHY', 'PERFORMANCE', 'TEACHING', 'ÌKÙN']
 const PATH_ID = 'hero-orbit-path'
+const IDLE_OPACITY = 0.08
+const SETTLED_OPACITY = 0.3
+// Roughly when the main typography has established itself (section 4 of
+// the hero copy begins rising around ~1950ms into the cinematic entrance),
+// so the ring feels like the final beat of that entrance rather than its
+// own competing event.
+const SETTLE_DELAY = 2100
 
-export default function HeroOrbitText() {
+interface HeroOrbitTextProps {
+  active?: boolean
+}
+
+export default function HeroOrbitText({ active = true }: HeroOrbitTextProps) {
   const text = `${ORBIT_WORDS.join('   ·   ')}   ·   `
+  const [settled, setSettled] = useState(false)
+
+  useEffect(() => {
+    if (!active || settled) return
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const timer = setTimeout(() => setSettled(true), reducedMotion ? 0 : SETTLE_DELAY)
+    return () => clearTimeout(timer)
+  }, [active, settled])
 
   return (
     <div
       aria-hidden="true"
-      className="hidden xl:block absolute right-[6%] top-1/2 -translate-y-1/2 w-[260px] h-[260px] z-[15] opacity-[0.3] pointer-events-none animate-spin-slower"
+      className="hidden lg:block absolute left-1/2 top-1/2 -z-10 h-[90vh] w-[90vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-spin-slower transition-opacity duration-[1400ms] ease-out"
+      style={{ opacity: settled ? SETTLED_OPACITY : IDLE_OPACITY }}
     >
       <svg viewBox="0 0 400 400" className="w-full h-full">
         <defs>

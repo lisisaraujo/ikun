@@ -50,7 +50,27 @@ export default function Navbar() {
     return () => observer.disconnect()
   }, [isHome])
 
-  const useWhite = isHome ? homeLogo === 'white' : false
+  // Independent of page/color tracking above, and independent of route —
+  // the footer (id="footer") is rendered on every page via the root
+  // layout, so this runs unconditionally rather than being gated by isHome.
+  const [overFooter, setOverFooter] = useState(false)
+
+  // The footer's own backdrop is always the same dark navy regardless of
+  // page, so it overrides whatever color the rest of the page would call
+  // for — otherwise a black logo (the default on every non-home route)
+  // would go invisible against it.
+  const useWhite = overFooter ? true : isHome ? homeLogo === 'white' : false
+  useEffect(() => {
+    const footerEl = document.getElementById('footer')
+    if (!footerEl) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setOverFooter(entry.isIntersecting),
+      { threshold: 0.25 }
+    )
+    observer.observe(footerEl)
+    return () => observer.disconnect()
+  }, [pathname])
 
   function handleLogoClick(e: React.MouseEvent) {
     if (isHome) {
@@ -67,7 +87,10 @@ export default function Navbar() {
         onClick={handleLogoClick}
         className="block pointer-events-auto hover:opacity-70 transition-opacity duration-200"
       >
-        <div className="h-28 md:h-32" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
+        <div
+          className={`transition-[height] duration-300 ease-out ${overFooter ? 'h-56 md:h-64' : 'h-28 md:h-32'}`}
+          style={{ width: 'auto', aspectRatio: '2421/1754' }}
+        >
           <Image
             src={useWhite ? '/ikun-logo-white.png' : '/ikun-logo-black.png'}
             alt="IKUN"
