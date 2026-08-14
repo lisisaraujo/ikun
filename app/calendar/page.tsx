@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getAllEvents } from '@/lib/sanity/queries'
+import { urlFor } from '@/lib/sanity/image'
 import Container from '@/components/layout/Container'
 import Reveal from '@/components/ui/Reveal'
+import KineticHeading from '@/components/ui/KineticHeading'
 import SpiralRings from '@/components/features/projects/SpiralRings'
+import type { SanityImage } from '@/types/sanity'
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -15,7 +19,7 @@ function EventRow({
   past = false,
   delay = 0,
 }: {
-  event: { _id: string; title: string; eventType: string; date: string; city: string; country: string; ticketLink?: string }
+  event: { _id: string; title: string; eventType: string; date: string; city: string; country: string; image?: SanityImage; ticketLink?: string }
   past?: boolean
   delay?: number
 }) {
@@ -32,10 +36,23 @@ function EventRow({
           {day}
           <span className="block text-[11px] tracking-widest text-[#37C6F4]/50 mt-1 font-normal">{mon}.{yr}</span>
         </p>
-        <div>
-          <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
-          <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#1C2433]">{event.title}</h3>
-          {loc && <p className="text-sm text-[#8B5F3C]/60 mt-1">{loc}</p>}
+        <div className="flex items-center gap-4">
+          {event.image && (
+            <div className="relative w-14 h-14 shrink-0 rounded-lg overflow-hidden">
+              <Image
+                src={urlFor(event.image).width(112).height(112).fit('crop').auto('format').url()}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="56px"
+              />
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
+            <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#1C2433]">{event.title}</h3>
+            {loc && <p className="text-sm text-[#8B5F3C]/60 mt-1">{loc}</p>}
+          </div>
         </div>
         {!past && event.ticketLink && (
           <a
@@ -90,9 +107,9 @@ export default async function CalendarPage() {
             <SpiralRings className="w-full h-full" />
           </div>
           <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-4">Every performance</p>
-          <h1 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#1C2433] mb-5 leading-tight">Calendar</h1>
+          <KineticHeading as="h1" className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#1C2433] mb-5 leading-tight">Calendar</KineticHeading>
           <p className="text-[#8B5F3C]/70 text-base md:text-lg leading-relaxed">
-            Shows, workshops and talks — what&apos;s coming up, and a record of what&apos;s already happened.
+            Shows, workshops and talks — what&apos;s <span className="text-[#37C6F4]">coming up</span>, and a record of what&apos;s already happened.
           </p>
         </div>
 

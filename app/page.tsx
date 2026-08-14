@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getHomePage, getAboutPage, getAllProjects, getAllIronuPosts, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
+import { urlFor } from '@/lib/sanity/image'
 import HeroStack from '@/components/features/home/HeroStack'
 import AboutContent from '@/components/features/about/AboutContent'
 import ContactForm from '@/components/features/contact/ContactForm'
@@ -12,6 +14,7 @@ import IronuCarousel from '@/components/features/ironu/IronuCarousel'
 import SectionSeam from '@/components/layout/SectionSeam'
 import SectionBackdrop from '@/components/layout/SectionBackdrop'
 import Reveal from '@/components/ui/Reveal'
+import KineticHeading from '@/components/ui/KineticHeading'
 import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 
@@ -38,6 +41,7 @@ export default async function HomePage() {
     .filter((e) => new Date(e.date) >= now)
     .reverse()
     .slice(0, 3)
+  const calendarImage = upcomingEvents.find((event) => event.image)?.image
 
   const email = settings?.email ?? SITE_EMAIL
   const insta = settings?.instagramUrl
@@ -50,7 +54,6 @@ export default async function HomePage() {
       {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
       <HeroStack
         videoId={homeData?.heroVideoUrl ? extractYouTubeId(homeData.heroVideoUrl) : null}
-        introHeading={homeData?.introHeading}
         introText={homeData?.introText ?? []}
       />
 
@@ -63,7 +66,7 @@ export default async function HomePage() {
           stable document position, since it isn't sticky itself. */}
       <div id="about">
         <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop id="about" color="#1C2433" />
+          <SectionBackdrop id="about" color="#1C2433" glow="#37C6F4" />
           <SectionSeam />
           {about ? (
             <AboutContent about={about} />
@@ -81,7 +84,7 @@ export default async function HomePage() {
             extra top padding nudges the centered block down to sit in the
             middle of what's actually free below the logo. */}
         <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-center pt-40 pb-10 overflow-hidden">
-          <SectionBackdrop id="projects" color="#8B5F3C" />
+          <SectionBackdrop id="projects" color="#8B5F3C" glow="#E8A25C" />
           <SectionSeam />
           <ProjectsAmbient />
           <ProjectsCarousel projects={projects} />
@@ -90,62 +93,94 @@ export default async function HomePage() {
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}
       <div id="calendar">
-        <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center pt-40 pb-10 px-8 md:px-16 lg:px-24">
-          <SectionBackdrop id="calendar" color="#1C2433" />
+        <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-6 pb-10 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
+          <SectionBackdrop id="calendar" color="#1C2433" glow="#37C6F4" />
           <SectionSeam />
-          <Reveal>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-4">What&apos;s next</p>
-            <h2 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl font-light text-[#F3F1EB] mb-12 leading-tight">Calendar</h2>
-          </Reveal>
-          {upcomingEvents.length === 0 ? (
-            <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest">No upcoming events.</p>
-          ) : (
-            <div className="divide-y divide-[#F3F1EB]/15">
-              {upcomingEvents.map((event, i) => {
-                const d = new Date(event.date)
-                const day = String(d.getDate()).padStart(2, '0')
-                const mon = String(d.getMonth() + 1).padStart(2, '0')
-                const yr = d.getFullYear()
-                const loc = [event.city, event.country].filter(Boolean).join(', ')
-                return (
-                  <Reveal key={event._id} delay={i * 80}>
-                    <div className="py-7 grid grid-cols-[80px_1fr_auto] gap-8 items-start">
-                      <p className="text-4xl font-light text-[#37C6F4] font-[family-name:var(--font-heading)] tabular-nums leading-none">
-                        {day}
-                        <span className="block text-[11px] tracking-widest text-[#37C6F4]/50 mt-1 font-normal">{mon}.{yr}</span>
-                      </p>
-                      <div>
-                        <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
-                        <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#F3F1EB]">{event.title}</h3>
-                        {loc && <p className="text-sm text-[#F3F1EB]/50 mt-1">{loc}</p>}
-                      </div>
-                      {event.ticketLink && (
-                        <a
-                          href={event.ticketLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[11px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 hover:opacity-100 transition-opacity mt-1"
-                        >
-                          Book ↗
-                        </a>
-                      )}
-                    </div>
-                  </Reveal>
-                )
-              })}
+          {calendarImage && (
+            <div className="absolute inset-0 -z-[5]" aria-hidden="true">
+              <Image
+                src={urlFor(calendarImage).width(2200).auto('format').url()}
+                alt=""
+                fill
+                className="object-cover object-[70%_center] opacity-35 grayscale"
+                sizes="100vw"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,#1C2433_0%,rgba(28,36,51,0.86)_35%,rgba(28,36,51,0.28)_78%,#1C2433_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(0deg,#1C2433_0%,transparent_42%,rgba(28,36,51,0.55)_100%)]" />
             </div>
           )}
 
-          <div className="mt-14 flex justify-end">
-            <Link
-              href="/calendar"
-              className="group inline-flex items-center gap-3 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 text-sm font-semibold tracking-widest uppercase transition-opacity duration-200"
-            >
-              See all events
-              <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+          <div className="mx-auto w-full max-w-[110rem]" aria-label="Upcoming events">
+            <div className="mb-5 flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.28em] text-[#37C6F4] md:mb-7">
+              <p>What&apos;s next</p>
+              <p className="hidden sm:block">Upcoming performances&nbsp;&nbsp; / &nbsp;&nbsp;01—{String(upcomingEvents.length).padStart(2, '0')}</p>
+            </div>
+
+            <div className="border-t border-[#F3F1EB]/75">
+              {upcomingEvents.length === 0 ? (
+                <p className="border-b border-[#F3F1EB]/25 py-10 text-sm uppercase tracking-widest text-[#F3F1EB]/40">
+                  No upcoming events.
+                </p>
+              ) : (
+                upcomingEvents.map((event, i) => {
+                  const d = new Date(event.date)
+                  const date = d.toLocaleDateString('en-IE', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })
+                  const loc = [event.city, event.country].filter(Boolean).join(', ')
+
+                  return (
+                    <Reveal key={event._id} delay={i * 80}>
+                      <article className="group grid gap-4 border-b border-[#F3F1EB]/55 py-5 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-center md:grid-cols-[4.5rem_minmax(0,1fr)_auto] md:gap-8 md:py-6">
+                        <p className="hidden font-[family-name:var(--font-heading)] text-4xl font-light italic leading-none text-[#37C6F4]/45 sm:block md:text-5xl" aria-hidden="true">
+                          {String(i + 1).padStart(2, '0')}
+                        </p>
+                        <div className="min-w-0">
+                          <p className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[#37C6F4]">
+                            <span>{event.eventType}</span>
+                            <span className="h-px w-5 bg-[#37C6F4]/45" aria-hidden="true" />
+                            <time dateTime={event.date}>{date}</time>
+                          </p>
+                          <h3 className="max-w-5xl font-[family-name:var(--font-heading)] text-3xl font-light italic leading-[0.95] tracking-[-0.035em] text-[#F3F1EB] transition-transform duration-500 group-hover:translate-x-2 md:text-[clamp(2.4rem,3.6vw,4.75rem)]">
+                            {event.title}
+                          </h3>
+                          <p className="mt-2 text-xs text-[#F3F1EB]/65 md:text-sm">
+                            {[event.venue, loc].filter(Boolean).join(' · ')}
+                          </p>
+                        </div>
+
+                        {event.ticketLink && (
+                          <a
+                            href={event.ticketLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-fit items-center gap-3 rounded-full border border-[#F3F1EB]/75 bg-[#F3F1EB] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#1C2433] transition-colors duration-200 hover:border-[#37C6F4] hover:bg-[#37C6F4] sm:justify-self-end"
+                            aria-label={`Tickets for ${event.title}`}
+                          >
+                            Tickets
+                            <span aria-hidden="true">↗</span>
+                          </a>
+                        )}
+                      </article>
+                    </Reveal>
+                  )
+                })
+              )}
+            </div>
+
+            <div className="mt-8 flex justify-end md:mt-10">
+              <Link
+                href="/calendar"
+                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-[#37C6F4] transition-opacity duration-200 [@media(hover:hover)]:opacity-70 hover:opacity-100"
+              >
+                See all events
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </section>
       </div>
@@ -153,7 +188,7 @@ export default async function HomePage() {
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
       <div id="ironu">
         <section className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop id="ironu" color="#8B5F3C" />
+          <SectionBackdrop id="ironu" color="#8B5F3C" glow="#E8A25C" />
           <SectionSeam />
           <IronuSpiral />
           <IronuCarousel posts={ironuPosts} />
@@ -163,7 +198,7 @@ export default async function HomePage() {
       {/* ── CONTACT ──────────────────────────────────────────── */}
       <div id="contact">
         <section className="relative sticky top-0 z-50 min-h-screen flex flex-col justify-center pt-40 pb-10 px-8 md:px-24 lg:px-40 overflow-hidden">
-          <SectionBackdrop id="contact" color="#1C2433" />
+          <SectionBackdrop id="contact" color="#1C2433" glow="#37C6F4" />
           <SectionSeam />
 
           {/* Ambient accent, echoing the same drifting spiral used in
@@ -179,9 +214,9 @@ export default async function HomePage() {
             <div>
               <Reveal>
                 <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
-                <h2 className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-6 leading-tight">Contact</h2>
+                <KineticHeading className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-6 leading-tight">Contact</KineticHeading>
                 <p className="text-[#F3F1EB]/60 text-base md:text-lg leading-relaxed max-w-md mb-10">
-                  A project in mind, a workshop to propose, or just a hello — reach out directly or leave a message and I&apos;ll get back to you.
+                  A project in mind, a workshop to propose, or just a <span className="text-[#37C6F4]">hello</span> — reach out directly or leave a message and I&apos;ll get back to you.
                 </p>
               </Reveal>
               <a

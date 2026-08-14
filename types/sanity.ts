@@ -84,6 +84,7 @@ export interface CalendarEvent {
   venue: string
   city: string
   country: string
+  image?: SanityImage
   ticketLink?: string
   description?: string
 }

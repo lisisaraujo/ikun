@@ -19,19 +19,17 @@ export default function LogoMark() {
   const useWhite = isHome && !scrolled
 
   return (
-    <div className="fixed top--2 left-0 z-[60] flex items-start pt-1 pl-6 md:pl-10 lg:pl-16">
-      <Link href="/" aria-label="Home" className="block transition-opacity duration-200 hover:opacity-70">
-        <div className="h-28 md:h-32" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
-          <Image
-            src={useWhite ? '/ikun-logo-white.png' : '/ikun-logo-black.png'}
-            alt="IKUN"
-            width={2421}
-            height={1754}
-            priority
-            style={{ height: '100%', width: 'auto' }}
-          />
-        </div>
-      </Link>
-    </div>
+<Link href="/" aria-label="Home" className="block transition-opacity duration-200 hover:opacity-70">
+  <div className="h-34 md:h-40" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
+    <Image
+      src={useWhite ? '/ikun-logo-white.png' : '/ikun-logo-black.png'}
+      alt="IKUN"
+      width={2421}
+      height={1754}
+      priority
+      style={{ height: '100%', width: 'auto' }}
+    />
+  </div>
+</Link>
   )
 }

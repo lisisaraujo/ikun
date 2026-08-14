@@ -9,9 +9,14 @@
 interface SectionBackdropProps {
   id: string
   color: string
+  // Optional accent wash — a soft, off-center bloom of colour on top of the
+  // flat backdrop, echoing Peeping Tom's single-colour glow. Kept separate
+  // from `color` (the base fill) so each section can lean warm or cool
+  // independent of its own base tone.
+  glow?: string
 }
 
-export default function SectionBackdrop({ id, color }: SectionBackdropProps) {
+export default function SectionBackdrop({ id, color, glow }: SectionBackdropProps) {
   const patternId = `engravings-${id}`
 
   return (
@@ -96,6 +101,19 @@ export default function SectionBackdrop({ id, color }: SectionBackdropProps) {
       {/* wash — dims the engravings to the same effective strength as the
           brown backdrop, which uses this exact same base/engravings/wash recipe */}
       <div className="absolute inset-0" style={{ backgroundColor: color, opacity: 0.8 }} />
+
+      {/* accent glow — a single soft bloom, off-center so it reads as
+          atmosphere drifting in from a corner rather than a centered spotlight */}
+      {glow && (
+        <div
+          className="absolute -top-1/4 -right-1/4 w-[70%] h-[70%] rounded-full"
+          style={{
+            background: glow,
+            opacity: 0.16,
+            filter: 'blur(120px)',
+          }}
+        />
+      )}
     </div>
   )
 }

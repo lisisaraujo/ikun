@@ -7,9 +7,10 @@ interface HeroVideoProps {
   showTextToggle?: boolean
   textVisible?: boolean
   onToggleText?: () => void
+  onVideoVisible?: () => void
 }
 
-export default function HeroVideo({ videoId, showTextToggle, textVisible, onToggleText }: HeroVideoProps) {
+export default function HeroVideo({ videoId, showTextToggle, textVisible, onToggleText, onVideoVisible }: HeroVideoProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [playing, setPlaying] = useState(true)
   const [revealed, setRevealed] = useState(false)
@@ -23,11 +24,17 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
   // its own or the moment the button is actually used.
   const [showTextHint, setShowTextHint] = useState(false)
   useEffect(() => {
-    if (!showTextToggle) return
+    if (!showTextToggle || !revealed) return
     const showTimer = setTimeout(() => setShowTextHint(true), 1800)
     const hideTimer = setTimeout(() => setShowTextHint(false), 6500)
     return () => { clearTimeout(showTimer); clearTimeout(hideTimer) }
-  }, [showTextToggle])
+  }, [revealed, showTextToggle])
+
+  // The story begins when the protective YouTube cover has lifted and the
+  // moving image is actually visible, rather than racing ahead on mount.
+  useEffect(() => {
+    if (revealed) onVideoVisible?.()
+  }, [onVideoVisible, revealed])
 
   const handleToggleText = () => {
     setShowTextHint(false)
@@ -46,7 +53,6 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
     return () => {
       if (revealTimer.current) clearTimeout(revealTimer.current)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const sendCommand = (func: string) => {
@@ -92,7 +98,6 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing])
 
   // All params baked into the URL so controls=0 is guaranteed to be applied.

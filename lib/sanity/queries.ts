@@ -41,7 +41,7 @@ export async function getAllEvents(): Promise<CalendarEvent[]> {
   return sanityClient.fetch(
     `*[_type == "calendarEvent"] | order(date desc) {
       _id, _createdAt, title, eventType, date,
-      venue, city, country, ticketLink, description
+      venue, city, country, image, ticketLink, description
     }`
   )
 }

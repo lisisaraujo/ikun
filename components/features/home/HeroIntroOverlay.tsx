@@ -1,50 +1,138 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import PortableText from '@/components/ui/PortableText'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PortableTextBlock } from '@portabletext/types'
 
 interface HeroIntroOverlayProps {
-  heading?: string
   text: PortableTextBlock[]
-  // User-driven override (the "Aa" button on the video) — independent of
-  // the auto-entrance below. Kept separate so toggling it never replays the
-  // entrance animation; it only plays the smaller fade layered on top.
+  started?: boolean
   textHidden?: boolean
-  // Fires once when scrolling the text all the way past its end commits to
-  // hiding it — a second, gesture-driven way to reach the same hidden state
-  // the "Aa" button reaches, so the parent only needs one source of truth.
+  revealImmediately?: boolean
   onDismiss?: () => void
 }
 
-// Delay before the text beams in on its own — long enough to read as a
-// considered entrance rather than a loading flash, short enough that it
-// doesn't feel like a missing element while you wait.
-const AUTO_ENTER_DELAY = 600
+interface StoryItem {
+  key: string
+  start: number
+  words: string[]
+}
 
-// How much of the trailing padding (see `paddingRight` below) counts as the
-// "keep scrolling to dismiss" zone, in px.
+interface StoryToken {
+  itemIndex: number
+  text: string
+  pauseAfter: number
+}
+
 const DISMISS_ZONE = 220
 
-export default function HeroIntroOverlay({ heading, text, textHidden = false, onDismiss }: HeroIntroOverlayProps) {
-  const [entered, setEntered] = useState(false)
+const ITEM_LAYOUT = 'mt-[8vh] w-[86vw] max-w-3xl lg:mt-0 lg:w-auto lg:max-w-none'
+
+function blockText(block: PortableTextBlock) {
+  if (block._type !== 'block' || !Array.isArray(block.children)) return ''
+  return block.children
+    .map((child) => ('text' in child && typeof child.text === 'string' ? child.text : ''))
+    .join('')
+    .trim()
+}
+
+function wordPause(word: string, endsItem: boolean) {
+  if (endsItem) return 700
+  if (/[.!?…][”’"')\]]?$/.test(word)) return 360
+  if (/[,;:][”’"')\]]?$/.test(word)) return 170
+  return 72
+}
+
+export default function HeroIntroOverlay({
+  text,
+  started = false,
+  textHidden = false,
+  revealImmediately = false,
+  onDismiss,
+}: HeroIntroOverlayProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const fieldRef = useRef<HTMLDivElement>(null)
   const fadeRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([])
+  const activeItemRef = useRef(-1)
+  const [revealedWords, setRevealedWords] = useState(0)
 
-  // Now lives inside the hero's own viewport rather than its own scroll
-  // section, so it appears on its own shortly after mount instead of
-  // waiting for the user to scroll into it.
+  const story = useMemo(() => {
+    const paragraphs = text.map(blockText).filter(Boolean)
+
+    const items = paragraphs.reduce<StoryItem[]>((currentItems, paragraph, index) => {
+      const words = paragraph.split(/\s+/).filter(Boolean)
+      const previousItem = currentItems.at(-1)
+      const start = previousItem ? previousItem.start + previousItem.words.length : 0
+      return [...currentItems, { key: `paragraph-${index}`, start, words }]
+    }, [])
+
+    const tokens: StoryToken[] = items.flatMap((item, itemIndex) =>
+      item.words.map((word, wordIndex) => ({
+        itemIndex,
+        text: word,
+        pauseAfter: wordPause(word, wordIndex === item.words.length - 1),
+      }))
+    )
+
+    return {
+      items,
+      tokens,
+      plainText: paragraphs.join('\n\n'),
+    }
+  }, [text])
+
+  // Reveal with punctuation-aware pacing. Sentence endings breathe longer,
+  // while the space between ordinary words stays close to spoken cadence.
   useEffect(() => {
-    const t = setTimeout(() => setEntered(true), AUTO_ENTER_DELAY)
-    return () => clearTimeout(t)
-  }, [])
+    if (!started || revealImmediately || story.tokens.length === 0) return
 
-  // Reading past the last column keeps scrolling into the container's own
-  // trailing padding — the last `DISMISS_ZONE` px of that runway fades the
-  // text out 1:1 with the drag, so pushing it all the way off-screen is a
-  // second way to hide it. Tracks scroll position directly rather than
-  // through React state so it can update every frame without re-rendering.
+    let timeout: ReturnType<typeof setTimeout> | undefined
+    let nextWord = 0
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (reducedMotion) {
+      timeout = setTimeout(() => setRevealedWords(story.tokens.length), 0)
+      return () => clearTimeout(timeout)
+    }
+
+    const revealNext = () => {
+      nextWord += 1
+      setRevealedWords(nextWord)
+      if (nextWord < story.tokens.length) {
+        timeout = setTimeout(revealNext, story.tokens[nextWord - 1].pauseAfter)
+      }
+    }
+
+    timeout = setTimeout(revealNext, 500)
+    return () => {
+      if (timeout) clearTimeout(timeout)
+    }
+  }, [revealImmediately, started, story.tokens])
+
+  const visibleWords = revealImmediately ? story.tokens.length : revealedWords
+
+  // Smaller screens still follow the active passage horizontally. From the
+  // desktop breakpoint upward every passage shares one full-screen stage,
+  // so the story moves around the image without moving the viewport itself.
+  useEffect(() => {
+    if (!started || visibleWords === 0) return
+    const token = story.tokens[Math.min(visibleWords - 1, story.tokens.length - 1)]
+    if (!token || token.itemIndex === activeItemRef.current) return
+
+    activeItemRef.current = token.itemIndex
+    const container = scrollRef.current
+    const item = itemRefs.current[token.itemIndex]
+    if (!container || !item || token.itemIndex === 0 || revealImmediately) return
+    if (window.matchMedia('(min-width: 1024px)').matches) return
+
+    container.scrollTo({
+      left: Math.max(item.offsetLeft - container.clientWidth * 0.1, 0),
+      behavior: 'smooth',
+    })
+  }, [revealImmediately, started, story.tokens, visibleWords])
+
+  // Keep the existing gesture: scrolling through the final runway dismisses
+  // the whole composition, matching the Aa button's hidden state.
   useEffect(() => {
     const container = scrollRef.current
     const fadeEl = fadeRef.current
@@ -52,51 +140,40 @@ export default function HeroIntroOverlay({ heading, text, textHidden = false, on
 
     let raf = 0
     let committed = false
-
     const update = () => {
       raf = 0
       const maxScroll = container.scrollWidth - container.clientWidth
       const dismissStart = Math.max(maxScroll - DISMISS_ZONE, 0)
-      const progress =
-        maxScroll <= 0 ? 0 : Math.min(Math.max((container.scrollLeft - dismissStart) / DISMISS_ZONE, 0), 1)
+      const progress = maxScroll <= 0
+        ? 0
+        : Math.min(Math.max((container.scrollLeft - dismissStart) / DISMISS_ZONE, 0), 1)
 
       if (progress > 0 && progress < 1) {
-        // Actively being dragged through the dismiss zone — track the
-        // gesture 1:1, no easing lag.
         fadeEl.style.transition = 'none'
         fadeEl.style.opacity = String(1 - progress)
         committed = false
-      } else if (progress >= 1) {
-        if (!committed) {
-          committed = true
-          // Hold at fully faded (rather than clearing the inline override
-          // immediately) so there's no one-frame flash back to visible
-          // before the parent's re-render with textHidden=true lands —
-          // the `[textHidden]` effect below does the actual handoff.
-          fadeEl.style.transition = 'none'
-          fadeEl.style.opacity = '0'
-          onDismiss?.()
-        }
-      } else {
+      } else if (progress >= 1 && !committed) {
+        committed = true
+        fadeEl.style.transition = 'none'
+        fadeEl.style.opacity = '0'
+        onDismiss?.()
+      } else if (progress <= 0) {
         fadeEl.style.transition = ''
         fadeEl.style.opacity = ''
         committed = false
       }
     }
-
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update)
     }
 
     container.addEventListener('scroll', onScroll, { passive: true })
-    return () => container.removeEventListener('scroll', onScroll)
+    return () => {
+      container.removeEventListener('scroll', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [onDismiss])
 
-  // Once the parent confirms the hidden state (however it was reached),
-  // drop any inline drag override so the CSS class/transition fully owns
-  // opacity again — and if we're still parked in the dismiss zone, pull
-  // back out of it so reopening (via the "Aa" button) doesn't land right
-  // back in a scroll position that reads as "still faded".
   useEffect(() => {
     const fadeEl = fadeRef.current
     const container = scrollRef.current
@@ -107,91 +184,105 @@ export default function HeroIntroOverlay({ heading, text, textHidden = false, on
     if (!textHidden && container) {
       const maxScroll = container.scrollWidth - container.clientWidth
       const dismissStart = Math.max(maxScroll - DISMISS_ZONE, 0)
-      if (container.scrollLeft > dismissStart) {
-        container.scrollLeft = dismissStart
-      }
+      if (container.scrollLeft > dismissStart) container.scrollLeft = dismissStart
     }
   }, [textHidden])
 
-  // Subtle cursor-follow parallax on the whole text field — a few px of
-  // drift opposite the cursor's offset from center
+  // A small counter-drift keeps the written field connected to the moving
+  // image without compromising legibility or taking control away from it.
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const el = fieldRef.current
-      if (!el) return
-      const x = (e.clientX / window.innerWidth - 0.5) * -12
-      const y = (e.clientY / window.innerHeight - 0.5) * -8
-      el.style.transform = `translate(${x}px, ${y}px)`
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const onMove = (event: MouseEvent) => {
+      const field = fieldRef.current
+      if (!field) return
+      const x = (event.clientX / window.innerWidth - 0.5) * -10
+      const y = (event.clientY / window.innerHeight - 0.5) * -7
+      field.style.transform = `translate3d(${x}px, ${y}px, 0)`
     }
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   return (
-    <div className="absolute inset-0 z-30 flex flex-col items-center px-4 sm:px-8 pt-16 sm:pt-20 text-center pointer-events-none">
-      {/* light beam trailing down from the logo — fixed height, animated via
-          scale so it never shifts the layout below it. Follows the manual
-          toggle too (a plain fade is enough for a 1px line — no need for
-          the two-layer treatment the text field gets below). */}
-      <div
-        aria-hidden="true"
-        className={`shrink-0 h-8 sm:h-10 w-px bg-gradient-to-b from-[#37C6F4]/90 via-[#37C6F4]/25 to-transparent origin-top blur-[1px] transition-all ease-[cubic-bezier(0.22,1,0.36,1)] duration-[900ms] ${
-          entered && !textHidden ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'
-        }`}
-      />
+    <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden px-4 pb-8 pt-28 sm:px-8 sm:pt-32 md:pt-36">
+      <div className="sr-only">
+        {story.plainText.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+      </div>
 
-      {/* text field: fills the rest of the screen so the reading frame feels
-          full-height rather than a small centered box */}
       <div
         ref={fieldRef}
-        className="relative mt-6 sm:mt-8 max-w-[92vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl w-full mx-auto flex-1 min-h-0"
-        style={{ transition: 'transform 0.3s ease-out' }}
+        className={`relative mx-auto h-full w-full transition-opacity duration-200 ${
+          started && !textHidden ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ transitionProperty: 'opacity, transform', transitionDuration: '200ms, 300ms' }}
       >
-        {/* Outer layer — the auto-entrance only, untouched by the manual
-            toggle below: text materializes out of the beam once on load,
-            the "big" version of this move. */}
         <div
-          className={`h-full origin-top transition-all ease-[cubic-bezier(0.22,1,0.36,1)] duration-[900ms] ${
-            entered
-              ? 'opacity-100 translate-y-0 scale-100 blur-0'
-              : 'opacity-0 -translate-y-16 sm:-translate-y-24 scale-[0.35] blur-sm'
-          }`}
+          ref={fadeRef}
+          className={`h-full transition-opacity duration-200 ${textHidden ? 'opacity-0' : 'opacity-100'}`}
         >
-          {/* Inner layer — the manual "Aa" toggle. A much smaller move (a
-              near-imperceptible settle rather than a materialize) so
-              switching it back and forth reads as a quiet aside, not a
-              second grand entrance every time. */}
           <div
-            ref={fadeRef}
-            className={`h-full origin-top transition-all ease-[cubic-bezier(0.22,1,0.36,1)] duration-500 ${
-              textHidden ? 'opacity-0 -translate-y-2 scale-[0.97] blur-[2px]' : 'opacity-100 translate-y-0 scale-100 blur-0'
+            ref={scrollRef}
+            className={`h-full overflow-x-auto overflow-y-hidden overscroll-x-contain [touch-action:pan-x_pan-y] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+              started && !textHidden ? 'pointer-events-auto' : 'pointer-events-none'
             }`}
+            style={{
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 4%, black 91%, transparent 99%)',
+              maskImage: 'linear-gradient(to right, transparent 0%, black 4%, black 91%, transparent 99%)',
+            }}
           >
-            {/* Horizontal, not vertical — a normal wheel/touch scroll on
-                this section always means "go to About", never "read the
-                next line". Reading happens by scrolling this frame
-                sideways instead, the same CSS-columns mechanic AboutContent
-                uses: text auto-flows into fixed-width columns rightward. */}
-            <div
-              ref={scrollRef}
-              className={`relative h-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
-                entered && !textHidden ? 'pointer-events-auto' : 'pointer-events-none'
-              }`}
-              style={{
-                columnWidth: '280px',
-                columnGap: '3.5rem',
-                paddingLeft: '4vw',
-                paddingRight: '30vw',
-                // Fades the far right edge so it reads as "there's more this
-                // way" right from the start, before any scrolling has happened
-                WebkitMaskImage: 'linear-gradient(to right, black 80%, transparent 97%)',
-                maskImage: 'linear-gradient(to right, black 80%, transparent 97%)',
-              }}
-            >
-              <PortableText
-                value={text}
-                className="text-left text-[#8B5F3C] text-[15px] sm:text-lg md:text-xl leading-relaxed [text-shadow:0_1px_12px_rgba(0,0,0,0.5)]"
-              />
+            <div className="flex h-full w-max min-w-full items-start gap-[7vw] px-[5vw] pr-[45vw] lg:block lg:w-[calc(100%_+_220px)] lg:min-w-0 lg:px-0 lg:pr-0" aria-hidden="true">
+              <div className="contents lg:grid lg:h-full lg:w-[calc(100%_-_220px)] lg:grid-cols-2 lg:content-center lg:gap-x-[7vw] lg:gap-y-10 lg:px-[5vw]">
+                {story.items.map((item, itemIndex) => (
+                  <div
+                    key={item.key}
+                    ref={(element) => { itemRefs.current[itemIndex] = element }}
+                    className={`shrink-0 ${ITEM_LAYOUT}`}
+                  >
+                    <p className="font-[family-name:var(--font-heading)] text-[clamp(1.1rem,2vw,1.7rem)] font-light italic leading-[1.35] tracking-[-0.02em] text-[#8b5f3] [text-shadow:0_2px_14px_rgba(0,0,0,0.8)] lg:text-[clamp(1rem,1.2vw,1.35rem)] lg:leading-[1.42]">
+                      {item.words.map((word, wordIndex) => {
+                        const globalIndex = item.start + wordIndex
+                        const visible = globalIndex < visibleWords
+                        const accent = globalIndex % 23 === 0
+
+                        return (
+                          <span
+                            key={`${item.key}-${wordIndex}`}
+                            className={`mr-[0.28em] inline-block whitespace-nowrap ${accent ? 'text-[#37C6F4] lg:text-[1.08em]' : ''}`}
+                          >
+                            {Array.from(word).map((letter, letterIndex) => {
+                              const seed = globalIndex * 37 + letterIndex * 17
+                              const x = (seed % 19) - 9
+                              const y = ((seed * 3) % 25) - 12
+                              const looseRotation = (seed % 23) - 11
+                              const settledRotation = ((seed % 7) - 3) * 0.12
+
+                              return (
+                                <span
+                                  key={`${item.key}-${wordIndex}-${letterIndex}`}
+                                  className="inline-block motion-reduce:transition-none"
+                                  style={{
+                                    opacity: visible ? 1 : 0,
+                                    filter: visible ? 'blur(0px)' : 'blur(5px)',
+                                    transform: visible
+                                      ? `translate3d(0, 0, 0) rotate(${settledRotation}deg) scale(1)`
+                                      : `translate3d(${x}px, ${y}px, 0) rotate(${looseRotation}deg) scale(0.72)`,
+                                    transitionDelay: visible ? `${(seed % 5) * 24 + letterIndex * 12}ms` : '0ms',
+                                    transitionDuration: `${680 + (seed % 5) * 95}ms`,
+                                    transitionProperty: 'opacity, filter, transform',
+                                    transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                                  }}
+                                >
+                                  {letter}
+                                </span>
+                              )
+                            })}
+                          </span>
+                        )
+                      })}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

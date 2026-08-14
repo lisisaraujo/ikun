@@ -354,6 +354,24 @@
   animation: ambientFade 9s ease-in-out infinite;
 }
 
+/* Stately, much slower orbit for a full ring of text — spinSlow's 10s
+   would read as spinning; this reads as drifting. */
+.animate-spin-slower {
+  animation: spinSlow 60s linear infinite;
+}
+
+/* Continuous slow zoom/drift for a "moving" panel — never settles, never
+   loops jarringly since scale and position both move together */
+@keyframes kenBurns {
+  0%   { transform: scale(1) translate(0, 0); }
+  50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+.animate-ken-burns {
+  animation: kenBurns 24s ease-in-out infinite;
+}
+
 /* ── Utility: underline-slide (brown underline grows from left on hover) ── */
 .link-underline {
   position: relative;

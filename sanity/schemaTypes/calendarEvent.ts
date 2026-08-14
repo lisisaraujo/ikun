@@ -51,6 +51,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'image',
+      title: 'Photo',
+      description: 'Optional — shown as a small thumbnail next to the event on the calendar preview and listing.',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'ticketLink',
       title: 'Ticket Link',
       type: 'url',
