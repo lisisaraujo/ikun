@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/lib/sanity/image'
+import { portableTextToPlainText } from '@/lib/portableTextToPlainText'
 import type { SanityProject } from '@/types/sanity'
 
 interface ProjectCardProps {
@@ -12,6 +13,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
   const imageSrc = project.coverImage
     ? urlFor(project.coverImage).width(600).height(400).fit('crop').auto('format').url()
     : null
+  const excerpt = portableTextToPlainText(project.description, 140)
 
   return (
     <Link
@@ -25,7 +27,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
         {imageSrc ? (
           <Image
             src={imageSrc}
-            alt={project.title}
+            alt={project.coverImage?.alt || project.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -50,7 +52,7 @@ export default function ProjectCard({ project, dark = false }: ProjectCardProps)
           {project.title}
         </h3>
         <p className={`text-sm leading-relaxed line-clamp-3 ${dark ? 'text-[#C9C9C9]' : 'text-[#8B5F3C]/70'}`}>
-          {project.shortDescription}
+          {excerpt}
         </p>
       </div>
     </Link>

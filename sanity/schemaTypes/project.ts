@@ -4,6 +4,7 @@ export default defineType({
   name: 'project',
   title: 'Project',
   type: 'document',
+
   fields: [
     defineField({
       name: 'title',
@@ -11,44 +12,60 @@ export default defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: 'year',
       title: 'Year',
       type: 'number',
       validation: (Rule) => Rule.required().min(1900).max(2100),
     }),
-    defineField({
-      name: 'location',
-      title: 'Location',
-      type: 'string',
-      description: 'City, venue or country where the project was presented',
-    }),
+
     defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
-      options: { hotspot: true },
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        }),
+      ],
     }),
+
     defineField({
-      name: 'shortDescription',
-      title: 'Short Description',
-      type: 'text',
-      rows: 3,
-      validation: (Rule) => Rule.required().max(300),
-    }),
-    defineField({
-      name: 'fullDescription',
-      title: 'Full Description',
+      name: 'description',
+      title: 'Project Description',
       type: 'array',
       of: [{ type: 'block' }],
+      validation: (Rule) => Rule.required(),
+      description:
+        'Main project description. Use Portable Text so paragraphs, emphasis and links can be preserved.',
     }),
+
+    defineField({
+      name: 'featuredNote',
+      title: 'Featured Note',
+      type: 'array',
+      of: [{ type: 'block' }],
+      description:
+        'Optional highlighted note, e.g. Aerowaves selection or another important recognition.',
+    }),
+
     defineField({
       name: 'credits',
       title: 'Credits',
@@ -56,16 +73,42 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'credit',
           fields: [
-            defineField({ name: 'role', title: 'Role', type: 'string' }),
-            defineField({ name: 'name', title: 'Name', type: 'string' }),
+            defineField({
+              name: 'role',
+              title: 'Role',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+
+            defineField({
+              name: 'name',
+              title: 'Name',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
           ],
+
           preview: {
-            select: { title: 'role', subtitle: 'name' },
+            select: {
+              title: 'role',
+              subtitle: 'name',
+            },
           },
         },
       ],
     }),
+
+    defineField({
+      name: 'commissionedBy',
+      title: 'Commissioned / Produced By',
+      type: 'array',
+      of: [{ type: 'block' }],
+      description:
+        'Commissioning, production and funding information related to the work.',
+    }),
+
     defineField({
       name: 'performanceDates',
       title: 'Performance Dates',
@@ -73,35 +116,85 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'performanceDate',
+
           fields: [
-            defineField({ name: 'date', title: 'Date', type: 'date' }),
-            defineField({ name: 'venue', title: 'Venue', type: 'string' }),
-            defineField({ name: 'city', title: 'City', type: 'string' }),
+            defineField({
+              name: 'label',
+              title: 'Event / Festival',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+              description:
+                'Examples: World Premiere, What Next Dance Festival, Dansens Hus',
+            }),
+
+            defineField({
+              name: 'venue',
+              title: 'Venue',
+              type: 'string',
+            }),
+
+            defineField({
+              name: 'city',
+              title: 'City',
+              type: 'string',
+            }),
+
+            defineField({
+              name: 'country',
+              title: 'Country',
+              type: 'string',
+            }),
+
+            defineField({
+              name: 'startDate',
+              title: 'Start Date',
+              type: 'date',
+              validation: (Rule) => Rule.required(),
+            }),
+
+            defineField({
+              name: 'endDate',
+              title: 'End Date',
+              type: 'date',
+              description:
+                'Optional. Use when the performance runs across multiple days.',
+            }),
           ],
+
           preview: {
-            select: { title: 'date', subtitle: 'venue' },
+            select: {
+              title: 'label',
+              city: 'city',
+              country: 'country',
+              startDate: 'startDate',
+              endDate: 'endDate',
+            },
+
+            prepare({
+              title,
+              city,
+              country,
+              startDate,
+              endDate,
+            }) {
+              const location = [city, country].filter(Boolean).join(', ')
+
+              const dates =
+                startDate && endDate
+                  ? `${startDate} – ${endDate}`
+                  : startDate
+
+              return {
+                title,
+                subtitle: [location, dates].filter(Boolean).join(' · '),
+              }
+            },
           },
         },
       ],
     }),
-    defineField({
-      name: 'reviews',
-      title: 'Reviews & Press Quotes',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({ name: 'quote', title: 'Quote', type: 'text', rows: 4 }),
-            defineField({ name: 'reviewer', title: 'Reviewer Name', type: 'string' }),
-            defineField({ name: 'publication', title: 'Publication', type: 'string' }),
-          ],
-          preview: {
-            select: { title: 'publication', subtitle: 'reviewer' },
-          },
-        },
-      ],
-    }),
+
     defineField({
       name: 'images',
       title: 'Image Gallery',
@@ -109,30 +202,55 @@ export default defineType({
       of: [
         {
           type: 'image',
-          options: { hotspot: true },
+          options: {
+            hotspot: true,
+          },
+
           fields: [
-            defineField({ name: 'caption', title: 'Caption', type: 'string' }),
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            }),
+
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
+            }),
+
+            defineField({
+              name: 'credit',
+              title: 'Photo Credit',
+              type: 'string',
+            }),
           ],
         },
       ],
     }),
+
     defineField({
-      name: 'youtubeUrl',
-      title: 'YouTube Video URL',
+      name: 'videoUrl',
+      title: 'Video URL',
       type: 'url',
-    }),
-    defineField({
-      name: 'collaborators',
-      title: 'Collaborators (legacy)',
-      type: 'array',
-      of: [{ type: 'string' }],
-      description: 'Use Credits above for new projects.',
+      description:
+        'YouTube, Vimeo or another externally hosted video.',
     }),
   ],
+
   preview: {
-    select: { title: 'title', year: 'year', media: 'coverImage' },
+    select: {
+      title: 'title',
+      year: 'year',
+      media: 'coverImage',
+    },
+
     prepare({ title, year, media }) {
-      return { title, subtitle: String(year), media }
+      return {
+        title,
+        subtitle: year ? String(year) : undefined,
+        media,
+      }
     },
   },
 })

@@ -8,9 +8,9 @@ export const SPIRAL_RINGS = [
   { r: 64, dasharray: '5 10 3 8' },
 ]
 
-export default function SpiralRings({ className = '' }: { className?: string }) {
+export default function SpiralRings({ className = '', style }: { className?: string; style?: React.CSSProperties }) {
   return (
-    <svg viewBox="0 0 200 200" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 200 200" aria-hidden="true" className={className} style={style}>
       {SPIRAL_RINGS.map(({ r, dasharray }) => (
         <circle
           key={r}

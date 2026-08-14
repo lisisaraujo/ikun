@@ -2,14 +2,30 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getAllProjects, getProjectBySlug } from '@/lib/sanity/queries'
+import { portableTextToPlainText } from '@/lib/portableTextToPlainText'
 import PortableText from '@/components/ui/PortableText'
 import YoutubeEmbed from '@/components/features/projects/YoutubeEmbed'
-import ReviewsCarousel from '@/components/features/projects/ReviewsCarousel'
 import ProjectGalleryHero from '@/components/features/projects/ProjectGalleryHero'
 import Container from '@/components/layout/Container'
+import type { ProjectPerformanceDate } from '@/types/sanity'
 
 interface Props {
   params: Promise<{ slug: string }>
+}
+
+function formatPerformanceDate({ startDate, endDate }: ProjectPerformanceDate) {
+  const start = new Date(startDate).toLocaleDateString('en-IE', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+  if (!endDate) return start
+  const end = new Date(endDate).toLocaleDateString('en-IE', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+  return `${start} – ${end}`
 }
 
 export async function generateStaticParams() {
@@ -23,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {}
   return {
     title: project.title,
-    description: project.shortDescription,
+    description: portableTextToPlainText(project.description, 160),
   }
 }
 
@@ -39,7 +55,6 @@ export default async function ProjectPage({ params }: Props) {
       <ProjectGalleryHero
         title={project.title}
         year={project.year}
-        location={project.location}
         coverImage={project.coverImage ?? null}
         images={project.images ?? []}
         backHref="/#projects"
@@ -51,24 +66,26 @@ export default async function ProjectPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-12">
-            {/* Description */}
-            {project.fullDescription ? (
-              <div className="prose prose-lg max-w-none text-[#8B5F3C]/80 leading-relaxed">
-                <PortableText value={project.fullDescription} />
+            {/* Featured note — a highlighted recognition (e.g. an Aerowaves
+                selection), set apart from the main description below it */}
+            {project.featuredNote && (
+              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#1C2433]/80 italic leading-relaxed">
+                <PortableText value={project.featuredNote} />
               </div>
-            ) : project.shortDescription ? (
-              <p className="text-[#8B5F3C]/80 text-lg leading-relaxed">
-                {project.shortDescription}
-              </p>
-            ) : null}
+            )}
 
-                  {/* Video */}
-            {project.youtubeUrl && (
+            {/* Description */}
+            <div className="prose prose-lg max-w-none text-[#8B5F3C]/80 leading-relaxed">
+              <PortableText value={project.description} />
+            </div>
+
+            {/* Video */}
+            {project.videoUrl && (
               <section>
                 <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
                   Video
                 </h2>
-                <YoutubeEmbed url={project.youtubeUrl} title={project.title} />
+                <YoutubeEmbed url={project.videoUrl} title={project.title} />
               </section>
             )}
 
@@ -80,28 +97,23 @@ export default async function ProjectPage({ params }: Props) {
                 </h2>
                 <ul className="divide-y divide-[#C9C9C9]/40">
                   {project.performanceDates.map((pd) => (
-                    <li key={pd._key} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4">
-                      <span className="text-[#8B5F3C] font-light">
-                        {pd.venue && <span className="font-medium">{pd.venue}</span>}
-                        {pd.venue && pd.city && <span className="text-[#8B5F3C]/40 mx-2">·</span>}
-                        {pd.city && <span className="text-[#8B5F3C]/60">{pd.city}</span>}
-                      </span>
-                      {pd.date && (
+                    <li key={pd._key} className="py-4">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                        <span className="text-[#8B5F3C] font-medium">{pd.label}</span>
                         <time className="text-sm text-[#8B5F3C]/40 tabular-nums whitespace-nowrap">
-                          {new Date(pd.date).toLocaleDateString('en-IE', {
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric',
-                          })}
+                          {formatPerformanceDate(pd)}
                         </time>
+                      </div>
+                      {(pd.venue || pd.city || pd.country) && (
+                        <p className="mt-1 text-sm text-[#8B5F3C]/60">
+                          {[pd.venue, pd.city, pd.country].filter(Boolean).join(' · ')}
+                        </p>
                       )}
                     </li>
                   ))}
                 </ul>
               </section>
             )}
-
-      
           </div>
 
           {/* Sidebar */}
@@ -125,34 +137,20 @@ export default async function ProjectPage({ params }: Props) {
               </section>
             )}
 
-            {/* Legacy collaborators */}
-            {!project.credits?.length && project.collaborators && project.collaborators.length > 0 && (
+            {/* Commissioned / produced by */}
+            {project.commissionedBy && (
               <section>
                 <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
-                  Collaborators
+                  Commissioned / Produced By
                 </h2>
-                <ul className="space-y-1">
-                  {project.collaborators.map((c) => (
-                    <li key={c} className="text-sm text-[#8B5F3C]/70">{c}</li>
-                  ))}
-                </ul>
+                <div className="prose prose-sm max-w-none text-[#8B5F3C]/70">
+                  <PortableText value={project.commissionedBy} />
+                </div>
               </section>
             )}
           </aside>
         </div>
       </Container>
-
-      {/* Reviews — light bg with top border */}
-      {project.reviews && project.reviews.length > 0 && (
-        <section className="bg-[#F3F1EB] border-t border-[#C9C9C9]/40 py-20 md:py-28">
-          <Container>
-            <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-10">
-              Reviews
-            </h2>
-            <ReviewsCarousel reviews={project.reviews} />
-          </Container>
-        </section>
-      )}
 
       {/* Footer nav */}
       <div className="border-t border-[#C9C9C9]/40 py-10">

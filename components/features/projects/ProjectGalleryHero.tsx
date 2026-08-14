@@ -9,7 +9,6 @@ import type { SanityImage, GalleryImage } from '@/types/sanity'
 interface ProjectGalleryHeroProps {
   title: string
   year?: string | number
-  location?: string
   coverImage: SanityImage | null
   images: GalleryImage[]
   backHref: string
@@ -19,7 +18,6 @@ interface ProjectGalleryHeroProps {
 export default function ProjectGalleryHero({
   title,
   year,
-  location,
   coverImage,
   images,
   backHref,
@@ -128,11 +126,6 @@ export default function ProjectGalleryHero({
                   {year}
                 </span>
               )}
-              {location && (
-                <span className="text-[#F3F1EB]/50 text-xs uppercase tracking-widest">
-                  {location}
-                </span>
-              )}
             </div>
             <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl lg:text-7xl font-800 text-[#F3F1EB] leading-tight">
               {title}
@@ -171,7 +164,7 @@ export default function ProjectGalleryHero({
               <Image
                 key={index}
                 src={currentSrc}
-                alt={currentImage.caption ?? `Photo ${index + 1}`}
+                alt={currentImage.alt ?? currentImage.caption ?? `Photo ${index + 1}`}
                 fill
                 sizes="100vw"
                 className="object-contain animate-fadeIn"

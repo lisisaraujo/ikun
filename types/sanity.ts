@@ -36,21 +36,18 @@ export interface ProjectCredit {
 
 export interface ProjectPerformanceDate {
   _key: string
-  date: string   // ISO date string YYYY-MM-DD
+  label: string
   venue?: string
   city?: string
-}
-
-export interface ProjectReview {
-  _key: string
-  quote: string
-  reviewer?: string
-  publication?: string
+  country?: string
+  startDate: string   // ISO date string YYYY-MM-DD
+  endDate?: string
 }
 
 export interface GalleryImage extends SanityImage {
   _key: string
-  caption?: string
+  alt?: string
+  credit?: string
 }
 
 // Project
@@ -60,16 +57,14 @@ export interface SanityProject {
   title: string
   slug: SanitySlug
   year: number
-  location?: string
-  coverImage?: SanityImage
-  shortDescription: string
-  fullDescription?: PortableTextBlock[]
+  coverImage?: SanityImage & { alt?: string }
+  description: PortableTextBlock[]
+  featuredNote?: PortableTextBlock[]
   credits?: ProjectCredit[]
+  commissionedBy?: PortableTextBlock[]
   performanceDates?: ProjectPerformanceDate[]
-  reviews?: ProjectReview[]
   images?: GalleryImage[]
-  youtubeUrl?: string
-  collaborators?: string[]
+  videoUrl?: string
 }
 
 // Calendar Event

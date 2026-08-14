@@ -14,8 +14,8 @@ import type {
 export async function getAllProjects(): Promise<SanityProject[]> {
   return sanityClient.fetch(
     `*[_type == "project"] | order(year desc) {
-      _id, _createdAt, title, slug, year, location,
-      coverImage, shortDescription, youtubeUrl, collaborators
+      _id, _createdAt, title, slug, year,
+      coverImage, description, videoUrl
     }`
   )
 }
@@ -23,13 +23,13 @@ export async function getAllProjects(): Promise<SanityProject[]> {
 export async function getProjectBySlug(slug: string): Promise<SanityProject | null> {
   return sanityClient.fetch(
     `*[_type == "project" && slug.current == $slug][0] {
-      _id, _createdAt, title, slug, year, location,
-      coverImage, shortDescription, fullDescription,
+      _id, _createdAt, title, slug, year,
+      coverImage, description, featuredNote,
       credits[] { _key, role, name },
-      performanceDates[] { _key, date, venue, city },
-      reviews[] { _key, quote, reviewer, publication },
-      images[] { _key, asset, hotspot, crop, caption },
-      youtubeUrl, collaborators
+      commissionedBy,
+      performanceDates[] { _key, label, venue, city, country, startDate, endDate },
+      images[] { _key, asset, hotspot, crop, alt, caption, credit },
+      videoUrl
     }`,
     { slug }
   )
