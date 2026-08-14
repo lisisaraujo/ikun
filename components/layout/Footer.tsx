@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getGlobalSettings, getOtherInfos } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
-import { NAV_LINKS } from '@/constants/nav'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 import Container from './Container'
 
@@ -57,10 +56,10 @@ export default async function Footer() {
   ].filter(Boolean) as { label: string; url: string; icon: React.ReactNode }[]
 
   return (
-    <footer className="text-[#C9C9C9]">
+    <footer className="bg-[#1C2433] text-[#C9C9C9] border-t border-[#37C6F4]/15">
 
       {/* ── Middle: email + socials + logos ─────────────── */}
-      <Container className="py-10 border-b border-[#8B5F3C]/20">
+      <Container className="py-10 border-b border-[#F3F1EB]/10">
          <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           <Link
             href="/"
@@ -69,12 +68,10 @@ export default async function Footer() {
             {SITE_NAME}
           </Link>
 
-  
-       
           {/* Email */}
           <a
             href={`mailto:${email}`}
-            className="text-sm text-[#8B5F3C]/70 hover:text-[#37C6F4] transition-colors duration-200"
+            className="text-sm text-[#F3F1EB]/70 hover:text-[#37C6F4] transition-colors duration-200"
           >
             {email}
           </a>
@@ -89,7 +86,7 @@ export default async function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="block text-[#8B5F3C]/50 hover:text-[#37C6F4] transition-colors duration-200"
+                    className="block text-[#F3F1EB]/50 hover:text-[#37C6F4] transition-colors duration-200"
                   >
                     {icon}
                   </a>
@@ -101,7 +98,7 @@ export default async function Footer() {
 
         {/* Funder / partner logos */}
         {footerLogos.length > 0 && (
-          <div className="flex flex-wrap items-center gap-8 pt-8 border-t border-[#8B5F3C]/20">
+          <div className="flex flex-wrap items-center gap-8 pt-8 border-t border-[#F3F1EB]/10">
             {footerLogos.map((partner) => {
               const logoUrl = partner.logo
                 ? urlFor(partner.logo).height(64).auto('format').url()
@@ -113,10 +110,10 @@ export default async function Footer() {
                   alt={partner.name}
                   width={100}
                   height={32}
-                  className="object-contain max-h-8 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-80 transition-all duration-400"
+                  className="object-contain max-h-8 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
                 />
               ) : (
-                <span className="text-xs text-[#C9C9C9]/40 hover:text-[#C9C9C9]/70 transition-colors">
+                <span className="text-xs text-[#F3F1EB]/40 hover:text-[#F3F1EB]/70 transition-colors">
                   {partner.name}
                 </span>
               )
@@ -142,7 +139,7 @@ export default async function Footer() {
 
       {/* ── Bottom: copyright + credit + privacy ────────── */}
       <Container className="py-5">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-[#8B5F3C]/40">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-[#F3F1EB]/40">
           <p>© {year} {SITE_NAME}. All rights reserved.</p>
           <p>Designed by Qusay &amp; Developed by Lísis Araújo</p>
           <Link href="/privacy" className="hover:text-[#37C6F4] transition-colors duration-200">

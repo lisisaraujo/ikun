@@ -345,6 +345,15 @@
   animation: spinSlow 10s linear infinite;
 }
 
+@keyframes ambientFade {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
+}
+
+.animate-ambient-fade {
+  animation: ambientFade 9s ease-in-out infinite;
+}
+
 /* ── Utility: underline-slide (brown underline grows from left on hover) ── */
 .link-underline {
   position: relative;

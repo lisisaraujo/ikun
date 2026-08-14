@@ -4,9 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 
 interface HeroVideoProps {
   videoId: string
+  showTextToggle?: boolean
+  textVisible?: boolean
+  onToggleText?: () => void
 }
 
-export default function HeroVideo({ videoId }: HeroVideoProps) {
+export default function HeroVideo({ videoId, showTextToggle, textVisible, onToggleText }: HeroVideoProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [playing, setPlaying] = useState(true)
   const [revealed, setRevealed] = useState(false)
@@ -14,6 +17,22 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
   // Tracks whether the current paused state was caused by scrolling away
   // (vs. the user clicking pause), so scrolling back never overrides a manual pause
   const autoPaused = useRef(false)
+
+  // A one-time coach-mark teaching the "Aa" toggle exists — shows itself
+  // briefly after the text has had time to be noticed, then dismisses on
+  // its own or the moment the button is actually used.
+  const [showTextHint, setShowTextHint] = useState(false)
+  useEffect(() => {
+    if (!showTextToggle) return
+    const showTimer = setTimeout(() => setShowTextHint(true), 1800)
+    const hideTimer = setTimeout(() => setShowTextHint(false), 6500)
+    return () => { clearTimeout(showTimer); clearTimeout(hideTimer) }
+  }, [showTextToggle])
+
+  const handleToggleText = () => {
+    setShowTextHint(false)
+    onToggleText?.()
+  }
 
   // Schedule the cover to lift after `delay` ms, cancelling any prior pending reveal
   const scheduleReveal = (delay: number) => {
@@ -54,12 +73,9 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
   // Stops playback once the hero has scrolled fully out of view (it's sticky,
   // so it would otherwise keep playing behind every other section forever),
   // and resumes it if scrolled back — unless the user paused it themselves.
-  // The intro-text section right after the hero is transparent (the video
-  // shows through it), so playback needs to survive that extra viewport of
-  // scroll too — hence *2 rather than just the hero's own height.
   useEffect(() => {
     const onScroll = () => {
-      const pastHero = window.scrollY >= window.innerHeight * 2
+      const pastHero = window.scrollY >= window.innerHeight
 
       if (pastHero && playing) {
         sendCommand('pauseVideo')
@@ -127,23 +143,59 @@ export default function HeroVideo({ videoId }: HeroVideoProps) {
         }`}
       />
 
-      {/* Sits where SideNav appears once scrolled past the hero — z-[51] puts this above the fixed Navbar at z-50 */}
-      <button
-        onClick={togglePlay}
-        aria-label={playing ? 'Pause video' : 'Play video'}
-        className="absolute top-6 right-6 md:right-10 lg:right-14 z-[51] flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-[#F3F1EB] hover:bg-black/60 transition-colors"
-      >
-        {playing ? (
-          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">
-            <rect x="6" y="4" width="4" height="16" rx="1" />
-            <rect x="14" y="4" width="4" height="16" rx="1" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">
-            <polygon points="5,3 19,12 5,21" />
-          </svg>
+      {/* Media controls cluster — sits where SideNav appears once scrolled
+          past the hero — z-[51] puts this above the fixed Navbar at z-50 */}
+      <div className="absolute top-6 right-6 md:right-10 lg:right-14 z-[51] flex items-center gap-2">
+        {showTextToggle && (
+          <div className="relative">
+            {/* Coach-mark — points at the button once, teaches the gesture,
+                then gets out of the way for good (dismissed by its own timer
+                or the first tap, whichever comes first). */}
+            <div
+              role="status"
+              className={`absolute top-full right-0 mt-3 whitespace-nowrap rounded-full border border-[#37C6F4]/30 bg-black/70 backdrop-blur-sm px-3 py-1.5 text-[11px] text-[#F3F1EB] shadow-[0_4px_16px_-4px_rgba(0,0,0,0.6)] transition-all duration-500 ${
+                showTextHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 pointer-events-none'
+              }`}
+            >
+              Tap to hide the text
+            </div>
+
+            {/* Filled when text is showing, outlined when it's not — a
+                clearly "on/off" pair rather than a same-as-everything-else
+                icon, so it reads at a glance as a toggle. */}
+            <button
+              onClick={handleToggleText}
+              aria-pressed={textVisible}
+              aria-label={textVisible ? 'Hide intro text' : 'Show intro text'}
+              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 ${
+                textVisible
+                  ? 'bg-[#37C6F4] border-[#37C6F4] text-[#0B0B0B] hover:bg-[#F3F1EB]'
+                  : 'bg-black/40 border-[#37C6F4]/50 text-[#37C6F4] hover:bg-black/60'
+              }`}
+            >
+              <span className="font-heading text-[11px] font-semibold leading-none select-none" aria-hidden="true">
+                Aa
+              </span>
+            </button>
+          </div>
         )}
-      </button>
+        <button
+          onClick={togglePlay}
+          aria-label={playing ? 'Pause video' : 'Play video'}
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-[#F3F1EB] hover:bg-black/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70"
+        >
+          {playing ? (
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16" rx="1" />
+              <rect x="14" y="4" width="4" height="16" rx="1" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

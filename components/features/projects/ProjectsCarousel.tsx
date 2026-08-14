@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity/image'
 import type { SanityProject } from '@/types/sanity'
+import SpiralRings from './SpiralRings'
 
 interface ProjectsCarouselProps {
   projects: SanityProject[]
@@ -12,14 +13,6 @@ interface ProjectsCarouselProps {
 
 // How far (px) an off-center card sinks below the chain, at maximum distance
 const SINK = 56
-
-// Concentric rings — irregular dash rhythm per ring so it reads as
-// hand-worked rather than a machine-uniform pattern
-const RINGS = [
-  { r: 24, dasharray: '4 9' },
-  { r: 43, dasharray: '3 6 7 9' },
-  { r: 64, dasharray: '5 10 3 8' },
-]
 
 // The stitched-thread dial that floats beneath each card, tilted flat via
 // perspective and spinning constantly. rotateX squashes it visually to
@@ -41,36 +34,7 @@ function SpinnerDial({ focus }: { focus: number }) {
           transition: 'transform 0.3s ease-out',
         }}
       >
-        <svg
-          viewBox="0 0 200 200"
-          aria-hidden="true"
-          className="w-full h-full pointer-events-none animate-spin-slow"
-        >
-          {RINGS.map(({ r, dasharray }) => (
-            <circle
-              key={r}
-              cx={100}
-              cy={100}
-              r={r}
-              fill="none"
-              stroke="#37C6F4"
-              strokeOpacity={0.45}
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeDasharray={dasharray}
-            />
-          ))}
-          {/* centered seal mark — a bounded medallion, not an empty coil */}
-          <rect
-            x={95}
-            y={95}
-            width={10}
-            height={10}
-            transform="rotate(45 100 100)"
-            fill="#37C6F4"
-            fillOpacity={0.55}
-          />
-        </svg>
+        <SpiralRings className="w-full h-full pointer-events-none animate-spin-slow" />
       </div>
     </div>
   )

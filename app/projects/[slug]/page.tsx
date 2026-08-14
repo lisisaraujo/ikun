@@ -42,8 +42,8 @@ export default async function ProjectPage({ params }: Props) {
         location={project.location}
         coverImage={project.coverImage ?? null}
         images={project.images ?? []}
-        backHref="/projects"
-        backLabel="All projects"
+        backHref="/#projects"
+        backLabel="Back"
       />
 
       {/* Body */}
@@ -158,7 +158,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className="border-t border-[#C9C9C9]/40 py-10">
         <Container>
           <Link
-            href="/projects"
+            href="/#projects"
             className="inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2" aria-hidden="true">

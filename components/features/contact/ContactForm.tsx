@@ -5,10 +5,10 @@ import { useState } from 'react'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const fieldClass =
-  'w-full bg-transparent border-0 border-b border-[#1C2433]/15 py-3 text-sm text-[#8B5F3C] placeholder-[#8B5F3C]/30 focus:outline-none focus:border-[#37C6F4] transition-colors duration-200'
+  'w-full bg-transparent border-0 border-b border-[#F3F1EB]/20 py-3 text-sm text-[#F3F1EB] placeholder-[#F3F1EB]/30 focus:outline-none focus:border-[#37C6F4] transition-colors duration-200'
 
 const labelClass =
-  'block text-[10px] uppercase tracking-widest text-[#8B5F3C]/40 mb-1'
+  'block text-[10px] uppercase tracking-widest text-[#F3F1EB]/40 mb-1'
 
 export default function ContactForm() {
   const [status, setStatus]     = useState<Status>('idle')
@@ -43,7 +43,7 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <p className="text-sm text-[#1C2433] py-6 border-b border-[#C9C9C9]/40">
+      <p className="text-sm text-[#F3F1EB] py-6 border-b border-[#F3F1EB]/20">
         Thank you — your message has been sent.
       </p>
     )
@@ -79,13 +79,13 @@ export default function ContactForm() {
       </div>
 
       {status === 'error' && (
-        <p className="text-red-500 text-xs">{errorMsg}</p>
+        <p className="text-red-400 text-xs">{errorMsg}</p>
       )}
 
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="text-xs uppercase tracking-widest text-[#F3F1EB] bg-[#1C2433] px-8 py-3.5 hover:bg-[#37C6F4] hover:text-[#0B0B0B] transition-colors duration-200 disabled:opacity-40"
+        className="text-xs uppercase tracking-widest text-[#0B0B0B] bg-[#37C6F4] px-8 py-3.5 hover:bg-[#F3F1EB] transition-colors duration-200 disabled:opacity-40"
       >
         {status === 'loading' ? 'Sending…' : 'Send Message'}
       </button>

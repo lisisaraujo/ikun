@@ -37,17 +37,18 @@ export default async function IronuPostPage({ params }: Props) {
 
   return (
     <div className="bg-[#F3F1EB] min-h-screen">
-      {/* Back link — floats above content */}
-      <div className="fixed top-16 left-0 right-0 z-40 pointer-events-none">
+      {/* Back link — floats above content. Sits below the fixed logo's
+          ~112px band on mobile, where the two would otherwise overlap. */}
+      <div className="fixed top-28 md:top-16 left-0 right-0 z-40 pointer-events-none">
         <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16 pt-5">
           <Link
-            href="/ironu"
+            href="/#ironu"
             className="pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-[10px] uppercase tracking-widest transition-opacity duration-200"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none" strokeWidth={2} aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            Ìrònú
+            Back
           </Link>
         </div>
       </div>

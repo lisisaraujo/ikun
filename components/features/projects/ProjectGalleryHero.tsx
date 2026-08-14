@@ -91,8 +91,10 @@ export default function ProjectGalleryHero({
           />
         )}
 
-        {/* Back link — top left, above gallery button */}
-        <div className="absolute top-6 left-6 md:left-10 lg:left-16 z-30">
+        {/* Back link — top left, above gallery button. Pushed down below the
+            fixed logo's ~112px band on mobile, where the two would otherwise
+            visually collide in that top-left corner. */}
+        <div className="absolute top-28 left-6 md:top-6 md:left-10 lg:left-16 z-30">
           <Link
             href={backHref}
             className="inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"

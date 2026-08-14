@@ -4,24 +4,53 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useScrollDirection } from '@/hooks/useScrollDirection'
+
+// Matches the background each home-page section is actually painted with —
+// SectionBackdrop uses #1C2433 (blue) for about/calendar/contact and
+// #8B5F3C (brown) for projects/ironu.
+const SECTION_LOGO: Record<string, 'white' | 'black'> = {
+  about: 'white',
+  projects: 'black',
+  calendar: 'white',
+  ironu: 'black',
+  contact: 'white',
+}
+const SECTION_IDS = Object.keys(SECTION_LOGO)
 
 export default function Navbar() {
   const pathname = usePathname()
-  const [scrolled, setScrolled] = useState(false)
-  const direction = useScrollDirection()
+  const isHome = pathname === '/'
+  // Still in the hero (before any of the sections below have been reached)
+  // defaults to white — same near-black background as before.
+  const [homeLogo, setHomeLogo] = useState<'white' | 'black'>('white')
 
+  // Tracks which section currently sits under the fixed logo so its color
+  // always matches that section's own background — the same top-of-viewport
+  // crossing trick SideNav uses to track the active section.
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 0) }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    if (!isHome) return
 
-  const isHome   = pathname === '/'
-  const useWhite = isHome && !scrolled
-  // Stay visible near the very top regardless of direction, otherwise hide
-  // on the way down and reappear as soon as the user scrolls back up
-  const hidden = scrolled && direction === 'down'
+    const entered: Record<string, boolean> = {}
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => { entered[entry.target.id] = entry.isIntersecting })
+        let active: string | null = null
+        SECTION_IDS.forEach((id) => { if (entered[id]) active = id })
+        setHomeLogo(active ? SECTION_LOGO[active] : 'white')
+      },
+      { rootMargin: '0px 0px -100% 0px', threshold: 0 }
+    )
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [isHome])
+
+  const useWhite = isHome ? homeLogo === 'white' : false
 
   function handleLogoClick(e: React.MouseEvent) {
     if (isHome) {
@@ -31,10 +60,7 @@ export default function Navbar() {
   }
 
   return (
-    <div
-      className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none transition-transform duration-300 ease-out"
-      style={{ transform: hidden ? 'translate(-50%, -100%)' : 'translate(-50%, 0)' }}
-    >
+    <div className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none -translate-x-1/2">
       <Link
         href="/"
         aria-label="Home"
