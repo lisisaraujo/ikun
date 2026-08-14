@@ -10,6 +10,8 @@ import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import ProjectsAmbient from '@/components/features/projects/ProjectsAmbient'
 import SpiralRings from '@/components/features/projects/SpiralRings'
 import IronuCarousel from '@/components/features/ironu/IronuCarousel'
+import IronuSpiralGraphic from '@/components/features/ironu/IronuSpiralGraphic'
+import SectionOrbitBackground from '@/components/features/carousel/SectionOrbitBackground'
 import SectionSeam from '@/components/layout/SectionSeam'
 import SectionBackdrop from '@/components/layout/SectionBackdrop'
 import Reveal from '@/components/ui/Reveal'
@@ -86,6 +88,11 @@ export default async function HomePage() {
           <SectionBackdrop id="projects" color="#8B5F3C" glow="#E8A25C" />
           <SectionSeam />
           <ProjectsAmbient />
+          <SectionOrbitBackground channel="projects" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
+            <div className="h-full w-full opacity-[0.16]">
+              <SpiralRings className="h-full w-full" />
+            </div>
+          </SectionOrbitBackground>
           <ProjectsCarousel projects={projects} />
         </section>
       </div>
@@ -189,6 +196,9 @@ export default async function HomePage() {
         <section className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
           <SectionBackdrop id="ironu" color="#8B5F3C" glow="#E8A25C" />
           <SectionSeam />
+          <SectionOrbitBackground channel="ironu" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
+            <IronuSpiralGraphic className="h-full w-full" opacity={0.16} />
+          </SectionOrbitBackground>
           <IronuCarousel posts={ironuPosts} />
         </section>
       </div>

@@ -7,21 +7,14 @@ import { urlFor } from '@/lib/sanity/image'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 import { emitCarouselNav } from '@/lib/carouselNavPulse'
 import type { SanityProject } from '@/types/sanity'
-import SpiralRings from './SpiralRings'
 import { useCarouselTrack } from '@/components/features/carousel/useCarouselTrack'
 import { getCardMotion, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
-import CarouselOrbit from '@/components/features/carousel/CarouselOrbit'
 import ActiveImageMetadata from '@/components/features/carousel/ActiveImageMetadata'
 import ActiveEntryLabel from '@/components/features/carousel/ActiveEntryLabel'
 
 interface ProjectsCarouselProps {
   projects: SanityProject[]
 }
-
-// Roughly 1.2–1.36x the active card's own width at each breakpoint — a
-// graphic field radiating from behind the work, not a fixed size that
-// happens to roughly line up with it.
-const ORBIT_SIZE = 'w-[260px] sm:w-[370px] md:w-[470px] lg:w-[570px] aspect-square'
 
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const reducedMotion = useReducedMotion()
@@ -44,13 +37,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   if (projects.length === 0) return null
 
   const activeProject = projects[centerIndex]
-  const orbitStep = 360 / projects.length
-  // The active card's own live signed distance (not each card's own, since
-  // only the active card carries an orbit) — continuously tracks drag/scroll
-  // position even between index changes, so the orbit visibly responds to
-  // navigation direction rather than only stepping at the moment centerIndex
-  // itself updates.
-  const liveNudge = -(signedDistances[centerIndex] ?? 0) * 40
 
   return (
     <div className="relative">
@@ -100,16 +86,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                 transition: `transform 420ms ${CAROUSEL_EASE}, opacity 420ms ${CAROUSEL_EASE}, filter 420ms ${CAROUSEL_EASE}`,
               }}
             >
-              {isCenter && (
-                <CarouselOrbit
-                  reducedMotion={reducedMotion}
-                  rotationDeg={centerIndex * orbitStep + liveNudge}
-                  sizeClassName={ORBIT_SIZE}
-                >
-                  <SpiralRings className="w-full h-full" />
-                </CarouselOrbit>
-              )}
-
               <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)]">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
                   {coverUrl && (

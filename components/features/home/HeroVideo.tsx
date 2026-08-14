@@ -142,10 +142,10 @@ export default function HeroVideo({ videoId, showTextToggle, textVisible, onTogg
           <button
             onClick={onToggleText}
             aria-pressed={textVisible}
-            className={`flex items-center justify-center h-10 rounded-full border px-4 text-[11px] font-semibold tracking-wide transition-[transform,background-color,border-color,color,opacity] duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 ${
+            className={`flex items-center justify-center h-10 rounded-full border px-4 text-[11px] font-semibold tracking-wide backdrop-blur-sm transition-[transform,background-color,border-color,color,opacity] duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 ${
               textVisible
-                ? 'scale-100 bg-[#37C6F4] border-[#37C6F4] text-[#0B0B0B] hover:bg-[#F3F1EB]'
-                : 'scale-[0.92] bg-black/30 border-[#37C6F4]/35 text-[#37C6F4]/70 hover:bg-black/60 hover:text-[#37C6F4]'
+                ? 'scale-100 bg-[#37C6F4]/15 border-[#37C6F4]/35 text-[#37C6F4] hover:bg-[#37C6F4]/25'
+                : 'scale-[0.92] bg-black/15 border-[#37C6F4]/20 text-[#37C6F4]/55 hover:bg-black/30 hover:text-[#37C6F4]'
             }`}
           >
             <span className="font-heading select-none">

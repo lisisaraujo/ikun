@@ -31,7 +31,6 @@ type RevealMode = 'cinematic' | 'quick'
 // stretch — everything before it is neutral, giving the drag room to
 // breathe before anything starts leaving.
 const FADE_ZONE = 110
-const VELOCITY_COMMIT_PX_MS = 0.9
 const SNAP_BACK_IDLE_MS = 140
 const MAX_DRAG_BLUR = 4
 
@@ -359,8 +358,6 @@ export default function HeroIntroOverlay({
 
     let raf = 0
     let committed = false
-    let lastScrollLeft = container.scrollLeft
-    let lastTime = performance.now()
     let idleTimer: ReturnType<typeof setTimeout> | undefined
 
     const settle = () => {
@@ -379,20 +376,20 @@ export default function HeroIntroOverlay({
         : Math.min(Math.max((container.scrollLeft - dismissStart) / FADE_ZONE, 0), 1)
       const eased = rawProgress * rawProgress * (3 - 2 * rawProgress)
 
-      const now = performance.now()
-      const dt = now - lastTime
-      const velocity = dt > 0 ? (container.scrollLeft - lastScrollLeft) / dt : 0
-      lastTime = now
-      lastScrollLeft = container.scrollLeft
-
       if (rawProgress > 0 && rawProgress < 1 && !committed) {
         fadeEl.style.transition = 'none'
         fadeEl.style.opacity = String(1 - eased)
         fadeEl.style.filter = reducedMotion ? '' : `blur(${eased * MAX_DRAG_BLUR}px)`
       }
 
-      const earlyCommit = !reducedMotion && velocity > VELOCITY_COMMIT_PX_MS && rawProgress > 0.2
-      if ((rawProgress >= 1 || earlyCommit) && !committed) {
+      // Only commits once the drag has actually reached the end of the
+      // gesture — never mid-drag on a velocity guess. Committing early
+      // while the user's still actively scrolling handed control of the
+      // same layer to two things at once (the ongoing drag, and the
+      // phase-driven exit transition it triggers), which is what read as
+      // a twitch. Native scroll momentum already carries a fast flick the
+      // rest of the way on its own, so this loses no responsiveness.
+      if (rawProgress >= 1 && !committed) {
         committed = true
         setShowSwipeHint(false)
         try {

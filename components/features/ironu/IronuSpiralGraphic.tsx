@@ -1,7 +1,7 @@
 // The pure stitched-thread spiral graphic — Ìrònú's own equivalent of
-// SpiralRings, used inside CarouselOrbit behind the active card. Sizing,
-// positioning and rotation are all owned by CarouselOrbit; this component
-// only draws the mark itself.
+// SpiralRings, used inside SectionOrbitBackground as the whole-section
+// ambient mark behind the carousel. Sizing, positioning and rotation are
+// all owned by SectionOrbitBackground; this component only draws the mark.
 function buildSpiralPath(turns = 3, maxR = 92, cx = 100, cy = 100, steps = 200) {
   let d = ''
   for (let i = 0; i <= steps; i++) {
@@ -16,14 +16,14 @@ function buildSpiralPath(turns = 3, maxR = 92, cx = 100, cy = 100, steps = 200) 
 }
 const SPIRAL_PATH = buildSpiralPath()
 
-export default function IronuSpiralGraphic({ className = '' }: { className?: string }) {
+export default function IronuSpiralGraphic({ className = '', opacity = 0.4 }: { className?: string; opacity?: number }) {
   return (
     <svg viewBox="0 0 200 200" aria-hidden="true" className={className}>
       <path
         d={SPIRAL_PATH}
         fill="none"
         stroke="#37C6F4"
-        strokeOpacity={0.4}
+        strokeOpacity={opacity}
         strokeWidth={2}
         strokeLinecap="round"
         strokeDasharray="4 7 2 9"

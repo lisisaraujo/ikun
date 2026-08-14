@@ -114,6 +114,13 @@ export default function SectionBackdrop({ id, color, glow }: SectionBackdropProp
           }}
         />
       )}
+
+      {/* Bottom edge softened toward shadow rather than cutting flat into
+          the next section — a quiet vignette, not a visible line (that's
+          SectionSeam's job, untouched here). */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-[14vh] bg-gradient-to-b from-transparent to-black/25"
+      />
     </div>
   )
 }

@@ -9,10 +9,8 @@ import { emitCarouselNav } from '@/lib/carouselNavPulse'
 import type { IronuPost } from '@/types/sanity'
 import { useCarouselTrack } from '@/components/features/carousel/useCarouselTrack'
 import { getCardMotion, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
-import CarouselOrbit from '@/components/features/carousel/CarouselOrbit'
 import ActiveImageMetadata from '@/components/features/carousel/ActiveImageMetadata'
 import ActiveEntryLabel from '@/components/features/carousel/ActiveEntryLabel'
-import IronuSpiralGraphic from './IronuSpiralGraphic'
 
 interface IronuCarouselProps {
   posts: IronuPost[]
@@ -22,16 +20,12 @@ function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-// Roughly 1.2–1.36x the active card's own width at each breakpoint —
-// matches ProjectsCarousel's orbit proportions on the same principle,
-// scaled to Ìrònú's own (slightly narrower) card widths.
-const ORBIT_SIZE = 'w-[250px] sm:w-[350px] md:w-[440px] lg:w-[540px] aspect-square'
-
 // Same interaction language as ProjectsCarousel — strong center hierarchy,
 // side entries tilted and receding, spatial (scroll-driven, not swapped)
-// transitions, active-entry typography attached to the artwork on desktop
-// and stacked beneath it on mobile, and a single orbit graphic behind the
-// active card rather than a whole-section background mark.
+// transitions, and active-entry typography attached to the artwork on
+// desktop / stacked beneath it on mobile. The section's own orbit graphic
+// (a whole-section ambient background, not a per-card element) lives in
+// app/page.tsx as <SectionOrbitBackground>.
 export default function IronuCarousel({ posts }: IronuCarouselProps) {
   const reducedMotion = useReducedMotion()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -53,8 +47,6 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
   if (posts.length === 0) return null
 
   const activePost = posts[centerIndex]
-  const orbitStep = 360 / posts.length
-  const liveNudge = -(signedDistances[centerIndex] ?? 0) * 40
 
   return (
     <div className="relative">
@@ -102,16 +94,6 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
                 transition: `transform 420ms ${CAROUSEL_EASE}, opacity 420ms ${CAROUSEL_EASE}, filter 420ms ${CAROUSEL_EASE}`,
               }}
             >
-              {isCenter && (
-                <CarouselOrbit
-                  reducedMotion={reducedMotion}
-                  rotationDeg={centerIndex * orbitStep + liveNudge}
-                  sizeClassName={ORBIT_SIZE}
-                >
-                  <IronuSpiralGraphic className="w-full h-full" />
-                </CarouselOrbit>
-              )}
-
               <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)]">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
                   {coverUrl ? (

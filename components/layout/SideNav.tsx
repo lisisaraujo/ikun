@@ -192,15 +192,25 @@ export default function SideNav() {
               {current.label}
             </span>
           )}
-          <svg
-            viewBox="0 0 16 16"
-            className="w-3 h-3 shrink-0 text-[#37C6F4] transition-[transform,opacity] duration-300 group-hover:opacity-90"
-            style={{ transform: `rotate(${open ? 45 : 0}deg)`, transitionTimingFunction: PANEL_EASE }}
-            fill="none" aria-hidden="true"
-          >
-            <line x1="8" y1="1" x2="8" y2="15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-            <line x1="1" y1="8" x2="15" y2="8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-          </svg>
+          <span className="relative h-3 w-3 shrink-0">
+            {/* Closed: a dot, the same "current" mark used in the panel.
+                Open: an ×, its close affordance. Cross-faded rather than
+                rotated — a dot has no meaningful rotation into an ×. */}
+            <span
+              className="absolute inset-0 rounded-full bg-[#37C6F4] transition-opacity duration-300 group-hover:opacity-70"
+              style={{ opacity: open ? 0 : 1, transitionTimingFunction: PANEL_EASE }}
+              aria-hidden="true"
+            />
+            <svg
+              viewBox="0 0 16 16"
+              className="absolute inset-0 h-3 w-3 text-[#37C6F4] transition-opacity duration-300 group-hover:opacity-80"
+              style={{ opacity: open ? 1 : 0, transitionTimingFunction: PANEL_EASE }}
+              fill="none" aria-hidden="true"
+            >
+              <line x1="2" y1="2" x2="14" y2="14" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+              <line x1="14" y1="2" x2="2" y2="14" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+          </span>
         </span>
       </button>
 
@@ -250,27 +260,25 @@ export default function SideNav() {
                 </span>
                 <span className="block flex-1 overflow-hidden">
                   <span
-                    className="flex items-center gap-3 font-[family-name:var(--font-heading)] uppercase tracking-[0.02em] text-2xl lg:text-[28px] font-light text-[#F3F1EB] transition-transform duration-300 ease-out group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
+                    className={`flex items-center gap-3 font-[family-name:var(--font-heading)] uppercase tracking-[0.02em] text-2xl lg:text-[28px] font-light group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5 ${
+                      isCurrent
+                        ? 'text-[#37C6F4]'
+                        : 'text-[#F3F1EB] group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
+                    }`}
                     style={{
                       opacity: itemsRevealed ? 1 : 0,
                       filter: reducedMotion ? 'none' : itemsRevealed ? 'blur(0px)' : 'blur(3px)',
                       transform: reducedMotion ? 'none' : itemsRevealed ? 'translateY(0%)' : 'translateY(110%)',
+                      // Color gets its own short, un-delayed transition (a
+                      // hover response) separate from the mask-reveal's
+                      // longer, staggered one for transform/opacity/filter.
                       transition: reducedMotion
-                        ? 'opacity 200ms ease-out'
-                        : `transform 600ms ${PANEL_EASE} ${delay}ms, opacity 600ms ${PANEL_EASE} ${delay}ms, filter 600ms ${PANEL_EASE} ${delay}ms`,
+                        ? 'opacity 200ms ease-out, color 250ms ease-out'
+                        : `transform 600ms ${PANEL_EASE} ${delay}ms, opacity 600ms ${PANEL_EASE} ${delay}ms, filter 600ms ${PANEL_EASE} ${delay}ms, color 250ms ${PANEL_EASE}`,
                     }}
                   >
                     {section.label}
-                    {isCurrent ? (
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#37C6F4]" />
-                    ) : (
-                      <span
-                        className="shrink-0 text-[#37C6F4] opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
-                        aria-hidden="true"
-                      >
-                        →
-                      </span>
-                    )}
+                    {isCurrent && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#37C6F4]" />}
                   </span>
                 </span>
               </button>
