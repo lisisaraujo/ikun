@@ -6,6 +6,12 @@
 // recedes toward the background.
 export const CAROUSEL_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)'
 
+// The active-card orbit's idle spin — almost imperceptible, ambient
+// movement rather than a loading spinner — and how long its discrete
+// "step to the new active project" turn takes before it's back to idling.
+export const ORBIT_IDLE_SECONDS = 45
+export const ORBIT_KICK_MS = 700
+
 // A card reaches full "neighbor" treatment once it's this many card-steps
 // from center, and full "background" recession by the second threshold.
 const NEIGHBOR_AT = 0.65

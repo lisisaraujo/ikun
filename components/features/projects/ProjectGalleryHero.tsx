@@ -26,8 +26,12 @@ export default function ProjectGalleryHero({
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
 
-  const hasGallery = images.length > 0
-  const total = images.length
+  // Studio allows an "images" array item to exist with no asset actually
+  // uploaded yet (or one whose asset was since deleted) — urlFor() throws
+  // on those, so they're filtered out here rather than trusted as-is.
+  const galleryImages = images.filter((img) => img?.asset?._ref)
+  const hasGallery = galleryImages.length > 0
+  const total = galleryImages.length
 
   const prev = useCallback(() => setIndex((i) => (i - 1 + total) % total), [total])
   const next = useCallback(() => setIndex((i) => (i + 1) % total), [total])
@@ -50,11 +54,11 @@ export default function ProjectGalleryHero({
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  const coverSrc = coverImage
+  const coverSrc = coverImage?.asset?._ref
     ? urlFor(coverImage).width(1600).height(900).fit('crop').auto('format').url()
     : null
 
-  const currentImage = images[index]
+  const currentImage = galleryImages[index]
   const currentSrc = currentImage
     ? urlFor(currentImage).width(1920).height(1080).fit('max').auto('format').url()
     : null
@@ -208,7 +212,7 @@ export default function ProjectGalleryHero({
             )}
             {total > 1 && (
               <div className="flex gap-1.5 overflow-x-auto justify-center">
-                {images.map((img, i) => {
+                {galleryImages.map((img, i) => {
                   const thumbSrc = urlFor(img).width(120).height(80).fit('crop').auto('format').url()
                   return (
                     <button

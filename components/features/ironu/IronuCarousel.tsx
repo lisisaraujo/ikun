@@ -9,7 +9,10 @@ import { emitCarouselNav } from '@/lib/carouselNavPulse'
 import type { IronuPost } from '@/types/sanity'
 import { useCarouselTrack } from '@/components/features/carousel/useCarouselTrack'
 import { getCardMotion, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
+import CarouselOrbit from '@/components/features/carousel/CarouselOrbit'
+import ActiveImageMetadata from '@/components/features/carousel/ActiveImageMetadata'
 import ActiveEntryLabel from '@/components/features/carousel/ActiveEntryLabel'
+import IronuSpiralGraphic from './IronuSpiralGraphic'
 
 interface IronuCarouselProps {
   posts: IronuPost[]
@@ -19,12 +22,16 @@ function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
+// Roughly 1.2–1.36x the active card's own width at each breakpoint —
+// matches ProjectsCarousel's orbit proportions on the same principle,
+// scaled to Ìrònú's own (slightly narrower) card widths.
+const ORBIT_SIZE = 'w-[250px] sm:w-[350px] md:w-[440px] lg:w-[540px] aspect-square'
+
 // Same interaction language as ProjectsCarousel — strong center hierarchy,
 // side entries tilted and receding, spatial (scroll-driven, not swapped)
-// transitions, and the active entry's own typography living outside the
-// image. No per-card spinner dial here (Ìrònú never had one); the section's
-// single background IronuSpiral plays that "meaningful geometric motion"
-// role instead — see IronuSpiral.tsx.
+// transitions, active-entry typography attached to the artwork on desktop
+// and stacked beneath it on mobile, and a single orbit graphic behind the
+// active card rather than a whole-section background mark.
 export default function IronuCarousel({ posts }: IronuCarouselProps) {
   const reducedMotion = useReducedMotion()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -46,6 +53,8 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
   if (posts.length === 0) return null
 
   const activePost = posts[centerIndex]
+  const orbitStep = 360 / posts.length
+  const liveNudge = -(signedDistances[centerIndex] ?? 0) * 40
 
   return (
     <div className="relative">
@@ -93,6 +102,16 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
                 transition: `transform 420ms ${CAROUSEL_EASE}, opacity 420ms ${CAROUSEL_EASE}, filter 420ms ${CAROUSEL_EASE}`,
               }}
             >
+              {isCenter && (
+                <CarouselOrbit
+                  reducedMotion={reducedMotion}
+                  rotationDeg={centerIndex * orbitStep + liveNudge}
+                  sizeClassName={ORBIT_SIZE}
+                >
+                  <IronuSpiralGraphic className="w-full h-full" />
+                </CarouselOrbit>
+              )}
+
               <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)]">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
                   {coverUrl ? (
@@ -107,6 +126,18 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="font-[family-name:var(--font-heading)] text-6xl text-[#F3F1EB]/10" aria-hidden="true">Ì</span>
                     </div>
+                  )}
+
+                  {isCenter && (
+                    <ActiveImageMetadata
+                      entryKey={post._id}
+                      index={centerIndex}
+                      total={posts.length}
+                      eyebrow={formatDate(post.date)}
+                      title={post.title}
+                      ctaLabel="Read"
+                      reducedMotion={reducedMotion}
+                    />
                   )}
                 </div>
               </div>
@@ -144,6 +175,8 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
         </button>
       )}
 
+      {/* Mobile only — desktop's active-entry typography lives on the
+          image itself now (ActiveImageMetadata above). */}
       {activePost && (
         <ActiveEntryLabel
           entryKey={activePost._id}
@@ -154,6 +187,7 @@ export default function IronuCarousel({ posts }: IronuCarouselProps) {
           href={`/ironu/${activePost.slug.current}`}
           ctaLabel="Read"
           reducedMotion={reducedMotion}
+          className="md:hidden"
         />
       )}
     </div>

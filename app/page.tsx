@@ -9,7 +9,6 @@ import ContactForm from '@/components/features/contact/ContactForm'
 import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import ProjectsAmbient from '@/components/features/projects/ProjectsAmbient'
 import SpiralRings from '@/components/features/projects/SpiralRings'
-import IronuSpiral from '@/components/features/ironu/IronuSpiral'
 import IronuCarousel from '@/components/features/ironu/IronuCarousel'
 import SectionSeam from '@/components/layout/SectionSeam'
 import SectionBackdrop from '@/components/layout/SectionBackdrop'
@@ -190,7 +189,6 @@ export default async function HomePage() {
         <section className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
           <SectionBackdrop id="ironu" color="#8B5F3C" glow="#E8A25C" />
           <SectionSeam />
-          <IronuSpiral />
           <IronuCarousel posts={ironuPosts} />
         </section>
       </div>

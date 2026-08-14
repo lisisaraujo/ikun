@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEntryReveal } from './useEntryReveal'
 import { CAROUSEL_EASE } from './carouselMotion'
 
 interface ActiveEntryLabelProps {
@@ -16,12 +16,13 @@ interface ActiveEntryLabelProps {
   href: string
   ctaLabel: string
   reducedMotion: boolean
+  className?: string
 }
 
-// The active carousel entry's own typography, living in the surrounding
-// composition rather than as an overlay inside the photograph — index/year
-// arrive first, the title rises through a mask, the CTA follows. Shared by
-// Projects and Ìrònú so both carousels speak the same typographic language.
+// The active carousel entry's own typography, living directly beneath the
+// track — this is the mobile presentation (see ActiveImageMetadata for the
+// desktop, on-image version). Index/year arrive first, the title rises
+// through a mask, the CTA follows. Shared by Projects and Ìrònú.
 export default function ActiveEntryLabel({
   entryKey,
   index,
@@ -31,30 +32,12 @@ export default function ActiveEntryLabel({
   href,
   ctaLabel,
   reducedMotion,
+  className = '',
 }: ActiveEntryLabelProps) {
-  const [revealed, setRevealed] = useState(reducedMotion)
-
-  // Resetting `revealed` to false when the entry changes must happen
-  // synchronously with that change (React's documented "adjust state
-  // during render" pattern) — an effect would apply it a render late.
-  // Only the *timed* release back to true (below) needs an effect, since
-  // that's inherently async (a couple of animation frames later).
-  const [prevKey, setPrevKey] = useState(entryKey)
-  if (prevKey !== entryKey) {
-    setPrevKey(entryKey)
-    setRevealed(reducedMotion)
-  }
-
-  useEffect(() => {
-    if (reducedMotion) return
-    const raf = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setRevealed(true))
-    })
-    return () => cancelAnimationFrame(raf)
-  }, [entryKey, reducedMotion])
+  const revealed = useEntryReveal(entryKey, reducedMotion)
 
   return (
-    <div className="relative z-10 mt-8 flex flex-col items-center px-4 text-center md:mt-12">
+    <div className={`relative z-10 mt-6 flex flex-col items-center px-4 text-center ${className}`}>
       <p
         className="text-[11px] font-semibold tracking-[0.3em] text-[#37C6F4]"
         style={{ opacity: revealed ? 1 : 0, transition: 'opacity 500ms ease-out 0ms' }}
@@ -70,16 +53,16 @@ export default function ActiveEntryLabel({
 
       {/* Stationary clipping mask — the title rises through it, same
           language as the hero intro's masked line reveal. */}
-      <div className="mt-3 overflow-hidden py-1">
+      <div className="mt-2 overflow-hidden py-1">
         <h3
-          className="font-[family-name:var(--font-heading)] text-4xl font-light uppercase tracking-[0.01em] text-[#F3F1EB] sm:text-5xl md:text-6xl"
+          className="font-[family-name:var(--font-heading)] text-3xl font-light uppercase tracking-[0.01em] text-[#F3F1EB] sm:text-4xl"
           style={{
             opacity: revealed ? 1 : 0,
             filter: reducedMotion ? 'none' : revealed ? 'blur(0px)' : 'blur(3px)',
             transform: reducedMotion ? 'none' : revealed ? 'translateY(0%)' : 'translateY(110%)',
             transition: reducedMotion
               ? 'opacity 250ms ease-out'
-              : `transform 800ms ${CAROUSEL_EASE} 160ms, opacity 800ms ${CAROUSEL_EASE} 160ms, filter 800ms ${CAROUSEL_EASE} 160ms`,
+              : `transform 650ms ${CAROUSEL_EASE} 120ms, opacity 650ms ${CAROUSEL_EASE} 120ms, filter 650ms ${CAROUSEL_EASE} 120ms`,
           }}
         >
           {title}
@@ -88,8 +71,8 @@ export default function ActiveEntryLabel({
 
       <Link
         href={href}
-        className="mt-4 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#F3F1EB]/50 hover:text-[#37C6F4]"
-        style={{ opacity: revealed ? 1 : 0, transition: 'opacity 500ms ease-out 320ms, color 300ms' }}
+        className="mt-2 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#F3F1EB]/50 hover:text-[#37C6F4]"
+        style={{ opacity: revealed ? 1 : 0, transition: 'opacity 500ms ease-out 280ms, color 300ms' }}
       >
         {ctaLabel}
         <span aria-hidden="true">↗</span>

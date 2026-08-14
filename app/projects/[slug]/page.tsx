@@ -45,9 +45,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params
-  const project = await getProjectBySlug(slug)
+
+  const [project, allProjects] = await Promise.all([
+    getProjectBySlug(slug),
+    getAllProjects(),
+  ])
 
   if (!project) notFound()
+
+  // Ordered `year desc` (see getAllProjects), same convention as the
+  // Ìrònú detail page's Older/Newer nav.
+  const idx         = allProjects.findIndex((p) => p.slug.current === slug)
+  const olderProject = idx < allProjects.length - 1 ? allProjects[idx + 1] : null
+  const newerProject = idx > 0                       ? allProjects[idx - 1] : null
 
   return (
     <div className="bg-[#F3F1EB] min-h-screen">
@@ -69,15 +79,13 @@ export default async function ProjectPage({ params }: Props) {
             {/* Featured note — a highlighted recognition (e.g. an Aerowaves
                 selection), set apart from the main description below it */}
             {project.featuredNote && (
-              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#1C2433]/80 italic leading-relaxed">
+              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#8B5F3C]/80 italic">
                 <PortableText value={project.featuredNote} />
               </div>
             )}
 
             {/* Description */}
-            <div className="prose prose-lg max-w-none text-[#8B5F3C]/80 leading-relaxed">
-              <PortableText value={project.description} />
-            </div>
+            <PortableText value={project.description} className="text-[#8B5F3C]/80 text-lg" />
 
             {/* Video */}
             {project.videoUrl && (
@@ -143,27 +151,43 @@ export default async function ProjectPage({ params }: Props) {
                 <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
                   Commissioned / Produced By
                 </h2>
-                <div className="prose prose-sm max-w-none text-[#8B5F3C]/70">
-                  <PortableText value={project.commissionedBy} />
-                </div>
+                <PortableText value={project.commissionedBy} className="text-[#8B5F3C]/70 text-sm" />
               </section>
             )}
           </aside>
         </div>
       </Container>
 
-      {/* Footer nav */}
-      <div className="border-t border-[#C9C9C9]/40 py-10">
-        <Container>
-          <Link
-            href="/#projects"
-            className="inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
-          >
-            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2" aria-hidden="true">
-              <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Back to projects
-          </Link>
+      {/* Prev / Next — same pattern as the Ìrònú detail page, in place of a
+          redundant second "back" link (the hero above already has one). */}
+      <div className="border-t border-[#C9C9C9]/40 mt-4">
+        <Container className="py-14">
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              {olderProject && (
+                <Link href={`/projects/${olderProject.slug.current}`} className="group block">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                    ← Older
+                  </p>
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                    {olderProject.title}
+                  </p>
+                </Link>
+              )}
+            </div>
+            <div className="text-right">
+              {newerProject && (
+                <Link href={`/projects/${newerProject.slug.current}`} className="group block">
+                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                    Newer →
+                  </p>
+                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                    {newerProject.title}
+                  </p>
+                </Link>
+              )}
+            </div>
+          </div>
         </Container>
       </div>
     </div>

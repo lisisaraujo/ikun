@@ -9,62 +9,19 @@ import { emitCarouselNav } from '@/lib/carouselNavPulse'
 import type { SanityProject } from '@/types/sanity'
 import SpiralRings from './SpiralRings'
 import { useCarouselTrack } from '@/components/features/carousel/useCarouselTrack'
-import { getCardMotion, getCardFocus, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
+import { getCardMotion, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
+import CarouselOrbit from '@/components/features/carousel/CarouselOrbit'
+import ActiveImageMetadata from '@/components/features/carousel/ActiveImageMetadata'
 import ActiveEntryLabel from '@/components/features/carousel/ActiveEntryLabel'
 
 interface ProjectsCarouselProps {
   projects: SanityProject[]
 }
 
-// The stitched-thread dial that floats beneath each card, tilted flat via
-// perspective. rotateX squashes it visually to ~47% height without
-// shrinking the box it occupies in layout, so a negative margin pulls the
-// empty reserved half out from under the card instead of leaving a gap.
-// `focus` shrinks it for off-center cards, so the centered card's dial
-// reads largest. `indexRotation` + `liveNudge` turn it from unrelated
-// decoration into a carousel indicator: indexRotation steps to a new
-// orientation per active project, liveNudge tracks this card's own live
-// scroll position as it approaches/leaves center — direction follows
-// navigation direction because it's driven by the same signed distance
-// the card's own transform uses.
-function SpinnerDial({
-  focus,
-  indexRotation,
-  liveNudge,
-  accelerated,
-  reducedMotion,
-}: {
-  focus: number
-  indexRotation: number
-  liveNudge: number
-  accelerated: boolean
-  reducedMotion: boolean
-}) {
-  const scale = 0.5 + focus * 0.5
-  const rotation = reducedMotion ? 0 : indexRotation + liveNudge
-
-  return (
-    <div className="flex justify-center" style={{ perspective: '700px' }}>
-      <div
-        className="w-[170px] h-[170px] sm:w-[220px] sm:h-[220px] md:w-[270px] md:h-[270px] lg:w-[320px] lg:h-[320px] mt-[-30px] sm:mt-[-44px] md:mt-[-58px] lg:mt-[-71px] mb-[-30px] sm:mb-[-44px] md:mb-[-58px] lg:mb-[-71px]"
-        style={{
-          transform: `scale(${scale}) rotateX(62deg) rotate(${rotation}deg)`,
-          filter: 'drop-shadow(0 22px 16px rgba(11,11,11,0.45)) drop-shadow(0 8px 6px rgba(11,11,11,0.3))',
-          transition: reducedMotion ? 'transform 200ms ease-out' : `transform 500ms ${CAROUSEL_EASE}`,
-        }}
-      >
-        <SpiralRings
-          className="w-full h-full pointer-events-none"
-          style={
-            reducedMotion
-              ? undefined
-              : { animation: `spinSlow ${accelerated ? 12 : 60}s linear infinite` }
-          }
-        />
-      </div>
-    </div>
-  )
-}
+// Roughly 1.2–1.36x the active card's own width at each breakpoint — a
+// graphic field radiating from behind the work, not a fixed size that
+// happens to roughly line up with it.
+const ORBIT_SIZE = 'w-[260px] sm:w-[370px] md:w-[470px] lg:w-[570px] aspect-square'
 
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const reducedMotion = useReducedMotion()
@@ -87,7 +44,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   if (projects.length === 0) return null
 
   const activeProject = projects[centerIndex]
-  const dialStep = 360 / projects.length
+  const orbitStep = 360 / projects.length
+  // The active card's own live signed distance (not each card's own, since
+  // only the active card carries an orbit) — continuously tracks drag/scroll
+  // position even between index changes, so the orbit visibly responds to
+  // navigation direction rather than only stepping at the moment centerIndex
+  // itself updates.
+  const liveNudge = -(signedDistances[centerIndex] ?? 0) * 40
 
   return (
     <div className="relative">
@@ -108,7 +71,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           const isCenter = i === centerIndex
           const isHovered = i === hoveredIndex
           const motion = getCardMotion(signedDist, reducedMotion, intensity)
-          const focus = getCardFocus(signedDist)
 
           // Side cards hint at clickability on hover: a touch more opacity,
           // a touch less blur/tilt — never stronger than the center image.
@@ -138,6 +100,16 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                 transition: `transform 420ms ${CAROUSEL_EASE}, opacity 420ms ${CAROUSEL_EASE}, filter 420ms ${CAROUSEL_EASE}`,
               }}
             >
+              {isCenter && (
+                <CarouselOrbit
+                  reducedMotion={reducedMotion}
+                  rotationDeg={centerIndex * orbitStep + liveNudge}
+                  sizeClassName={ORBIT_SIZE}
+                >
+                  <SpiralRings className="w-full h-full" />
+                </CarouselOrbit>
+              )}
+
               <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)]">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
                   {coverUrl && (
@@ -149,16 +121,20 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                       className="object-cover"
                     />
                   )}
+
+                  {isCenter && (
+                    <ActiveImageMetadata
+                      entryKey={project._id}
+                      index={centerIndex}
+                      total={projects.length}
+                      eyebrow={String(project.year)}
+                      title={project.title}
+                      ctaLabel="View project"
+                      reducedMotion={reducedMotion}
+                    />
+                  )}
                 </div>
               </div>
-
-              <SpinnerDial
-                focus={focus}
-                indexRotation={centerIndex * dialStep}
-                liveNudge={-signedDist * 30}
-                accelerated={isCenter && isHovered}
-                reducedMotion={reducedMotion}
-              />
             </Link>
           )
         })}
@@ -193,6 +169,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         </button>
       )}
 
+      {/* Mobile only — desktop's active-project typography lives on the
+          image itself now (ActiveImageMetadata above). */}
       {activeProject && (
         <ActiveEntryLabel
           entryKey={activeProject._id}
@@ -203,6 +181,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           href={`/projects/${activeProject.slug.current}`}
           ctaLabel="View project"
           reducedMotion={reducedMotion}
+          className="md:hidden"
         />
       )}
     </div>
