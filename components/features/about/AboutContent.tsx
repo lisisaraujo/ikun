@@ -28,12 +28,12 @@ export default function AboutContent({ about }: AboutContentProps) {
         <div className="shrink-0 mb-6 md:mb-8 text-center lg:text-left">
           <KineticHeading
             as="h2"
-            className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl font-light text-[#F3F1EB] mb-3 leading-tight"
+            className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl font-light text-[#8B5F3C] mb-3 leading-tight"
           >
             Mufutau Yusuf
           </KineticHeading>
-          <p className="font-[family-name:var(--font-heading)] italic font-light text-[#F3F1EB]/70 text-lg md:text-xl">
-            Performer, <span className="text-[#37C6F4] not-italic">Choreographer</span>, Teacher.
+          <p className="font-[family-name:var(--font-heading)] italic font-light text-[#8B5F3C]/70 text-lg md:text-xl">
+            Performer, <span className="not-italic">Choreographer</span>, Teacher.
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export default function AboutContent({ about }: AboutContentProps) {
             maskImage: 'linear-gradient(to bottom, black 90%, transparent 100%)',
           }}
         >
-          <PortableText value={about.bio} className="prose-ikun-editorial text-[#F3F1EB]/85 text-base md:text-lg" />
+          <PortableText value={about.bio} className="prose-ikun-editorial text-[#8B5F3C]/85 text-base md:text-lg" />
         </div>
       </div>
 

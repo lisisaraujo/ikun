@@ -223,7 +223,7 @@
   font-size: 3.75rem;
   line-height: 0.75;
   font-weight: 700;
-  color: var(--color-ikun-blue);
+  color: var(--color-ikun-brown);
   float: left;
   padding-right: 0.5rem;
   padding-top: 0.3rem;
@@ -259,16 +259,16 @@
 /* Scoped overrides so this variant reads on the translucent brown background,
    without touching .prose-ikun's colors used elsewhere on lighter surfaces */
 .prose-ikun-editorial a {
-  color: var(--color-ikun-offwhite);
+  color: var(--color-ikun-brown);
   text-decoration-color: transparent;
 }
 
 .prose-ikun-editorial a:hover {
-  text-decoration-color: var(--color-ikun-offwhite);
+  text-decoration-color: var(--color-ikun-brown);
 }
 
 .prose-ikun-editorial strong {
-  color: var(--color-ikun-offwhite);
+  color: var(--color-ikun-brown);
 }
 
 /* Pull quote — breaks out of the narrow column so it reads as a moment of

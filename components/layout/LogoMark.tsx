@@ -22,7 +22,7 @@ export default function LogoMark() {
 <Link href="/" aria-label="Home" className="block transition-opacity duration-200 hover:opacity-70">
   <div className="h-34 md:h-40" style={{ width: 'auto', aspectRatio: '2421/1754' }}>
     <Image
-      src={useWhite ? '/ikun-logo-white.png' : '/ikun-logo-black.png'}
+      src={'/01_IKUN_Logo-with-name-beneath.png'}
       alt="IKUN"
       width={2421}
       height={1754}
