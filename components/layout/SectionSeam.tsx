@@ -1,22 +1,30 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
-// Stitched divider marking the boundary between two page sections. The seam
-// stays visible while its repeated stitches travel with the page: scrolling
-// down carries them right, and scrolling back up carries them left. Sits at
-// the top edge of the section it's placed in, which must be positioned.
+// How far apart (px) each accent mark repeats — wide enough that it reads
+// as an occasional signature along the seam, not a dense stitch line.
+const TILE_WIDTH = 900
+
+// A quiet seam marking the boundary between two page sections — the
+// brand's own accent mark (the same tilde used in the logo/cursor)
+// recurring sparsely. The hairline beneath it is kept in the markup but
+// invisible (opacity 0) rather than removed. Drifts slowly with scroll.
+// Sits at the top edge of the section it's placed in, which must be
+// positioned.
 export default function SectionSeam() {
-  const stitchesRef = useRef<HTMLDivElement>(null)
+  const patternId = `seam-accent-${useId()}`
+  const patternRef = useRef<SVGPatternElement>(null)
 
   useEffect(() => {
-    const stitches = stitchesRef.current
-    if (!stitches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const pattern = patternRef.current
+    if (!pattern || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let raf = 0
     const update = () => {
       raf = 0
-      stitches.style.backgroundPositionX = `${window.scrollY * 0.18}px`
+      const x = (window.scrollY * 0.15) % TILE_WIDTH
+      pattern.setAttribute('x', String(x))
     }
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update)
@@ -35,25 +43,23 @@ export default function SectionSeam() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-x-0 top-0 z-20 h-6 overflow-hidden"
     >
-      {/* thread */}
-      <div
-        className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[#37C6F4]/80 shadow-[0_0_6px_rgba(55,198,244,0.5)]"
-      />
-      {/* stitches — the cursor accent mark, tiled, small and soft */}
-      <div className="absolute inset-x-0 top-1/2 h-5 -translate-y-1/2">
-        <div
-          ref={stitchesRef}
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(/cursor-accent.png)',
-            backgroundRepeat: 'repeat-x',
-            backgroundSize: '16px 19px',
-            backgroundPosition: '0 center',
-            filter: 'drop-shadow(0 0 3px rgba(55, 198, 244, 0.65))',
-            willChange: 'background-position',
-          }}
+      {/* hairline — present but invisible */}
+      <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 opacity-0 bg-[#37C6F4]" />
+
+      {/* the accent mark itself, widely and evenly spaced */}
+      <svg className="absolute inset-x-0 top-1/2 h-5 w-full -translate-y-1/2" aria-hidden="true">
+        <defs>
+          <pattern ref={patternRef} id={patternId} patternUnits="userSpaceOnUse" width={TILE_WIDTH} height={20} x={0}>
+            <image href="/cursor-accent.png" x={0} y={0.5} width={16} height={19} opacity={0.8} />
+          </pattern>
+        </defs>
+        <rect
+          width="100%"
+          height="100%"
+          fill={`url(#${patternId})`}
+          style={{ filter: 'drop-shadow(0 0 3px rgba(55, 198, 244, 0.5))' }}
         />
-      </div>
+      </svg>
     </div>
   )
 }

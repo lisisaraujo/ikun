@@ -62,7 +62,7 @@ export default async function Footer() {
     // of that same composition rather than a bolted-on strip: same backdrop
     // recipe (SectionBackdrop, same navy/blue as `contact`), same scale.
     <footer id="footer" className="relative isolate flex min-h-screen flex-col overflow-hidden text-[#C9C9C9]">
-      <SectionBackdrop id="footer" color="#1C2433" glow="#37C6F4" />
+      <SectionBackdrop color="#1C2433" />
 
    
       {/* ── Middle: collaborator / funder logos — given real room to

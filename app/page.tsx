@@ -67,7 +67,7 @@ export default async function HomePage() {
           stable document position, since it isn't sticky itself. */}
       <div id="about">
         <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop id="about" color="#1C2433" glow="#37C6F4" />
+          <SectionBackdrop color="#1C2433" />
           <SectionSeam />
           {about ? (
             <AboutContent about={about} />
@@ -85,7 +85,7 @@ export default async function HomePage() {
             extra top padding nudges the centered block down to sit in the
             middle of what's actually free below the logo. */}
         <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-center pt-40 pb-10 overflow-hidden">
-          <SectionBackdrop id="projects" color="#8B5F3C" glow="#E8A25C" />
+          <SectionBackdrop color="#1C2433" />
           <SectionSeam />
           <ProjectsAmbient />
           <SectionOrbitBackground channel="projects" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
@@ -100,7 +100,7 @@ export default async function HomePage() {
       {/* ── CALENDAR ─────────────────────────────────────────── */}
       <div id="calendar">
         <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-6 pb-10 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
-          <SectionBackdrop id="calendar" color="#1C2433" glow="#37C6F4" />
+          <SectionBackdrop color="#1C2433" />
           <SectionSeam />
           {calendarImage && (
             <div className="absolute inset-0 -z-[5]" aria-hidden="true">
@@ -194,7 +194,7 @@ export default async function HomePage() {
       {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
       <div id="ironu">
         <section className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop id="ironu" color="#8B5F3C" glow="#E8A25C" />
+          <SectionBackdrop color="#1C2433" />
           <SectionSeam />
           <SectionOrbitBackground channel="ironu" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
             <IronuSpiralGraphic className="h-full w-full" opacity={0.16} />
@@ -206,7 +206,7 @@ export default async function HomePage() {
       {/* ── CONTACT ──────────────────────────────────────────── */}
       <div id="contact">
         <section className="relative sticky top-0 z-50 min-h-screen flex flex-col justify-center pt-40 pb-10 px-8 md:px-24 lg:px-40 overflow-hidden">
-          <SectionBackdrop id="contact" color="#1C2433" glow="#37C6F4" />
+          <SectionBackdrop color="#1C2433" />
           <SectionSeam />
 
           {/* Ambient accent, echoing the same drifting spiral used in
