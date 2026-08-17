@@ -117,14 +117,14 @@ export default async function HomePage() {
           )}
 
           <div className="mx-auto w-full max-w-[110rem]" aria-label="Upcoming events">
-            <div className="mb-5 flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.28em] text-[#37C6F4] md:mb-7">
+            <div className="mb-5 flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.28em] text-[#8B5F3C] md:mb-7">
               <p>What&apos;s next</p>
               <p className="hidden sm:block">Upcoming performances&nbsp;&nbsp; / &nbsp;&nbsp;01—{String(upcomingEvents.length).padStart(2, '0')}</p>
             </div>
 
-            <div className="border-t border-[#F3F1EB]/75">
+            <div className="border-t-[6px] border-[#8B5F3C]/75">
               {upcomingEvents.length === 0 ? (
-                <p className="border-b border-[#F3F1EB]/25 py-10 text-sm uppercase tracking-widest text-[#F3F1EB]/40">
+                <p className="border-b-[6px] border-[#8B5F3C]/25 py-10 text-sm uppercase tracking-widest text-[#8B5F3C]/40">
                   No upcoming events.
                 </p>
               ) : (
@@ -139,20 +139,20 @@ export default async function HomePage() {
 
                   return (
                     <Reveal key={event._id} delay={i * 80}>
-                      <article className="group grid gap-4 border-b border-[#F3F1EB]/55 py-5 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-center md:grid-cols-[4.5rem_minmax(0,1fr)_auto] md:gap-8 md:py-6">
-                        <p className="hidden font-[family-name:var(--font-heading)] text-4xl font-light italic leading-none text-[#37C6F4]/45 sm:block md:text-5xl" aria-hidden="true">
+                      <article className="group grid gap-4 border-b-[6px] border-[#8B5F3C]/55 py-5 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-center md:grid-cols-[4.5rem_minmax(0,1fr)_auto] md:gap-8 md:py-6">
+                        <p className="hidden font-[family-name:var(--font-heading)] text-4xl font-light italic leading-none text-[#8B5F3C]/45 sm:block md:text-5xl" aria-hidden="true">
                           {String(i + 1).padStart(2, '0')}
                         </p>
                         <div className="min-w-0">
-                          <p className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[#37C6F4]">
+                          <p className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[#8B5F3C]">
                             <span>{event.eventType}</span>
-                            <span className="h-px w-5 bg-[#37C6F4]/45" aria-hidden="true" />
+                            <span className="h-px w-5 bg-[#8B5F3C]/45" aria-hidden="true" />
                             <time dateTime={event.date}>{date}</time>
                           </p>
-                          <h3 className="max-w-5xl font-[family-name:var(--font-heading)] text-3xl font-light italic leading-[0.95] tracking-[-0.035em] text-[#F3F1EB] transition-transform duration-500 group-hover:translate-x-2 md:text-[clamp(2.4rem,3.6vw,4.75rem)]">
+                          <h3 className="max-w-5xl font-[family-name:var(--font-heading)] text-3xl font-light italic leading-[0.95] tracking-[-0.035em] text-[#8B5F3C] transition-transform duration-500 group-hover:translate-x-2 md:text-[clamp(2.4rem,3.6vw,4.75rem)]">
                             {event.title}
                           </h3>
-                          <p className="mt-2 text-xs text-[#F3F1EB]/65 md:text-sm">
+                          <p className="mt-2 text-xs text-[#8B5F3C]/65 md:text-sm">
                             {[event.venue, loc].filter(Boolean).join(' · ')}
                           </p>
                         </div>
@@ -162,7 +162,7 @@ export default async function HomePage() {
                             href={event.ticketLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex w-fit items-center gap-3 rounded-full border border-[#F3F1EB]/75 bg-[#F3F1EB] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#1C2433] transition-colors duration-200 hover:border-[#37C6F4] hover:bg-[#37C6F4] sm:justify-self-end"
+                            className="inline-flex w-fit items-center gap-3 rounded-full border border-[#F3F1EB]/75 bg-[#F3F1EB] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#1C2433] transition-colors duration-200 hover:border-[#8B5F3C] hover:bg-[#8B5F3C] hover:text-[#F3F1EB] sm:justify-self-end"
                             aria-label={`Tickets for ${event.title}`}
                           >
                             Tickets
@@ -179,7 +179,7 @@ export default async function HomePage() {
             <div className="mt-8 flex justify-end md:mt-10">
               <Link
                 href="/calendar"
-                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-[#37C6F4] transition-opacity duration-200 [@media(hover:hover)]:opacity-70 hover:opacity-100"
+                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-[#8B5F3C] transition-opacity duration-200 [@media(hover:hover)]:opacity-70 hover:opacity-100"
               >
                 See all events
                 <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform group-hover:translate-x-1" aria-hidden="true">

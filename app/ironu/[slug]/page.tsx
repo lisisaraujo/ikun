@@ -36,7 +36,7 @@ export default async function IronuPostPage({ params }: Props) {
   const nextPost = idx > 0                    ? allPosts[idx - 1] : null
 
   return (
-    <div className="bg-[#F3F1EB] min-h-screen">
+    <div className="bg-[#8B5F3C] min-h-screen">
       {/* Back link — floats above content. Sits below the fixed logo's
           ~112px band on mobile, where the two would otherwise overlap. */}
       <div className="fixed top-28 md:top-16 left-0 right-0 z-40 pointer-events-none">
@@ -59,7 +59,7 @@ export default async function IronuPostPage({ params }: Props) {
       </Container>
 
       {/* Prev / Next */}
-      <div className="border-t border-[#C9C9C9]/40 mt-20">
+      <div className="border-t border-[#1C2433]/20 mt-20">
         <Container className="py-14">
           <div className="max-w-2xl grid grid-cols-2 gap-8">
             <div>

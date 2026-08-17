@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }: Props) {
   const newerProject = idx > 0                       ? allProjects[idx - 1] : null
 
   return (
-    <div className="bg-[#F3F1EB] min-h-screen">
+    <div className="bg-[#8B5F3C] min-h-screen">
       {/* Hero — clickable cover that opens gallery lightbox */}
       <ProjectGalleryHero
         title={project.title}
@@ -79,18 +79,24 @@ export default async function ProjectPage({ params }: Props) {
             {/* Featured note — a highlighted recognition (e.g. an Aerowaves
                 selection), set apart from the main description below it */}
             {project.featuredNote && (
-              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#8B5F3C]/80 italic">
-                <PortableText value={project.featuredNote} />
+              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#1C2433]/80 italic">
+                <PortableText
+                  value={project.featuredNote}
+                  className="[&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+                />
               </div>
             )}
 
             {/* Description */}
-            <PortableText value={project.description} className="text-[#8B5F3C]/80 text-lg" />
+            <PortableText
+              value={project.description}
+              className="text-[#1C2433]/80 text-lg [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+            />
 
             {/* Video */}
             {project.videoUrl && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
+                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
                   Video
                 </h2>
                 <YoutubeEmbed url={project.videoUrl} title={project.title} />
@@ -100,20 +106,20 @@ export default async function ProjectPage({ params }: Props) {
             {/* Performance dates */}
             {project.performanceDates && project.performanceDates.length > 0 && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
+                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
                   Performance Dates
                 </h2>
-                <ul className="divide-y divide-[#C9C9C9]/40">
+                <ul className="divide-y divide-[#1C2433]/20">
                   {project.performanceDates.map((pd) => (
                     <li key={pd._key} className="py-4">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                        <span className="text-[#8B5F3C] font-medium">{pd.label}</span>
-                        <time className="text-sm text-[#8B5F3C]/40 tabular-nums whitespace-nowrap">
+                        <span className="text-[#1C2433] font-medium">{pd.label}</span>
+                        <time className="text-sm text-[#1C2433]/40 tabular-nums whitespace-nowrap">
                           {formatPerformanceDate(pd)}
                         </time>
                       </div>
                       {(pd.venue || pd.city || pd.country) && (
-                        <p className="mt-1 text-sm text-[#8B5F3C]/60">
+                        <p className="mt-1 text-sm text-[#1C2433]/60">
                           {[pd.venue, pd.city, pd.country].filter(Boolean).join(' · ')}
                         </p>
                       )}
@@ -129,16 +135,16 @@ export default async function ProjectPage({ params }: Props) {
             {/* Credits */}
             {project.credits && project.credits.length > 0 && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
+                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
                   Credits
                 </h2>
                 <dl className="space-y-3">
                   {project.credits.map((credit) => (
                     <div key={credit._key} className="flex flex-col gap-0.5">
-                      <dt className="text-xs uppercase tracking-widest text-[#8B5F3C]/40 font-medium">
+                      <dt className="text-xs uppercase tracking-widest text-[#1C2433]/40 font-medium">
                         {credit.role}
                       </dt>
-                      <dd className="text-sm text-[#8B5F3C]">{credit.name}</dd>
+                      <dd className="text-sm text-[#1C2433]">{credit.name}</dd>
                     </div>
                   ))}
                 </dl>
@@ -148,10 +154,13 @@ export default async function ProjectPage({ params }: Props) {
             {/* Commissioned / produced by */}
             {project.commissionedBy && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#8B5F3C] mb-6">
+                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
                   Commissioned / Produced By
                 </h2>
-                <PortableText value={project.commissionedBy} className="text-[#8B5F3C]/70 text-sm" />
+                <PortableText
+                  value={project.commissionedBy}
+                  className="text-[#1C2433]/70 text-sm [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+                />
               </section>
             )}
           </aside>
@@ -160,7 +169,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* Prev / Next — same pattern as the Ìrònú detail page, in place of a
           redundant second "back" link (the hero above already has one). */}
-      <div className="border-t border-[#C9C9C9]/40 mt-4">
+      <div className="border-t border-[#1C2433]/20 mt-4">
         <Container className="py-14">
           <div className="grid grid-cols-2 gap-8">
             <div>

@@ -34,18 +34,18 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
             className="object-cover"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#F3F1EB]/30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#8B5F3C]/30" />
         </div>
       )}
 
       <div className={`mx-auto max-w-2xl px-6 md:px-0 ${imageSrc ? '' : 'pt-28'}`}>
         {/* Section label */}
-        <p className="text-[10px] uppercase tracking-[0.2em] text-[#8B5F3C] mb-3 font-medium">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-[#1C2433] mb-3 font-medium">
           Ìrònú
         </p>
 
         {/* Date */}
-        <p className="text-xs uppercase tracking-widest text-[#8B5F3C]/40 mb-6">
+        <p className="text-xs uppercase tracking-widest text-[#1C2433]/40 mb-6">
           {formatDate(post.date)}
         </p>
 
@@ -55,7 +55,12 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
         </h1>
 
         {/* Body */}
-        {post.body && <PortableText value={post.body} />}
+        {post.body && (
+          <PortableText
+            value={post.body}
+            className="text-[#1C2433] [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+          />
+        )}
 
         {/* Video */}
         {post.videoUrl && (
