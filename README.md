@@ -1,1 +1,1 @@
-ik-n
+Website for Ikun, a dance company led by Mufutau Yusuf — built end-to-end with Sanity CMS for client-managed content. Ongoing project.
