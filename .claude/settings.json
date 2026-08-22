@@ -5,7 +5,9 @@
       "Read(//tmp/**)",
       "Bash(ps -p 11246 -o command=)",
       "Bash(sleep 2; cat /tmp/ikun-dev.log)",
-      "Read(//private/tmp/**)"
+      "Read(//private/tmp/**)",
+      "WebSearch",
+      "WebFetch(domain:www.mux.com)"
     ]
   }
 }

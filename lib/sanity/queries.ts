@@ -78,7 +78,7 @@ export async function getAboutPage(): Promise<AboutPage | null> {
 export async function getHomePage(): Promise<HomePage | null> {
   return sanityClient.fetch(
     `*[_type == "homePage" && _id == "homePage"][0] {
-      _id, heroVideoUrl, introHeading, introText
+      _id, heroMuxPlaybackId, introHeading, introText
     }`
   )
 }

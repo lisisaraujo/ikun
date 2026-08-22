@@ -7,10 +7,10 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'heroVideoUrl',
-      title: 'Hero Video URL (YouTube)',
-      type: 'url',
-      description: 'Full YouTube URL, e.g. https://www.youtube.com/watch?v=xxxxx',
+      name: 'heroMuxPlaybackId',
+      title: 'Hero Video (Mux Playback ID)',
+      type: 'string',
+      description: 'Playback ID from your Mux asset, e.g. M02clBfd7hK01r1BzwLj95ji9CE5p01uAjK8tkn00rLhpes',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

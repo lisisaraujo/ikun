@@ -107,7 +107,7 @@ export interface AboutPage {
 // Home Page (singleton)
 export interface HomePage {
   _id: string
-  heroVideoUrl: string
+  heroMuxPlaybackId: string
   introHeading?: string
   introText: PortableTextBlock[]
 }

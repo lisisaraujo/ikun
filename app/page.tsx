@@ -12,11 +12,9 @@ import SpiralRings from '@/components/features/projects/SpiralRings'
 import IronuCarousel from '@/components/features/ironu/IronuCarousel'
 import IronuSpiralGraphic from '@/components/features/ironu/IronuSpiralGraphic'
 import SectionOrbitBackground from '@/components/features/carousel/SectionOrbitBackground'
-import SectionSeam from '@/components/layout/SectionSeam'
 import SectionBackdrop from '@/components/layout/SectionBackdrop'
 import Reveal from '@/components/ui/Reveal'
 import KineticHeading from '@/components/ui/KineticHeading'
-import { extractYouTubeId } from '@/lib/youtube'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
 
 export const metadata: Metadata = {
@@ -54,7 +52,7 @@ export default async function HomePage() {
 
       {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
       <HeroStack
-        videoId={homeData?.heroVideoUrl ? extractYouTubeId(homeData.heroVideoUrl) : null}
+        playbackId={homeData?.heroMuxPlaybackId ?? null}
         introText={homeData?.introText ?? []}
       />
 
@@ -68,7 +66,7 @@ export default async function HomePage() {
       <div id="about">
         <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
           <SectionBackdrop color="#1C2433" />
-          <SectionSeam />
+
           {about ? (
             <AboutContent about={about} />
           ) : (
@@ -86,7 +84,6 @@ export default async function HomePage() {
             middle of what's actually free below the logo. */}
         <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-center pt-40 pb-10 overflow-hidden">
           <SectionBackdrop color="#1C2433" />
-          <SectionSeam />
           <ProjectsAmbient />
           <SectionOrbitBackground channel="projects" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
             <div className="h-full w-full opacity-[0.16]">
@@ -101,7 +98,6 @@ export default async function HomePage() {
       <div id="calendar">
         <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-6 pb-10 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
           <SectionBackdrop color="#1C2433" />
-          <SectionSeam />
           {calendarImage && (
             <div className="absolute inset-0 -z-[5]" aria-hidden="true">
               <Image
@@ -195,7 +191,6 @@ export default async function HomePage() {
       <div id="ironu">
         <section className="sticky top-0 z-40 min-h-screen flex flex-col justify-center py-24">
           <SectionBackdrop color="#1C2433" />
-          <SectionSeam />
           <SectionOrbitBackground channel="ironu" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
             <IronuSpiralGraphic className="h-full w-full" opacity={0.16} />
           </SectionOrbitBackground>
@@ -207,7 +202,6 @@ export default async function HomePage() {
       <div id="contact">
         <section className="relative sticky top-0 z-50 min-h-screen flex flex-col justify-center pt-40 pb-10 px-8 md:px-24 lg:px-40 overflow-hidden">
           <SectionBackdrop color="#1C2433" />
-          <SectionSeam />
 
           {/* Ambient accent, echoing the same drifting spiral used in
               Projects/Ìrònú — quiet enough not to compete with the form */}

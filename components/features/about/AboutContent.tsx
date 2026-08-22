@@ -2,7 +2,6 @@ import Image from 'next/image'
 import PortableText from '@/components/ui/PortableText'
 import KineticHeading from '@/components/ui/KineticHeading'
 import SpiralRings from '@/components/features/projects/SpiralRings'
-import HeroOrbitText from '@/components/features/home/HeroOrbitText'
 import { urlFor } from '@/lib/sanity/image'
 import type { AboutPage } from '@/types/sanity'
 
@@ -23,7 +22,6 @@ export default function AboutContent({ about }: AboutContentProps) {
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.85fr] gap-10 lg:gap-16 h-[82vh] md:h-[74vh]">
       {/* ── Static: name, subtitle, bio ─────────────────────────── */}
       <div className="relative flex flex-col min-h-0 px-8 lg:pl-24 xl:pl-40 lg:pr-0">
-        <HeroOrbitText />
 
         <div className="shrink-0 mb-6 md:mb-8 text-center lg:text-left">
           <KineticHeading
