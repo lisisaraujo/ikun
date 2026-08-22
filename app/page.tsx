@@ -56,25 +56,6 @@ export default async function HomePage() {
         introText={homeData?.introText ?? []}
       />
 
-      {/* ── ABOUT ────────────────────────────────────────────── */}
-      {/* Wrapped in a plain, non-sticky div carrying the id: a `position:
-          sticky` element's own `offsetTop` drifts to track the current
-          scroll position once you've scrolled past it (a real browser
-          quirk), which breaks SideNav's scrollTo-based jump once you're
-          deeper in the page. This wrapper's offsetTop stays the true,
-          stable document position, since it isn't sticky itself. */}
-      <div id="about">
-        <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop color="#1C2433" />
-
-          {about ? (
-            <AboutContent about={about} />
-          ) : (
-            <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-8 md:px-24 lg:px-40">About content coming soon.</p>
-          )}
-        </section>
-      </div>
-
       {/* ── PROJECTS ─────────────────────────────────────────── */}
       <div id="projects">
         {/* pt/pb deliberately asymmetric, not py-24 — centering on the raw
@@ -91,6 +72,25 @@ export default async function HomePage() {
             </div>
           </SectionOrbitBackground>
           <ProjectsCarousel projects={projects} />
+        </section>
+      </div>
+
+      {/* ── ABOUT ────────────────────────────────────────────── */}
+      {/* Wrapped in a plain, non-sticky div carrying the id: a `position:
+          sticky` element's own `offsetTop` drifts to track the current
+          scroll position once you've scrolled past it (a real browser
+          quirk), which breaks SideNav's scrollTo-based jump once you're
+          deeper in the page. This wrapper's offsetTop stays the true,
+          stable document position, since it isn't sticky itself. */}
+      <div id="about">
+        <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
+          <SectionBackdrop color="#1C2433" />
+
+          {about ? (
+            <AboutContent about={about} />
+          ) : (
+            <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-8 md:px-24 lg:px-40">About content coming soon.</p>
+          )}
         </section>
       </div>
 

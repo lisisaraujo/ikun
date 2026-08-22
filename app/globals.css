@@ -157,13 +157,13 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    cursor: url("/cursor-accent.png") 16 20, auto;
+    cursor: url("/cursor-accent.png") 3 3, auto;
     overflow-x: hidden;
     overscroll-behavior-x: none;
   }
 
   a, button, [role="button"], select, label[for] {
-    cursor: url("/cursor-accent.png") 16 20, pointer;
+    cursor: url("/cursor-accent.png") 3 3, pointer;
   }
 
   h1, h2, h3, h4, h5, h6 {

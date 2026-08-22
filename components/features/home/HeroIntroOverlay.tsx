@@ -36,13 +36,32 @@ function introParagraphs(text: PortableTextBlock[]) {
   return paragraphs
 }
 
+function renderLinkedName(paragraph: string) {
+  const name = 'Mufutau Yusuf'
+  const parts = paragraph.split(name)
+
+  return parts.map((part, index) => (
+    <span key={index}>
+      {part}
+      {index < parts.length - 1 && (
+        <a
+          href="#about"
+          className="text-[#8B5F3C] underline decoration-[#37C6F4]/55 decoration-1 underline-offset-[0.18em] transition-colors duration-200 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+        >
+          {name}
+        </a>
+      )}
+    </span>
+  ))
+}
+
 export default function IkunPage({ text }: IkunPageProps) {
   const paragraphs = introParagraphs(text)
 
   if (paragraphs.length === 0) return null
 
   return (
-    <section className="relative z-[1] min-h-screen overflow-hidden px-6 pb-20 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
+    <section id="ikun" className="relative z-[1] min-h-screen overflow-hidden px-6 pb-20 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
       <div className="absolute inset-0 -z-20 bg-[#1C2433]" aria-hidden="true" />
       <SectionOrbitBackground channel="projects" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
         <div className="h-full w-full opacity-[0.16]">
@@ -66,7 +85,7 @@ export default function IkunPage({ text }: IkunPageProps) {
                 className="font-[family-name:var(--font-body)] text-[clamp(1.15rem,1.6vw,1.55rem)] font-light italic leading-[1.35] tracking-normal text-[#8B5F3C] [text-shadow:0_2px_14px_rgba(0,0,0,0.28)] lg:leading-[1.38]"
                 style={{ fontFamily: "var(--font-body), 'Noto Sans', system-ui, sans-serif" }}
               >
-                {paragraph}
+                {renderLinkedName(paragraph)}
               </p>
             ))}
           </div>
