@@ -26,7 +26,7 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
       {activeBackgroundImage && (
         <div className="absolute inset-0 -z-[5]" aria-hidden="true">
           <Image
-            key={activeBackgroundImage._ref}
+            key={activeBackgroundImage.asset._ref}
             src={urlFor(activeBackgroundImage).width(2200).height(1400).fit('crop').auto('format').url()}
             alt=""
             fill

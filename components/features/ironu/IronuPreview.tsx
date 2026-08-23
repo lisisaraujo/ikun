@@ -66,7 +66,7 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
                 {coverUrl ? (
                   <Image
                     src={coverUrl}
-                    alt={latestPost.coverImage?.alt || latestPost.title}
+                    alt={latestPost.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 18rem"
                     className="object-cover opacity-70 grayscale-[18%] transition-[transform,opacity,filter] duration-700 group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0"

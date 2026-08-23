@@ -143,29 +143,43 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
                 type="button"
                 onClick={() => setActivePanel(panel.id)}
                 aria-pressed={isActive}
-                className={`group relative z-10 flex min-h-24 items-center rounded-xl px-0 py-5 transition-[flex,opacity] duration-700 ease-[cubic-bezier(.19,1,.22,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 md:min-h-32 ${
+                className={`group relative z-10 flex min-h-24 cursor-pointer items-center rounded-xl px-0 py-5 transition-[flex,opacity] duration-700 ease-[cubic-bezier(.19,1,.22,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70 md:min-h-32 ${
                   isActive
                     ? 'flex-[1.72] opacity-100'
-                    : 'flex-[0.72] bg-transparent opacity-70 hover:opacity-100'
+                    : 'flex-[0.72] bg-transparent opacity-78 hover:opacity-100'
                 } ${isCompany ? 'justify-start text-left' : 'justify-end text-right'}`}
               >
-                {isActive && (
-                  <span
-                    className={`pointer-events-none absolute top-1/2 z-0 h-[5.8rem] -translate-y-1/2 rounded-2xl bg-[#A06B43]/[0.055] shadow-[0_30px_96px_-72px_rgba(160,107,67,0.68)] md:h-[7.4rem] ${
-                      isCompany
-                        ? '-left-8 right-0 md:-left-10'
-                        : 'left-0 -right-8 md:-right-10'
-                    }`}
-                    aria-hidden="true"
-                  />
-                )}
                 <span
-                  className={`relative z-10 translate-y-[0.04em] font-[family-name:var(--font-heading)] font-bold uppercase leading-none tracking-normal transition-[color,font-size] duration-700 ${
-                    isActive ? 'text-[#A06B43]' : 'text-[#A06B43]/62 group-hover:text-[#A06B43]'
+                  className={`pointer-events-none absolute top-1/2 z-0 h-[5.8rem] -translate-y-1/2 rounded-2xl bg-[#A06B43]/[0.055] transition-[opacity,transform] duration-700 ease-[cubic-bezier(.19,1,.22,1)] md:h-[7.4rem] ${
+                    isActive
+                      ? 'scale-x-100 opacity-100 shadow-[0_30px_96px_-72px_rgba(160,107,67,0.68)]'
+                      : 'scale-x-[0.94] opacity-0 group-hover:scale-x-100 group-hover:opacity-55 group-focus-visible:scale-x-100 group-focus-visible:opacity-55'
+                  } ${
+                    isCompany
+                      ? '-left-8 right-0 origin-left md:-left-10'
+                      : 'left-0 -right-8 origin-right md:-right-10'
+                  }`}
+                  aria-hidden="true"
+                />
+                <span
+                  className={`relative z-10 translate-y-[0.04em] font-[family-name:var(--font-heading)] font-bold uppercase leading-none tracking-normal transition-[color,font-size,transform] duration-700 ${
+                    isActive
+                      ? 'text-[#A06B43]'
+                      : `text-[#A06B43]/70 group-hover:text-[#A06B43] ${isCompany ? 'group-hover:translate-x-2' : 'group-hover:-translate-x-2'}`
                   } ${isActive ? 'text-[clamp(2rem,4.2vw,4.8rem)]' : 'text-[clamp(1.45rem,2.45vw,3rem)]'}`}
                 >
                   {panel.label}
                 </span>
+                {!isActive && (
+                  <span
+                    className={`pointer-events-none absolute bottom-3 z-10 text-[0.58rem] font-semibold uppercase tracking-[0.28em] text-[#37C6F4]/0 transition-[opacity,color,transform] duration-500 group-hover:translate-y-0 group-hover:text-[#37C6F4]/75 group-focus-visible:translate-y-0 group-focus-visible:text-[#37C6F4]/75 md:bottom-4 ${
+                      isCompany ? 'left-0 translate-y-1 md:left-1' : 'right-0 translate-y-1 md:right-1'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    View
+                  </span>
+                )}
               </button>
             )
           })}

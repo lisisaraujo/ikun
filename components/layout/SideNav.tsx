@@ -213,9 +213,9 @@ export default function SideNav() {
                   }`}
               />
               <span
-                className={`font-[family-name:var(--font-heading)] text-base font-light uppercase tracking-[0.14em] transition-colors duration-300 lg:text-xl ${isCurrent
-                  ? 'text-[#37C6F4]'
-                  : 'text-[#F3F1EB]/80 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
+                className={`font-[family-name:var(--font-heading)] text-base uppercase tracking-[0.14em] transition-[color,font-weight] duration-300 lg:text-xl ${isCurrent
+                  ? 'font-bold text-[#37C6F4]'
+                  : 'font-light text-[#A06B43]/78 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
                   }`}
               >
                 {section.label}
@@ -266,7 +266,7 @@ export default function SideNav() {
               style={{ transitionDelay: open ? `${index * 40}ms` : '0ms' }}
             >
               <span
-                className={`font-heading text-3xl font-semibold uppercase tracking-[0.15em] ${isCurrent ? 'text-[#37C6F4]' : 'text-[#F3F1EB]/80'
+                className={`font-heading text-3xl uppercase tracking-[0.15em] ${isCurrent ? 'font-bold text-[#37C6F4]' : 'font-light text-[#A06B43]/82'
                   }`}
               >
                 {section.label}
