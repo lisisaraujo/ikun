@@ -18,8 +18,8 @@ export default function SpiralRings({ className = '', style }: { className?: str
           cy={100}
           r={r}
           fill="none"
-          stroke="#37C6F4"
-          strokeOpacity={0.45}
+          stroke=" #8B5F3C"
+          strokeOpacity={0.65}
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeDasharray={dasharray}
@@ -32,8 +32,8 @@ export default function SpiralRings({ className = '', style }: { className?: str
         width={10}
         height={10}
         transform="rotate(45 100 100)"
-        fill="#37C6F4"
-        fillOpacity={0.55}
+        fill="#8B5F3C"
+        fillOpacity={0.65}
       />
     </svg>
   )

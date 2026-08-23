@@ -1,114 +1,90 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { urlFor } from '@/lib/sanity/image'
-import { useReducedMotion } from '@/lib/useReducedMotion'
-import { emitCarouselNav } from '@/lib/carouselNavPulse'
 import type { SanityProject } from '@/types/sanity'
-import { useCarouselTrack } from '@/components/features/carousel/useCarouselTrack'
-import { getCardMotion, CAROUSEL_EASE } from '@/components/features/carousel/carouselMotion'
-import ActiveImageMetadata from '@/components/features/carousel/ActiveImageMetadata'
-import ActiveEntryLabel from '@/components/features/carousel/ActiveEntryLabel'
 
 interface ProjectsCarouselProps {
   projects: SanityProject[]
 }
 
+const PAGE_SIZE = 3
+const WHEEL_PAGE_THRESHOLD = 36
+const WHEEL_PAGE_LOCK_MS = 650
+
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
-  const reducedMotion = useReducedMotion()
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const {
-    scrollerRef,
-    setCardRef,
-    signedDistances,
-    centerIndex,
-    canScrollLeft,
-    canScrollRight,
-    intensity,
-    scrollByAmount,
-    onKeyDown,
-  } = useCarouselTrack({
-    count: projects.length,
-    onNavigate: (dir) => emitCarouselNav('projects', dir),
-  })
+  const lastWheelPageAtRef = useRef(0)
+  const [page, setPage] = useState(0)
+  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
+  const canPage = projects.length > PAGE_SIZE
+
+  const visibleProjects = useMemo(() => {
+    const start = page * PAGE_SIZE
+    return projects.slice(start, start + PAGE_SIZE)
+  }, [page, projects])
 
   if (projects.length === 0) return null
 
-  const activeProject = projects[centerIndex]
+  function goToPage(direction: -1 | 1) {
+    setPage((current) => (current + direction + totalPages) % totalPages)
+  }
+
+  function handleWheel(event: React.WheelEvent<HTMLDivElement>) {
+    if (!canPage) return
+
+    const horizontalIntent = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+    if (!horizontalIntent || Math.abs(event.deltaX) < WHEEL_PAGE_THRESHOLD) return
+
+    event.preventDefault()
+    const now = Date.now()
+    if (now - lastWheelPageAtRef.current < WHEEL_PAGE_LOCK_MS) return
+    lastWheelPageAtRef.current = now
+    goToPage(event.deltaX > 0 ? 1 : -1)
+  }
 
   return (
-    <div className="relative">
-      <div
-        ref={scrollerRef}
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Projects"
-        tabIndex={0}
-        onKeyDown={onKeyDown}
-        className="relative flex gap-8 md:gap-10 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth pt-2 pb-2 px-[calc(50%-110px)] sm:px-[calc(50%-145px)] md:px-[calc(50%-180px)] lg:px-[calc(50%-210px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/50 rounded-2xl"
-      >
-        {projects.map((project, i) => {
+    <div
+      className="relative mx-auto flex w-full max-w-[112rem] flex-col px-5 sm:px-8 md:px-12 lg:px-16"
+      onWheel={handleWheel}
+    >
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-7">
+        {visibleProjects.map((project) => {
           const coverUrl = project.coverImage
-            ? urlFor(project.coverImage).width(960).height(1200).auto('format').url()
+            ? urlFor(project.coverImage).width(1200).height(780).fit('crop').auto('format').url()
             : null
-          const signedDist = signedDistances[i] ?? 0
-          const isCenter = i === centerIndex
-          const isHovered = i === hoveredIndex
-          const motion = getCardMotion(signedDist, reducedMotion, intensity)
-
-          // Side cards hint at clickability on hover: a touch more opacity,
-          // a touch less blur/tilt — never stronger than the center image.
-          const hoverEase = isHovered && !isCenter && !reducedMotion ? 1 : 0
-          const opacity = Math.min(1, motion.opacity + hoverEase * 0.15)
-          const blurPx = Math.max(0, motion.blurPx - hoverEase * 0.6)
-          const rotateDeg = motion.rotateDeg * (1 - hoverEase * 0.35)
-          const scale = motion.scale + hoverEase * 0.02 + (isCenter && isHovered && !reducedMotion ? 0.015 : 0)
 
           return (
             <Link
               key={project._id}
-              ref={setCardRef(i)}
               href={`/projects/${project.slug.current}`}
-              aria-label={`${project.title}${isCenter ? '' : ' — view project'}`}
-              aria-current={isCenter ? 'true' : undefined}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex((current) => (current === i ? null : current))}
-              onFocus={() => setHoveredIndex(i)}
-              onBlur={() => setHoveredIndex((current) => (current === i ? null : current))}
-              className="group relative shrink-0 snap-center w-[220px] sm:w-[290px] md:w-[360px] lg:w-[420px]"
-              style={{
-                transform: `translateY(${motion.translateY}px) scale(${scale}) rotate(${rotateDeg}deg)`,
-                transformOrigin: 'top center',
-                opacity,
-                filter: blurPx > 0.05 ? `blur(${blurPx}px)` : 'none',
-                transition: `transform 420ms ${CAROUSEL_EASE}, opacity 420ms ${CAROUSEL_EASE}, filter 420ms ${CAROUSEL_EASE}`,
-              }}
+              className="group relative block overflow-hidden rounded-2xl bg-[#0B0B0B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70"
             >
-              <div className="relative rounded-2xl shadow-[0_10px_20px_-10px_rgba(58,38,20,0.35)]">
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#1C2433]">
-                  {coverUrl && (
-                    <Image
-                      src={coverUrl}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 768px) 220px, (max-width: 1024px) 360px, 420px"
-                      className="object-cover"
-                    />
-                  )}
+              <div className="relative aspect-[1.32/1] min-h-[18rem] md:min-h-[26rem] lg:min-h-[31rem]">
+                {coverUrl ? (
+                  <Image
+                    src={coverUrl}
+                    alt={project.coverImage?.alt || project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover opacity-80 grayscale-[18%] transition-[transform,opacity,filter] duration-700 ease-out group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-[#111827]" />
+                )}
 
-                  {isCenter && (
-                    <ActiveImageMetadata
-                      entryKey={project._id}
-                      index={centerIndex}
-                      total={projects.length}
-                      eyebrow={String(project.year)}
-                      title={project.title}
-                      ctaLabel="View project"
-                      reducedMotion={reducedMotion}
-                    />
-                  )}
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,11,11,0.08)_0%,rgba(11,11,11,0.14)_45%,rgba(11,11,11,0.78)_100%)]" />
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                  <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.24em] text-[#37C6F4]/80">
+                    {project.year}
+                  </p>
+                  <h3
+                    className="max-w-[min(100%,32rem)] font-[family-name:var(--font-heading)] text-lg font-black uppercase leading-[1.08] tracking-normal text-[#F3F1EB] transition-colors duration-300 group-hover:text-[#37C6F4] md:text-xl lg:text-[1.35rem]"
+                    style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}
+                  >
+                    {project.title}
+                  </h3>
                 </div>
               </div>
             </Link>
@@ -116,49 +92,32 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         })}
       </div>
 
-      {canScrollLeft && (
-        <button
-          onClick={() => scrollByAmount(-1)}
-          aria-label="Previous project"
-          className="group/prev hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 items-center gap-2 text-[#F3F1EB]/60 drop-shadow-[0_2px_6px_rgba(28,36,51,0.8)] hover:text-[#37C6F4] transition-colors"
-        >
-          <svg viewBox="0 0 24 24" className="w-8 h-8 stroke-current fill-none stroke-[1.5]" aria-hidden="true">
-            <path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-0 -translate-x-1 transition-all duration-300 group-hover/prev:opacity-100 group-hover/prev:translate-x-0">
-            Previous
-          </span>
-        </button>
-      )}
-      {canScrollRight && (
-        <button
-          onClick={() => scrollByAmount(1)}
-          aria-label="Next project"
-          className="group/next hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 items-center gap-2 text-[#F3F1EB]/60 drop-shadow-[0_2px_6px_rgba(28,36,51,0.8)] hover:text-[#37C6F4] transition-colors"
-        >
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] opacity-0 translate-x-1 transition-all duration-300 group-hover/next:opacity-100 group-hover/next:translate-x-0">
-            Next
-          </span>
-          <svg viewBox="0 0 24 24" className="w-8 h-8 stroke-current fill-none stroke-[1.5]" aria-hidden="true">
-            <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      )}
-
-      {/* Mobile only — desktop's active-project typography lives on the
-          image itself now (ActiveImageMetadata above). */}
-      {activeProject && (
-        <ActiveEntryLabel
-          entryKey={activeProject._id}
-          index={centerIndex}
-          total={projects.length}
-          eyebrow={String(activeProject.year)}
-          title={activeProject.title}
-          href={`/projects/${activeProject.slug.current}`}
-          ctaLabel="View project"
-          reducedMotion={reducedMotion}
-          className="md:hidden"
-        />
+      {canPage && (
+        <div className="mt-8 flex items-center gap-4 md:mt-10">
+          <button
+            type="button"
+            onClick={() => goToPage(-1)}
+            aria-label="Previous projects"
+            className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#8B5F3C] bg-[#8B5F3C] text-[#F3F1EB] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:-translate-x-0.5" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => goToPage(1)}
+            aria-label="Next projects"
+            className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#8B5F3C] bg-[#8B5F3C] text-[#F3F1EB] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-[#8B5F3C]/60">
+            {String(page + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
+          </p>
+        </div>
       )}
     </div>
   )

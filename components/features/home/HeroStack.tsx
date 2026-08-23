@@ -3,7 +3,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import HeroSection from './HeroSection'
 import HeroVideo from './HeroVideo'
-import IkunPage from './HeroIntroOverlay'
+import IkunPage from './IkunPage'
 
 interface HeroStackProps {
   playbackId: string | null

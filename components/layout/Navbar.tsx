@@ -8,10 +8,33 @@ import { usePathname } from 'next/navigation'
 export default function Navbar() {
   const pathname = usePathname()
   const isHome = pathname === '/'
+  const [overHero, setOverHero] = useState(isHome)
 
   // The footer is rendered on every page via the root layout, so this runs
   // unconditionally rather than being gated by isHome.
   const [overFooter, setOverFooter] = useState(false)
+
+  useEffect(() => {
+    if (!isHome) return
+
+    const heroEl = document.getElementById('hero')
+    if (!heroEl) return
+
+    const updateFromScroll = () => {
+      const rect = heroEl.getBoundingClientRect()
+      setOverHero(rect.bottom > window.innerHeight * 0.55)
+    }
+
+    const frame = window.requestAnimationFrame(updateFromScroll)
+    window.addEventListener('scroll', updateFromScroll, { passive: true })
+    window.addEventListener('resize', updateFromScroll)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', updateFromScroll)
+      window.removeEventListener('resize', updateFromScroll)
+    }
+  }, [isHome, pathname])
+
   useEffect(() => {
     const footerEl = document.getElementById('footer')
     if (!footerEl) return
@@ -31,6 +54,8 @@ export default function Navbar() {
     }
   }
 
+  const logoSrc = isHome && overHero ? '/ikun-logo-white.png' : '/ikun-logo-black.png'
+
   return (
     <div className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none -translate-x-1/2">
       <Link
@@ -44,7 +69,7 @@ export default function Navbar() {
           style={{ width: 'auto', aspectRatio: '2421/1754' }}
         >
           <Image
-            src="/01_IKUN_Logo-with-name-beneath.png"
+            src={logoSrc}
             alt="IKUN"
             width={2421}
             height={1754}

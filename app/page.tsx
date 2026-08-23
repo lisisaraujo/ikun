@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getHomePage, getAboutPage, getAllProjects, getAllIronuPosts, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
+import DigestiveSpiral from '@/components/features/home/DigestiveSpiral'
 import HeroStack from '@/components/features/home/HeroStack'
 import AboutContent from '@/components/features/about/AboutContent'
 import ContactForm from '@/components/features/contact/ContactForm'
@@ -13,6 +14,7 @@ import IronuCarousel from '@/components/features/ironu/IronuCarousel'
 import IronuSpiralGraphic from '@/components/features/ironu/IronuSpiralGraphic'
 import SectionOrbitBackground from '@/components/features/carousel/SectionOrbitBackground'
 import SectionBackdrop from '@/components/layout/SectionBackdrop'
+import TextFocusGlow from '@/components/layout/TextFocusGlow'
 import Reveal from '@/components/ui/Reveal'
 import KineticHeading from '@/components/ui/KineticHeading'
 import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
@@ -50,29 +52,34 @@ export default async function HomePage() {
   return (
     <div className="block">
 
-      {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
-      <HeroStack
-        playbackId={homeData?.heroMuxPlaybackId ?? null}
-        introText={homeData?.introText ?? []}
-      />
+      <div className="relative isolate bg-[#1C2433]">
+        <div className="pointer-events-none absolute left-1/2 top-[92svh] z-0 h-[1500px] w-[1500px] -translate-x-1/2 opacity-[0.13] md:left-[56%] md:top-[86svh] md:h-[1700px] md:w-[1700px]" aria-hidden="true">
+          <div className="h-full w-full animate-spin-slower">
+            <DigestiveSpiral className="h-full w-full" variant="simple" />
+            {/* <DigestiveSpiral className="h-full w-full" variant="segmented" /> */}
+            {/* <DigestiveSpiral className="h-full w-full" variant="original" /> */}
+          </div>
+        </div>
 
-      {/* ── PROJECTS ─────────────────────────────────────────── */}
-      <div id="projects">
-        {/* pt/pb deliberately asymmetric, not py-24 — centering on the raw
-            viewport left content looking too high, since the fixed logo up
-            top eats into the space justify-center doesn't know about. The
-            extra top padding nudges the centered block down to sit in the
-            middle of what's actually free below the logo. */}
-        <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-center pt-40 pb-10 overflow-hidden">
-          <SectionBackdrop color="#1C2433" />
-          <ProjectsAmbient />
-          <SectionOrbitBackground channel="projects" sizeClassName="w-[800px] h-[800px] sm:w-[950px] sm:h-[950px] md:w-[1100px] md:h-[1100px]">
-            <div className="h-full w-full opacity-[0.16]">
-              <SpiralRings className="h-full w-full" />
-            </div>
-          </SectionOrbitBackground>
-          <ProjectsCarousel projects={projects} />
-        </section>
+        {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
+        <HeroStack
+          playbackId={homeData?.heroMuxPlaybackId ?? null}
+          introText={homeData?.introText ?? []}
+        />
+
+        {/* ── PROJECTS ─────────────────────────────────────────── */}
+        <div id="projects">
+          {/* pt/pb deliberately asymmetric, not py-24 — centering on the raw
+              viewport left content looking too high, since the fixed logo up
+              top eats into the space justify-center doesn't know about. The
+              extra top padding nudges the centered block down to sit in the
+              middle of what's actually free below the logo. */}
+          <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-start pt-28 pb-10 overflow-hidden md:pt-32">
+            <ProjectsAmbient />
+
+            <ProjectsCarousel projects={projects} />
+          </section>
+        </div>
       </div>
 
       {/* ── ABOUT ────────────────────────────────────────────── */}
@@ -213,7 +220,8 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-start">
-            <div>
+            <div className="relative">
+              <TextFocusGlow className="-left-20 top-4 h-[24rem] w-[34rem] opacity-70 md:-left-28 md:h-[30rem] md:w-[42rem]" />
               <Reveal>
                 <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
                 <KineticHeading className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-6 leading-tight">Contact</KineticHeading>

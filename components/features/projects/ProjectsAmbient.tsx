@@ -10,7 +10,7 @@ import SpiralRings from './SpiralRings'
 // section background is otherwise plain, with motion coming from just
 // these plus the big SectionOrbitBackground ring elsewhere in the section.
 const FLOATING_SPIRALS = [
-  { top: '6%',  left: '7%',  size: 60, opacity: 0.16, spin: 75 },
+  { top: '6%', left: '7%', size: 60, opacity: 0.16, spin: 75 },
   { top: '80%', right: '6%', size: 66, opacity: 0.18, spin: 95 },
 ]
 
