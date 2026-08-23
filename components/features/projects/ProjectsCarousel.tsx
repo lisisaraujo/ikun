@@ -46,7 +46,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
 
   return (
     <div
-      className="relative mx-auto flex w-full max-w-[112rem] flex-col px-5 sm:px-8 md:px-12 lg:px-16"
+      className="relative mx-auto flex w-full max-w-[140rem] flex-col px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12"
       onWheel={handleWheel}
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-7">

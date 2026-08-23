@@ -10,9 +10,9 @@ const SCROLL_COLLAPSE_THRESHOLD = 72
 const COLLAPSE_ANIMATION_MS = 1050
 
 const SECTIONS = [
-  { id: 'ikun', label: 'Ikun', href: '/#hero' },
-  { id: 'projects', label: 'Projects', href: '/#projects', routePrefix: '/projects' },
+  { id: 'home', label: 'Home', href: '/#hero' },
   { id: 'about', label: 'About', href: '/#about' },
+  { id: 'projects', label: 'Projects', href: '/#projects', routePrefix: '/projects' },
   { id: 'calendar', label: 'Calendar', href: '/#calendar', routePrefix: '/calendar' },
   { id: 'ironu', label: 'Ìrònú', href: '/#ironu', routePrefix: '/ironu' },
   { id: 'contact', label: 'Contact', href: '/#contact' },
@@ -140,7 +140,7 @@ export default function SideNav() {
     setOpen(false)
 
     if (isHome) {
-      if (section.id === 'ikun') {
+      if (section.id === 'home') {
         setAutoExpanded(false)
         window.scrollTo({ top: 0, behavior: 'instant' })
         return
@@ -206,8 +206,8 @@ export default function SideNav() {
               />
               <span
                 className={`font-[family-name:var(--font-heading)] text-base font-light uppercase tracking-[0.14em] transition-colors duration-300 lg:text-xl ${isCurrent
-                    ? 'text-[#37C6F4]'
-                    : 'text-[#F3F1EB]/80 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
+                  ? 'text-[#37C6F4]'
+                  : 'text-[#F3F1EB]/80 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
                   }`}
               >
                 {section.label}

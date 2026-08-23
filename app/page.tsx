@@ -67,6 +67,27 @@ export default async function HomePage() {
           introText={homeData?.introText ?? []}
         />
 
+        {/* ── ABOUT ────────────────────────────────────────────── */}
+        {/* Wrapped in a plain, non-sticky div carrying the id: a `position:
+            sticky` element's own `offsetTop` drifts to track the current
+            scroll position once you've scrolled past it (a real browser
+            quirk), which breaks SideNav's scrollTo-based jump once you're
+            deeper in the page. This wrapper's offsetTop stays the true,
+            stable document position, since it isn't sticky itself. */}
+        <div id="about">
+          <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-start pb-20 pt-12 md:pt-14">
+            {about ? (
+              <AboutContent
+                about={about}
+                companyText={homeData?.introText ?? []}
+                projects={projects}
+              />
+            ) : (
+              <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">About content coming soon.</p>
+            )}
+          </section>
+        </div>
+
         {/* ── PROJECTS ─────────────────────────────────────────── */}
         <div id="projects">
           {/* pt/pb deliberately asymmetric, not py-24 — centering on the raw
@@ -82,28 +103,9 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ── ABOUT ────────────────────────────────────────────── */}
-      {/* Wrapped in a plain, non-sticky div carrying the id: a `position:
-          sticky` element's own `offsetTop` drifts to track the current
-          scroll position once you've scrolled past it (a real browser
-          quirk), which breaks SideNav's scrollTo-based jump once you're
-          deeper in the page. This wrapper's offsetTop stays the true,
-          stable document position, since it isn't sticky itself. */}
-      <div id="about">
-        <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-center py-24">
-          <SectionBackdrop color="#1C2433" />
-
-          {about ? (
-            <AboutContent about={about} />
-          ) : (
-            <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-8 md:px-24 lg:px-40">About content coming soon.</p>
-          )}
-        </section>
-      </div>
-
       {/* ── CALENDAR ─────────────────────────────────────────── */}
       <div id="calendar">
-        <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-6 pb-10 pt-32 sm:px-8 md:px-16 md:pt-36 lg:px-24">
+        <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-4 pb-10 pt-32 sm:px-6 md:px-8 md:pt-36 lg:px-10 xl:px-12">
           <SectionBackdrop color="#1C2433" />
           {calendarImage && (
             <div className="absolute inset-0 -z-[5]" aria-hidden="true">
@@ -119,7 +121,7 @@ export default async function HomePage() {
             </div>
           )}
 
-          <div className="mx-auto w-full max-w-[110rem]" aria-label="Upcoming events">
+          <div className="mx-auto w-full max-w-[140rem]" aria-label="Upcoming events">
             <div className="mb-5 flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.28em] text-[#8B5F3C] md:mb-7">
               <p>What&apos;s next</p>
               <p className="hidden sm:block">Upcoming performances&nbsp;&nbsp; / &nbsp;&nbsp;01—{String(upcomingEvents.length).padStart(2, '0')}</p>
@@ -207,7 +209,7 @@ export default async function HomePage() {
 
       {/* ── CONTACT ──────────────────────────────────────────── */}
       <div id="contact">
-        <section className="relative sticky top-0 z-50 min-h-screen flex flex-col justify-center pt-40 pb-10 px-8 md:px-24 lg:px-40 overflow-hidden">
+        <section className="relative sticky top-0 z-50 min-h-screen flex flex-col justify-center pt-40 pb-10 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 overflow-hidden">
           <SectionBackdrop color="#1C2433" />
 
           {/* Ambient accent, echoing the same drifting spiral used in
@@ -225,7 +227,7 @@ export default async function HomePage() {
               <Reveal>
                 <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-6">Get in touch</p>
                 <KineticHeading className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#F3F1EB] mb-6 leading-tight">Contact</KineticHeading>
-                <p className="text-[#F3F1EB]/60 text-base md:text-lg leading-relaxed max-w-md mb-10">
+                <p className="text-[#F3F1EB]/60 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
                   A project in mind, a workshop to propose, or just a <span className="text-[#37C6F4]">hello</span> — reach out directly or leave a message and I&apos;ll get back to you.
                 </p>
               </Reveal>

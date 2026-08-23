@@ -59,34 +59,19 @@ export default function IkunPage({ text }: IkunPageProps) {
 
   if (paragraphs.length === 0) return null
 
-  const [leadParagraph, ...bodyParagraphs] = paragraphs
+  const [leadParagraph] = paragraphs
 
   return (
-    <section id="ikun" className="relative z-[1] min-h-[86svh] overflow-visible px-6 pb-8 pt-14 sm:px-8 md:px-16 md:pt-18 lg:px-24">
-      <div className="relative mx-auto flex min-h-[calc(86svh-5rem)] w-full max-w-[104rem] flex-col justify-center">
-        <div className="relative z-10 ml-auto w-full max-w-[72rem] text-left lg:text-right">
-          <TextFocusGlow className="-right-28 -top-20 h-[24rem] w-[46rem] -rotate-6 opacity-80 md:-right-40 md:-top-24 md:h-[30rem] md:w-[62rem]" />
+    <section id="ikun" className="relative z-[1] overflow-visible px-4 pb-20 pt-20 sm:px-6 md:px-8 md:pb-24 md:pt-24 lg:px-10 xl:px-12">
+      <div className="relative mx-auto flex w-full max-w-[136rem] flex-col justify-center">
+        <div className="relative z-10 mx-auto w-full max-w-[108rem] text-center">
+          <TextFocusGlow className="-right-24 -top-20 h-[26rem] w-[52rem] -rotate-6 opacity-85 md:-right-36 md:-top-24 md:h-[32rem] md:w-[68rem]" />
           <p
-            className="font-[family-name:var(--font-body)] text-[clamp(1.35rem,2.12vw,2.08rem)] font-light leading-[1.4] tracking-normal text-[#A06B43] [text-shadow:0_2px_14px_rgba(0,0,0,0.18)]"
+            className="font-[family-name:var(--font-body)] text-[clamp(1.48rem,2.38vw,2.38rem)] font-light leading-[1.38] tracking-normal text-[#A06B43] [text-shadow:0_2px_14px_rgba(0,0,0,0.18)]"
             style={{ fontFamily: "var(--font-body), 'Noto Sans', system-ui, sans-serif" }}
           >
             {renderLinkedName(leadParagraph)}
           </p>
-        </div>
-
-        <div className="relative z-10 mt-10 w-full max-w-[57rem] text-left md:mt-12 lg:mt-14 lg:ml-[6vw]">
-          <TextFocusGlow className="-bottom-20 -left-24 h-[22rem] w-[38rem] rotate-[8deg] opacity-55 md:-bottom-24 md:-left-32 md:h-[28rem] md:w-[48rem]" />
-          <div className="flex flex-col gap-6 md:gap-7">
-            {bodyParagraphs.map((paragraph, index) => (
-              <p
-                key={index}
-                className="font-[family-name:var(--font-body)] text-[clamp(1rem,1.1vw,1.16rem)] font-light leading-[1.58] tracking-normal text-[#A06B43] [text-shadow:0_2px_14px_rgba(0,0,0,0.18)]"
-                style={{ fontFamily: "var(--font-body), 'Noto Sans', system-ui, sans-serif" }}
-              >
-                {renderLinkedName(paragraph)}
-              </p>
-            ))}
-          </div>
         </div>
       </div>
     </section>

@@ -88,9 +88,8 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
         }`}
       />
 
-      {/* Media controls cluster — sits where SideNav appears once scrolled
-          past the hero — z-[51] puts this above the fixed Navbar at z-50 */}
-      <div className="absolute top-6 right-6 md:right-10 lg:right-14 z-[51] flex items-center gap-2">
+      {/* Media controls cluster — z-[51] puts this above the fixed Navbar at z-50 */}
+      <div className="absolute bottom-6 right-6 z-[51] flex items-center gap-2 md:bottom-10 md:right-10 lg:bottom-14 lg:right-14">
         <button
           onClick={togglePlay}
           aria-label={playing ? 'Pause video' : 'Play video'}
