@@ -75,7 +75,7 @@ export default async function HomePage() {
             deeper in the page. This wrapper's offsetTop stays the true,
             stable document position, since it isn't sticky itself. */}
         <div id="about">
-          <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-start pb-20 pt-12 md:pt-14">
+          <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-start pb-20 pt-16 md:pt-20">
             {about ? (
               <AboutContent
                 about={about}

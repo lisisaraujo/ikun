@@ -71,7 +71,7 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
   }, [activePanel, displayedPanel])
 
   return (
-    <div className="relative isolate mx-auto flex min-h-[calc(100svh-12rem)] w-full max-w-[140rem] flex-col justify-start overflow-visible px-4 pt-3 sm:px-6 md:px-8 md:pt-4 lg:px-10 xl:px-12">
+    <div className="relative isolate mx-auto flex min-h-[calc(100svh-12rem)] w-full max-w-[140rem] flex-col justify-start overflow-visible px-4 pt-6 sm:px-6 md:px-8 md:pt-7 lg:px-10 xl:px-12">
       <div className="mx-auto w-full max-w-[112rem]">
         <div className="flex w-full items-stretch gap-0 rounded-2xl px-2 py-1 md:px-4 lg:px-6">
           {panels.map((panel) => {
