@@ -54,7 +54,12 @@ export default function Navbar() {
     }
   }
 
-  const logoSrc = isHome && overHero ? '/ikun-logo-white.png' : '/ikun-logo-black.png'
+  const logoSrc = (isHome && overHero) || overFooter ? '/ikun-logo-white.png' : '/ikun-logo-black.png'
+  const logoSizeClass = overFooter
+    ? 'h-56 md:h-64'
+    : isHome && overHero
+      ? 'h-56 md:h-64'
+      : 'h-28 md:h-32'
 
   return (
     <div className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none -translate-x-1/2">
@@ -65,7 +70,7 @@ export default function Navbar() {
         className="block pointer-events-auto hover:opacity-70 transition-opacity duration-200"
       >
         <div
-          className={`transition-[height] duration-300 ease-out ${overFooter ? 'h-56 md:h-64' : 'h-28 md:h-32'}`}
+          className={`transition-[height] duration-300 ease-out ${logoSizeClass}`}
           style={{ width: 'auto', aspectRatio: '2421/1754' }}
         >
           <Image

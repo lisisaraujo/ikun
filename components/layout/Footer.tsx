@@ -2,59 +2,20 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getGlobalSettings, getOtherInfos } from '@/lib/sanity/queries'
 import { urlFor } from '@/lib/sanity/image'
-import { SITE_NAME, SITE_EMAIL } from '@/constants/site'
+import { SITE_NAME } from '@/constants/site'
 import Container from './Container'
 import SectionBackdrop from './SectionBackdrop'
-
-// ── Icons ────────────────────────────────────────────────────────────────────
-
-function InstagramIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" strokeWidth={2} />
-    </svg>
-  )
-}
-
-function YouTubeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-      <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
-    </svg>
-  )
-}
-
-function VimeoIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M22 7.42c-.09 2.01-1.49 4.76-4.2 8.24C15.07 19.2 12.72 21 10.7 21c-1.28 0-2.37-1.19-3.25-3.56L6.1 12.5C5.47 10.13 4.8 8.95 4.08 8.95c-.16 0-.72.34-1.68 1.01L1 8.44c1.06-.93 2.1-1.86 3.12-2.8 1.4-1.22 2.46-1.86 3.15-1.92 1.66-.16 2.68.97 3.06 3.39.41 2.6.7 4.22.86 4.85.48 2.17.99 3.26 1.56 3.26.44 0 1.1-.7 1.99-2.08.88-1.39 1.35-2.44 1.4-3.17.12-1.2-.35-1.8-1.4-1.8-.5 0-1.01.11-1.54.34.97-3.2 2.83-4.75 5.58-4.67 2.03.06 2.99 1.38 2.88 3.37z" />
-    </svg>
-  )
-}
 
 // ── Footer ───────────────────────────────────────────────────────────────────
 
 export default async function Footer() {
-  const [settings, otherInfos] = await Promise.all([
+  const [, otherInfos] = await Promise.all([
     getGlobalSettings(),
     getOtherInfos(),
   ])
 
-  const email         = settings?.email ?? SITE_EMAIL
-  const instagramUrl  = settings?.instagramUrl
-  const youtubeUrl    = settings?.youtubeUrl
-  const vimeoUrl      = settings?.vimeoUrl
   const footerLogos   = otherInfos?.partners?.filter((p) => p.showInFooter) ?? []
   const year          = new Date().getFullYear()
-
-  const socials = [
-    instagramUrl && { label: 'Instagram', url: instagramUrl, icon: <InstagramIcon /> },
-    youtubeUrl   && { label: 'YouTube',   url: youtubeUrl,   icon: <YouTubeIcon />   },
-    vimeoUrl     && { label: 'Vimeo',     url: vimeoUrl,     icon: <VimeoIcon />     },
-  ].filter(Boolean) as { label: string; url: string; icon: React.ReactNode }[]
 
   return (
     // `min-h-screen` + `relative overflow-hidden` mirrors the home page's
@@ -72,7 +33,7 @@ export default async function Footer() {
       <div className="flex flex-1 flex-col items-center justify-center gap-10 py-16">
         {footerLogos.length > 0 && (
           <>
-            <p className="text-xs uppercase tracking-[0.2em] text-[#F3F1EB]/40">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#F3F1EB]/46 md:text-base">
               Supported by
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-10 px-6">
@@ -90,7 +51,7 @@ export default async function Footer() {
                     className="object-contain max-h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
                   />
                 ) : (
-                  <span className="text-sm text-[#F3F1EB]/40 hover:text-[#F3F1EB]/70 transition-colors">
+                  <span className="text-base text-[#F3F1EB]/48 transition-colors hover:text-[#F3F1EB]/75 md:text-lg">
                     {partner.name}
                   </span>
                 )
@@ -116,11 +77,11 @@ export default async function Footer() {
       </div>
 
       {/* ── Bottom: copyright + credit + privacy ────────── */}
-      <Container className="border-t border-[#F3F1EB]/10 py-5">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-[#F3F1EB]/40">
+      <Container className="border-t border-[#F3F1EB]/10 py-7">
+        <div className="flex flex-col items-center justify-between gap-3 text-center text-sm leading-relaxed text-[#F3F1EB]/52 md:flex-row md:text-left md:text-[15px]">
           <p>© {year} {SITE_NAME}. All rights reserved.</p>
-          <p>Designed by Qusay &amp; Developed by Lísis Araújo</p>
-          <Link href="/privacy" className="hover:text-[#37C6F4] transition-colors duration-200">
+          <p>Brand Identity by Qusay Awad · Designed &amp; Developed by Lísis Araújo</p>
+          <Link href="/privacy" className="font-medium text-[#F3F1EB]/58 transition-colors duration-200 hover:text-[#37C6F4]">
             Privacy Policy
           </Link>
         </div>

@@ -18,6 +18,14 @@ const SECTIONS = [
   { id: 'contact', label: 'Contact', href: '/#contact' },
 ]
 
+function getSectionElement(id: string) {
+  return document.getElementById(id === 'home' ? 'hero' : id)
+}
+
+function getDocumentTop(el: HTMLElement) {
+  return el.getBoundingClientRect().top + window.scrollY
+}
+
 export default function SideNav() {
   const pathname = usePathname()
   const router = useRouter()
@@ -107,8 +115,8 @@ export default function SideNav() {
       let active = 0
 
       SECTIONS.forEach((section, index) => {
-        const el = document.getElementById(section.id)
-        if (el && y >= el.offsetTop) active = index
+        const el = getSectionElement(section.id)
+        if (el && y >= getDocumentTop(el)) active = index
       })
 
       if (expandedRef.current && scrollDelta > SCROLL_COLLAPSE_THRESHOLD) {
@@ -146,9 +154,9 @@ export default function SideNav() {
         return
       }
 
-      const el = document.getElementById(section.id)
+      const el = getSectionElement(section.id)
       if (el) {
-        window.scrollTo({ top: el.offsetTop + 1, behavior: 'instant' })
+        window.scrollTo({ top: getDocumentTop(el) + 1, behavior: 'instant' })
         return
       }
     }
