@@ -47,9 +47,6 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
                     </h3>
                     <p className="mt-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43]/76 transition-colors duration-300 group-hover:text-[#37C6F4]">
                       Read
-                      <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
-                        <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
                     </p>
                   </div>
 
@@ -76,12 +73,9 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
               <div className="mt-6 flex justify-end">
                 <Link
                   href="/ironu"
-                  className="group inline-flex items-center gap-3 rounded-full bg-[#8B5F3C]/14 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43] ring-1 ring-[#8B5F3C]/24 transition-colors duration-300 hover:text-[#37C6F4]"
+                  className="group inline-flex h-14 min-w-[14rem] items-center justify-center rounded-full bg-[#8B5F3C]/14 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43] ring-1 ring-[#8B5F3C]/24 transition-colors duration-300 hover:text-[#37C6F4] md:h-16 md:min-w-[16rem] md:text-sm"
                 >
                   See all posts
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
-                    <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
                 </Link>
               </div>
             </>

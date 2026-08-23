@@ -93,28 +93,28 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       </div>
 
       {canPage && (
-        <div className="mt-8 flex items-center md:mt-10">
+        <div className="mt-9 flex items-center justify-start md:mt-12">
           <div className="inline-flex items-center overflow-hidden rounded-full bg-[#8B5F3C]/18 shadow-[0_18px_60px_-48px_rgba(160,107,67,0.75)] ring-1 ring-[#8B5F3C]/28">
             <button
               type="button"
               onClick={() => goToPage(-1)}
               aria-label="Previous projects"
-              className="group flex h-11 w-12 items-center justify-center text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#37C6F4]/60 md:h-12 md:w-14"
+              className="group flex h-14 w-16 items-center justify-center text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#37C6F4]/60 md:h-16 md:w-20"
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-[2.4] transition-transform duration-300 group-hover:-translate-x-0.5" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2.4] transition-transform duration-300 group-hover:-translate-x-0.5 md:h-6 md:w-6" aria-hidden="true">
                 <path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <p className="border-x border-[#8B5F3C]/22 px-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#A06B43]/72">
+            <p className="border-x border-[#8B5F3C]/22 px-6 text-xs font-semibold uppercase tracking-[0.28em] text-[#A06B43]/72 md:px-8 md:text-sm">
               {String(page + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
             </p>
             <button
               type="button"
               onClick={() => goToPage(1)}
               aria-label="Next projects"
-              className="group flex h-11 w-12 items-center justify-center text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#37C6F4]/60 md:h-12 md:w-14"
+              className="group flex h-14 w-16 items-center justify-center text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#37C6F4]/60 md:h-16 md:w-20"
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-[2.4] transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[2.4] transition-transform duration-300 group-hover:translate-x-0.5 md:h-6 md:w-6" aria-hidden="true">
                 <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>

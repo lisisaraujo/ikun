@@ -61,7 +61,7 @@ function EventRow({
             rel="noopener noreferrer"
             className="text-[11px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 transition-opacity mt-1"
           >
-            Book ↗
+            Book
           </a>
         )}
       </div>

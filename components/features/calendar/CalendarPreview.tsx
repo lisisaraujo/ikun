@@ -98,7 +98,6 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
                         aria-label={`Tickets for ${event.title}`}
                       >
                         Tickets
-                        <span aria-hidden="true">↗</span>
                       </a>
                     )}
                   </article>
@@ -108,15 +107,12 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
           )}
         </div>
 
-        <div className="mt-8 flex justify-end md:mt-10">
+        <div className="mt-8 flex justify-center md:mt-10">
           <Link
             href="/calendar"
-            className="group inline-flex items-center gap-3 rounded-full bg-[#8B5F3C]/14 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43] ring-1 ring-[#8B5F3C]/24 transition-colors duration-300 hover:text-[#37C6F4]"
+            className="group inline-flex h-14 w-full max-w-[24rem] items-center justify-center rounded-full bg-[#8B5F3C]/14 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43] ring-1 ring-[#8B5F3C]/24 transition-colors duration-300 hover:text-[#37C6F4] sm:w-[24rem] md:h-16 md:text-sm"
           >
             See all events
-            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
           </Link>
         </div>
       </div>

@@ -60,27 +60,33 @@ export default async function IronuPostPage({ params }: Props) {
 
       {/* Prev / Next */}
       <div className="border-t border-[#1C2433]/20 mt-20">
-        <Container className="py-14">
-          <div className="max-w-2xl grid grid-cols-2 gap-8">
-            <div>
+        <Container className="py-16">
+          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
+            <div className="w-full sm:w-[min(22rem,50%)]">
               {prevPost && (
-                <Link href={`/ironu/${prevPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
-                    ← Older
+                <Link
+                  href={`/ironu/${prevPost.slug.current}`}
+                  className="group block rounded-2xl bg-[#8B5F3C]/10 px-6 py-5 text-center transition-colors duration-300 hover:bg-[#8B5F3C]/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+                >
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
+                    Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-xl font-bold uppercase leading-[1.05] tracking-normal text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4] md:text-2xl">
                     {prevPost.title}
                   </p>
                 </Link>
               )}
             </div>
-            <div className="text-right">
+            <div className="w-full sm:w-[min(22rem,50%)]">
               {nextPost && (
-                <Link href={`/ironu/${nextPost.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
-                    Newer →
+                <Link
+                  href={`/ironu/${nextPost.slug.current}`}
+                  className="group block rounded-2xl bg-[#8B5F3C]/10 px-6 py-5 text-center transition-colors duration-300 hover:bg-[#8B5F3C]/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+                >
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
+                    Newer
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-xl font-bold uppercase leading-[1.05] tracking-normal text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4] md:text-2xl">
                     {nextPost.title}
                   </p>
                 </Link>
