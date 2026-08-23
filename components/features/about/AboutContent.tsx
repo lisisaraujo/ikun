@@ -136,6 +136,9 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
           {panels.map((panel) => {
             const isActive = panel.id === active.id
             const isCompany = panel.id === 'company'
+            const tabClipPath = isCompany
+              ? 'polygon(0 0, calc(100% - 4.5rem) 0, 100% 100%, 0 100%)'
+              : 'polygon(0 0, 100% 0, 100% 100%, 4.5rem 100%)'
 
             return (
               <button
@@ -150,15 +153,16 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
                 } ${isCompany ? 'justify-start text-left' : 'justify-end text-right'}`}
               >
                 <span
-                  className={`pointer-events-none absolute top-1/2 z-0 h-[5.8rem] -translate-y-1/2 rounded-2xl bg-[#A06B43]/[0.055] transition-[opacity,transform] duration-700 ease-[cubic-bezier(.19,1,.22,1)] md:h-[7.4rem] ${
+                  className={`pointer-events-none absolute top-1/2 z-0 h-[5.8rem] -translate-y-1/2 bg-[#A06B43] transition-[opacity,transform,background-color] duration-700 ease-[cubic-bezier(.19,1,.22,1)] md:h-[7.4rem] ${
                     isActive
-                      ? 'scale-x-100 opacity-100 shadow-[0_30px_96px_-72px_rgba(160,107,67,0.68)]'
-                      : 'scale-x-[0.94] opacity-0 group-hover:scale-x-100 group-hover:opacity-55 group-focus-visible:scale-x-100 group-focus-visible:opacity-55'
+                      ? 'scale-x-100 opacity-[0.085] shadow-[0_30px_96px_-72px_rgba(160,107,67,0.68)]'
+                      : 'scale-x-[0.985] opacity-[0.028] group-hover:scale-x-100 group-hover:opacity-[0.055] group-focus-visible:scale-x-100 group-focus-visible:opacity-[0.055]'
                   } ${
                     isCompany
-                      ? '-left-8 right-0 origin-left md:-left-10'
-                      : 'left-0 -right-8 origin-right md:-right-10'
+                      ? '-left-8 right-[-1.6rem] origin-left rounded-l-2xl md:-left-10 md:right-[-2.2rem]'
+                      : 'left-[-1.6rem] -right-8 origin-right rounded-r-2xl md:left-[-2.2rem] md:-right-10'
                   }`}
+                  style={{ clipPath: tabClipPath }}
                   aria-hidden="true"
                 />
                 <span
