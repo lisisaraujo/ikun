@@ -12,7 +12,8 @@ export default function CursorGlow() {
 
   useEffect(() => {
     if (!window.matchMedia('(hover: hover)').matches) return
-    setEnabled(true)
+
+    const enableFrame = window.requestAnimationFrame(() => setEnabled(true))
 
     const onMove = (e: MouseEvent) => {
       const el = dotRef.current
@@ -28,6 +29,7 @@ export default function CursorGlow() {
     document.addEventListener('mouseover', onOver)
     document.addEventListener('mouseout', onOut)
     return () => {
+      window.cancelAnimationFrame(enableFrame)
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseover', onOver)
       document.removeEventListener('mouseout', onOut)

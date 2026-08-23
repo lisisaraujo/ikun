@@ -2,7 +2,7 @@
 // motif, glow bloom, and bottom vignette this used to layer on top were
 // removed so every section reads as one plain, uninterrupted color; the
 // only motion left in these sections' backgrounds is the spinning spirals
-// (SectionOrbitBackground, ProjectsAmbient), which live elsewhere.
+// in the active section components.
 interface SectionBackdropProps {
   color: string
 }
