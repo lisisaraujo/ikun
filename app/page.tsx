@@ -118,7 +118,6 @@ export default async function HomePage() {
           <section className="relative sticky top-0 z-50 min-h-screen overflow-visible px-4 pb-12 pt-32 sm:px-6 md:px-8 md:pt-36 lg:px-10 xl:px-12">
             <div className="relative z-10 mx-auto grid min-h-[calc(100svh-10rem)] w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(32rem,0.95fr)] lg:gap-16 xl:gap-24">
               <div className="max-w-[54rem] text-left">
-                <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#A06B43]/62">Contact</p>
                 <h2 className="font-[family-name:var(--font-heading)] text-[clamp(2.6rem,5.2vw,6.7rem)] font-bold uppercase leading-[0.9] tracking-normal text-[#A06B43]">
                   Get in touch
                 </h2>
