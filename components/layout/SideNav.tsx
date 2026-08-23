@@ -235,14 +235,14 @@ export default function SideNav() {
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls="mobile-side-nav-menu"
-        aria-label={open ? 'Close menu' : 'Open menu'}
-        className="md:hidden fixed top-6 right-6 z-[80] flex h-10 w-10 items-center justify-center rounded-full border border-[#37C6F4]/30 bg-[#0B0B0B]/60 backdrop-blur-md shadow-[0_4px_20px_-6px_rgba(0,0,0,0.5)]"
+        aria-label={open ? 'Close section menu' : 'Open section menu'}
+        className="group fixed right-5 top-5 z-[80] flex max-w-[calc(100vw-2.5rem)] items-center justify-center gap-2 rounded-full bg-[#8B5F3C]/18 px-4 py-3 text-[#37C6F4] shadow-[0_18px_60px_-48px_rgba(160,107,67,0.85)] ring-1 ring-[#8B5F3C]/28 backdrop-blur-md transition-[background-color,color,transform] duration-300 hover:bg-[#8B5F3C]/24 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 md:hidden"
       >
-        <span className="relative block h-4 w-5 shrink-0">
-          <span className={`absolute left-0 h-0.5 w-5 rounded-full bg-[#37C6F4] transition-all duration-300 ${open ? 'top-[7px] rotate-45' : 'top-0'}`} />
-          <span className={`absolute left-0 top-[7px] h-0.5 w-5 rounded-full bg-[#37C6F4] transition-opacity duration-200 ${open ? 'opacity-0' : 'opacity-100'}`} />
-          <span className={`absolute left-0 h-0.5 w-5 rounded-full bg-[#37C6F4] transition-all duration-300 ${open ? 'top-[7px] -rotate-45' : 'top-[14px]'}`} />
+        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#37C6F4]" />
+        <span className="font-[family-name:var(--font-heading)] text-sm font-bold uppercase leading-none tracking-[0.18em] text-[#37C6F4] transition-colors duration-300 group-hover:text-[#37C6F4]">
+          {open ? 'Menu' : SECTIONS[currentIndex]?.label}
         </span>
+        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#37C6F4]" />
       </button>
 
       <div

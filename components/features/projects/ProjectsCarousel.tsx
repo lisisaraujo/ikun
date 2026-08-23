@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/lib/sanity/image'
@@ -10,20 +10,34 @@ interface ProjectsCarouselProps {
   projects: SanityProject[]
 }
 
-const PAGE_SIZE = 3
+const MOBILE_PAGE_SIZE = 1
+const DESKTOP_PAGE_SIZE = 3
 const WHEEL_PAGE_THRESHOLD = 36
 const WHEEL_PAGE_LOCK_MS = 650
 
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const lastWheelPageAtRef = useRef(0)
   const [page, setPage] = useState(0)
-  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
-  const canPage = projects.length > PAGE_SIZE
+  const [pageSize, setPageSize] = useState(MOBILE_PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(projects.length / pageSize))
+  const canPage = projects.length > pageSize
 
   const visibleProjects = useMemo(() => {
-    const start = page * PAGE_SIZE
-    return projects.slice(start, start + PAGE_SIZE)
-  }, [page, projects])
+    const start = page * pageSize
+    return projects.slice(start, start + pageSize)
+  }, [page, pageSize, projects])
+
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 768px)')
+    const updatePageSize = () => {
+      setPageSize(query.matches ? DESKTOP_PAGE_SIZE : MOBILE_PAGE_SIZE)
+      setPage(0)
+    }
+
+    updatePageSize()
+    query.addEventListener('change', updatePageSize)
+    return () => query.removeEventListener('change', updatePageSize)
+  }, [])
 
   if (projects.length === 0) return null
 
