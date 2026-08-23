@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import type { PortableTextBlock } from '@portabletext/types'
+import type { ReactNode } from 'react'
 import PortableText from '@/components/ui/PortableText'
 import { urlFor } from '@/lib/sanity/image'
 import type { AboutPage, SanityImage, SanityProject } from '@/types/sanity'
@@ -20,6 +21,13 @@ type AboutPanel = {
   imageAlt: string
   content: PortableTextBlock[]
 }
+
+type PortableTextChild = {
+  _key?: string
+  text?: string
+}
+
+const artistName = 'Mufutau Yusuf'
 
 export default function AboutContent({ about, companyText = [], projects = [] }: AboutContentProps) {
   const [activePanel, setActivePanel] = useState<AboutPanel['id']>('company')
@@ -69,6 +77,57 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
       window.clearTimeout(swapTimer)
     }
   }, [activePanel, displayedPanel])
+
+  function renderCompanyText() {
+    return (
+      <div className="!max-w-none text-left text-base leading-[1.58] text-[#A06B43]/90 md:text-[1.08rem] xl:text-[1.16rem]">
+        {displayed.content.map((block, blockIndex) => {
+          if (block._type !== 'block') return null
+
+          const children = Array.isArray(block.children) ? (block.children as PortableTextChild[]) : []
+          const nodes: ReactNode[] = []
+
+          children.forEach((child, childIndex) => {
+            const text = child.text ?? ''
+            if (!text) return
+
+            const parts = text.split(artistName)
+            parts.forEach((part, partIndex) => {
+              if (part) {
+                nodes.push(<span key={`${child._key ?? childIndex}-${partIndex}-text`}>{part}</span>)
+              }
+
+              if (partIndex < parts.length - 1) {
+                nodes.push(
+                  <button
+                    key={`${child._key ?? childIndex}-${partIndex}-artist`}
+                    type="button"
+                    onClick={() => setActivePanel('artist')}
+                    className="inline cursor-pointer bg-[linear-gradient(currentColor,currentColor)] bg-[length:100%_0.14em] bg-[position:0_88%] bg-no-repeat p-0 font-semibold text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+                  >
+                    {artistName}
+                  </button>,
+                )
+              }
+            })
+          })
+
+          return (
+            <p
+              key={block._key ?? blockIndex}
+              className={`mb-6 last:mb-0 ${
+                blockIndex === 0
+                  ? 'max-w-[96rem] text-[clamp(1.35rem,2.12vw,2.08rem)] leading-[1.4]'
+                  : 'max-w-[88rem]'
+              }`}
+            >
+              {nodes}
+            </p>
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
     <div className="relative isolate mx-auto flex min-h-[calc(100svh-12rem)] w-full max-w-[140rem] flex-col justify-start overflow-visible px-4 pt-6 sm:px-6 md:px-8 md:pt-7 lg:px-10 xl:px-12">
@@ -139,14 +198,14 @@ export default function AboutContent({ about, companyText = [], projects = [] }:
                   />
                 </div>
               ) : (
-                <PortableText
-                  value={displayed.content}
-                  className={`!max-w-none ${expandedAlignment} leading-[1.58] text-[#A06B43]/90 [&_p]:mb-6 [&_p:last-child]:mb-0 ${
-                    displayed.id === 'company'
-                      ? 'text-base md:text-[1.08rem] xl:text-[1.16rem] [&_p:first-child]:max-w-[96rem] [&_p:first-child]:text-[clamp(1.35rem,2.12vw,2.08rem)] [&_p:first-child]:leading-[1.4] [&_p:not(:first-child)]:max-w-[88rem]'
-                      : 'text-base md:text-[1.08rem] xl:text-[1.16rem] [&_p]:ml-auto [&_p]:max-w-[96rem]'
-                  }`}
-                />
+                displayed.id === 'company' ? (
+                  renderCompanyText()
+                ) : (
+                  <PortableText
+                    value={displayed.content}
+                    className={`!max-w-none ${expandedAlignment} leading-[1.58] text-[#A06B43]/90 [&_p]:mb-6 [&_p:last-child]:mb-0 text-base md:text-[1.08rem] xl:text-[1.16rem] [&_p]:ml-auto [&_p]:max-w-[96rem]`}
+                  />
+                )
               )
             ) : null}
           </div>
