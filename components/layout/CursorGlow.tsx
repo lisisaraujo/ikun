@@ -7,11 +7,10 @@ import { useEffect, useRef, useState } from 'react'
 // replacement for it. Skips itself entirely on touch devices.
 export default function CursorGlow() {
   const dotRef = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(false)
   const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
-    if (!window.matchMedia('(hover: hover)').matches) return
+    if (!window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) return
 
     const enableFrame = window.requestAnimationFrame(() => setEnabled(true))
 
@@ -22,8 +21,24 @@ export default function CursorGlow() {
     const isInteractive = (target: EventTarget | null) =>
       target instanceof HTMLElement && !!target.closest('a, button, [role="button"], input, textarea, select')
 
+    const setActive = (active: boolean) => {
+      const el = dotRef.current
+      if (!el) return
+      el.dataset.active = active ? 'true' : 'false'
+      const size = active ? 30 : 8
+      el.style.width = `${size}px`
+      el.style.height = `${size}px`
+      el.style.marginLeft = `${-size / 2}px`
+      el.style.marginTop = `${-size / 2}px`
+      el.style.opacity = active ? '0.5' : '0.35'
+      el.style.boxShadow = active ? '0 0 22px rgba(55,198,244,0.65)' : '0 0 8px rgba(55,198,244,0.4)'
+    }
     const onOver = (e: MouseEvent) => { if (isInteractive(e.target)) setActive(true) }
-    const onOut = (e: MouseEvent) => { if (isInteractive(e.target)) setActive(false) }
+    const onOut = (e: MouseEvent) => {
+      if (isInteractive(e.target) && !(e.relatedTarget instanceof Node && (e.target as Element).contains(e.relatedTarget))) {
+        setActive(false)
+      }
+    }
 
     window.addEventListener('mousemove', onMove, { passive: true })
     document.addEventListener('mouseover', onOver)
@@ -38,21 +53,20 @@ export default function CursorGlow() {
 
   if (!enabled) return null
 
-  const size = active ? 30 : 8
-
   return (
     <div
       ref={dotRef}
       aria-hidden="true"
-      className="fixed top-0 left-0 z-[999] pointer-events-none rounded-full"
+      className="z-cursor fixed top-0 left-0 pointer-events-none rounded-full"
+      data-active="false"
       style={{
-        width: size,
-        height: size,
-        marginLeft: -size / 2,
-        marginTop: -size / 2,
+        width: 8,
+        height: 8,
+        marginLeft: -4,
+        marginTop: -4,
         backgroundColor: '#37C6F4',
-        opacity: active ? 0.5 : 0.35,
-        boxShadow: active ? '0 0 22px rgba(55,198,244,0.65)' : '0 0 8px rgba(55,198,244,0.4)',
+        opacity: 0.35,
+        boxShadow: '0 0 8px rgba(55,198,244,0.4)',
         transition: 'width 0.2s ease-out, height 0.2s ease-out, margin 0.2s ease-out, opacity 0.2s ease-out, box-shadow 0.2s ease-out',
       }}
     />

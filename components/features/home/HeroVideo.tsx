@@ -24,6 +24,7 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
   const playerRef = useRef<MuxPlayerRefAttributes>(null)
   const [playing, setPlaying] = useState(true)
   const [revealed, setRevealed] = useState(false)
+  const playingRef = useRef(playing)
   // Tracks whether the current paused state was caused by scrolling away
   // (vs. the user clicking pause), so scrolling back never overrides a manual pause
   const autoPaused = useRef(false)
@@ -31,10 +32,12 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
   const togglePlay = () => {
     if (playing) {
       playerRef.current?.pause()
+      playingRef.current = false
       setPlaying(false)
       autoPaused.current = false
     } else {
       playerRef.current?.play()
+      playingRef.current = true
       setPlaying(true)
     }
   }
@@ -43,23 +46,34 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
   // so it would otherwise keep playing behind every other section forever),
   // and resumes it if scrolled back — unless the user paused it themselves.
   useEffect(() => {
-    const onScroll = () => {
+    let raf = 0
+    const update = () => {
+      raf = 0
       const pastHero = window.scrollY >= window.innerHeight
 
-      if (pastHero && playing) {
+      if (pastHero && playingRef.current) {
         playerRef.current?.pause()
+        playingRef.current = false
         setPlaying(false)
         autoPaused.current = true
-      } else if (!pastHero && !playing && autoPaused.current) {
+      } else if (!pastHero && !playingRef.current && autoPaused.current) {
         playerRef.current?.play()
+        playingRef.current = true
         setPlaying(true)
         autoPaused.current = false
       }
     }
 
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(update)
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [playing])
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
+  }, [])
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -88,8 +102,8 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
         }`}
       />
 
-      {/* Media controls cluster — z-[51] puts this above the fixed Navbar at z-50 */}
-      <div className="absolute bottom-6 right-6 z-[51] flex items-center gap-2 md:bottom-10 md:right-10 lg:bottom-14 lg:right-14">
+      {/* Media controls cluster stays above the video while below global navigation. */}
+      <div className="absolute bottom-6 right-6 z-contact flex items-center gap-2 md:bottom-10 md:right-10 lg:bottom-14 lg:right-14">
         <button
           onClick={togglePlay}
           aria-label={playing ? 'Pause video' : 'Play video'}

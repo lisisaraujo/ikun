@@ -20,18 +20,29 @@ export default function Navbar() {
     const heroEl = document.getElementById('hero')
     if (!heroEl) return
 
+    let raf = 0
+    let previous: boolean | undefined
     const updateFromScroll = () => {
+      raf = 0
       const rect = heroEl.getBoundingClientRect()
-      setOverHero(rect.bottom > window.innerHeight * 0.55)
+      const next = rect.bottom > window.innerHeight * 0.55
+      if (next !== previous) {
+        previous = next
+        setOverHero(next)
+      }
     }
 
-    const frame = window.requestAnimationFrame(updateFromScroll)
-    window.addEventListener('scroll', updateFromScroll, { passive: true })
-    window.addEventListener('resize', updateFromScroll)
+    const scheduleUpdate = () => {
+      if (!raf) raf = window.requestAnimationFrame(updateFromScroll)
+    }
+
+    scheduleUpdate()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate, { passive: true })
     return () => {
-      window.cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', updateFromScroll)
-      window.removeEventListener('resize', updateFromScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', scheduleUpdate)
     }
   }, [isHome, pathname])
 
@@ -60,11 +71,11 @@ export default function Navbar() {
     : isHome && overHero
       ? 'h-28 md:h-32'
       : isHome
-        ? 'h-14 md:h-16'
+        ? 'h-20 md:h-24'
         : 'h-28 md:h-32'
 
   return (
-    <div className="fixed -top-2 left-1/2 z-[65] pointer-events-none -translate-x-1/2">
+    <div className="z-navbar fixed -top-2 left-1/2 pointer-events-none -translate-x-1/2">
       <Link
         href="/"
         aria-label="Home"

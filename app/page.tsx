@@ -63,7 +63,7 @@ export default async function HomePage() {
             deeper in the page. This wrapper's offsetTop stays the true,
             stable document position, since it isn't sticky itself. */}
         <div id="about">
-          <section className="home-section home-section-about home-flow-section relative z-10 flex flex-col justify-start">
+          <section className="home-section home-section-about home-flow-section z-section-content relative flex flex-col justify-start">
             {about ? (
               <AboutContent
                 about={about}
@@ -82,7 +82,7 @@ export default async function HomePage() {
               top eats into the space justify-center doesn't know about. The
               extra top padding nudges the centered block down to sit in the
               middle of what's actually free below the logo. */}
-          <section className="home-section home-section-projects home-flow-section relative z-20 flex flex-col justify-start overflow-hidden">
+          <section className="home-section home-section-projects home-flow-section z-projects relative flex flex-col justify-start overflow-hidden">
             <ProjectsAmbient />
 
             <ProjectsCarousel projects={projects} />
@@ -100,19 +100,19 @@ export default async function HomePage() {
           className="pointer-events-none absolute right-[-34rem] top-[6rem] z-0 h-[1400px] w-[1400px] opacity-[0.11] md:right-[-42rem] md:top-[2rem] md:h-[1650px] md:w-[1650px]"
           aria-hidden="true"
         >
-          <div className="h-full w-full animate-spin-slower">
+          <div className="h-full w-full">
             <DigestiveSpiral className="h-full w-full" variant="simple" />
           </div>
         </div>
 
         {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
-        <div id="ironu" className="home-flow-section relative z-10 overflow-visible">
+        <div id="ironu" className="home-flow-section z-section-content relative overflow-visible">
           <IronuPreview posts={ironuPosts} />
         </div>
 
         {/* ── CONTACT ──────────────────────────────────────────── */}
-        <div id="contact" className="relative z-20 overflow-visible">
-          <section className="home-section home-flow-section relative z-50 overflow-visible px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+        <div id="contact" className="relative z-projects overflow-visible">
+          <section className="home-section home-flow-section z-contact relative overflow-visible px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
             <div className="home-section-inner relative z-10 mx-auto grid w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(32rem,0.95fr)] lg:gap-16 xl:gap-24">
               <div className="max-w-[54rem] text-left">
                 <h2 className="type-title text-[#A06B43]">

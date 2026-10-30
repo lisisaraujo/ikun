@@ -120,10 +120,11 @@ export default function SideNav() {
 
       if (expandedRef.current && scrollDelta > SCROLL_COLLAPSE_THRESHOLD) {
         if (openRef.current) setOpen(false)
+        setHovered(false)
         lastScrollYRef.current = window.scrollY
       }
 
-      setCurrentIndex(active)
+      setCurrentIndex((current) => current === active ? current : active)
     }
 
     const onScroll = () => {
@@ -144,6 +145,7 @@ export default function SideNav() {
   function navigateTo(index: number) {
     const section = SECTIONS[index]
     setOpen(false)
+    setHovered(false)
 
     if (isHome) {
       if (section.id === 'home') {
@@ -174,7 +176,7 @@ export default function SideNav() {
       <nav
         aria-label="Section navigation"
         onMouseLeave={() => setHovered(false)}
-        className="pointer-events-none fixed right-6 top-[1.25rem] z-[70] h-[14rem] w-[15rem] md:right-10 lg:right-14"
+        className="z-sidenav pointer-events-none fixed right-6 top-[1.25rem] hidden h-[18rem] w-[17rem] md:block md:right-10 lg:right-14"
       >
         {SECTIONS.map((section, index) => {
           const isCurrent = index === currentIndex
@@ -193,7 +195,7 @@ export default function SideNav() {
               type="button"
               aria-current={isCurrent ? 'true' : undefined}
               aria-expanded={isCurrent ? expanded : undefined}
-              onMouseEnter={isCurrent ? () => setHovered(true) : undefined}
+              onMouseEnter={isCurrent ? () => { setHovered(true); setOpen(true) } : undefined}
               onClick={() => handleDesktopClick(index)}
               className="group absolute right-0 top-0 flex items-center justify-end gap-2 whitespace-nowrap text-right focus-visible:outline-none"
               style={{
@@ -214,7 +216,7 @@ export default function SideNav() {
               <span
                 className={`side-nav-label transition-[color,font-size,font-weight] duration-300 ${isCurrent
                   ? 'font-bold text-[#37C6F4]'
-                  : 'font-light text-[#A06B43]/78 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
+                  : 'font-semibold text-[#A06B43]/78 group-hover:text-[#37C6F4] group-focus-visible:text-[#37C6F4]'
                   }`}
               >
                 {section.label}
@@ -235,7 +237,7 @@ export default function SideNav() {
         aria-expanded={open}
         aria-controls="mobile-side-nav-menu"
         aria-label={open ? 'Close section menu' : 'Open section menu'}
-        className="group fixed right-5 top-3 z-[80] flex max-w-[calc(100vw-2.5rem)] items-center justify-center gap-2 rounded-full bg-[#8B5F3C]/18 px-4 py-3 text-[#37C6F4] shadow-[0_18px_60px_-48px_rgba(160,107,67,0.85)] ring-1 ring-[#8B5F3C]/28 backdrop-blur-md transition-[background-color,color,transform] duration-300 hover:bg-[#8B5F3C]/24 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 md:hidden"
+        className="z-sidenav-toggle group fixed right-5 top-3 flex max-w-[calc(100vw-2.5rem)] items-center justify-center gap-2 rounded-full bg-[#8B5F3C]/18 px-4 py-3 text-[#37C6F4] shadow-[0_18px_60px_-48px_rgba(160,107,67,0.85)] ring-1 ring-[#8B5F3C]/28 backdrop-blur-md transition-[background-color,color,transform] duration-300 hover:bg-[#8B5F3C]/24 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 md:hidden"
       >
         <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#37C6F4]" />
         <span className="type-label text-[#37C6F4] transition-colors duration-300 group-hover:text-[#37C6F4]">
@@ -248,7 +250,7 @@ export default function SideNav() {
         id="mobile-side-nav-menu"
         role="menu"
         aria-hidden={!open}
-        className={`md:hidden fixed inset-0 z-[75] flex flex-col items-center justify-center gap-2 bg-[#0B0B0B]/97 backdrop-blur-lg transition-opacity duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`z-sidenav-overlay md:hidden fixed inset-0 flex flex-col items-center justify-center gap-2 bg-[#0B0B0B]/97 backdrop-blur-lg transition-opacity duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
       >
         {SECTIONS.map((section, index) => {
@@ -265,7 +267,7 @@ export default function SideNav() {
               style={{ transitionDelay: open ? `${index * 40}ms` : '0ms' }}
             >
               <span
-                className={`type-title ${isCurrent ? 'text-[#37C6F4]' : 'font-light text-[#A06B43]/82'
+                className={`type-title ${isCurrent ? 'text-[#37C6F4]' : 'font-semibold text-[#A06B43]/82'
                   }`}
               >
                 {section.label}

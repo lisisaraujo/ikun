@@ -8,7 +8,6 @@ import type { SanityImage, GalleryImage } from '@/types/sanity'
 
 interface ProjectGalleryHeroProps {
   title: string
-  year?: string | number
   coverImage: SanityImage | null
   images: GalleryImage[]
   backHref: string
@@ -17,7 +16,6 @@ interface ProjectGalleryHeroProps {
 
 export default function ProjectGalleryHero({
   title,
-  year,
   coverImage,
   images,
   backHref,
@@ -79,8 +77,6 @@ export default function ProjectGalleryHero({
         ) : (
           <div className="absolute inset-0 bg-[#1C2433]" />
         )}
-        {/* Bottom-to-top dark gradient for title legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/20 to-transparent" />
         {/* Subtle top vignette so the back link is always readable */}
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
 
@@ -121,21 +117,6 @@ export default function ProjectGalleryHero({
           </div>
         )}
 
-        {/* Title block */}
-        <div className="absolute bottom-0 left-0 right-0 pb-12 z-20 pointer-events-none">
-          <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-1 mb-4">
-              {year && (
-                <span className="text-[#8B5F3C] text-xs uppercase tracking-widest">
-                  {year}
-                </span>
-              )}
-            </div>
-            <h1 className="type-display text-[#F3F1EB] font-extrabold">
-              {title}
-            </h1>
-          </div>
-        </div>
       </div>
 
       {/* Lightbox */}

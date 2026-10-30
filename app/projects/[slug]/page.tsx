@@ -64,7 +64,6 @@ export default async function ProjectPage({ params }: Props) {
       {/* Hero — clickable cover that opens gallery lightbox */}
       <ProjectGalleryHero
         title={project.title}
-        year={project.year}
         coverImage={project.coverImage ?? null}
         images={project.images ?? []}
         backHref="/#projects"
@@ -73,6 +72,17 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* Body */}
       <Container className="py-16 md:py-24">
+        <header className="mb-14 md:mb-20">
+          {project.year && (
+            <p className="type-meta mb-4 text-[#1C2433]/70">
+              {project.year}
+            </p>
+          )}
+          <h1 className="type-display text-[#1C2433] font-extrabold">
+            {project.title}
+          </h1>
+        </header>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-12">

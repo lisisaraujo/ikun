@@ -43,17 +43,29 @@ export default function KineticHeading({ children, className = '', as = 'h2' }: 
     const el = ref.current
     if (!el) return
 
-    const onMove = (e: MouseEvent) => {
+    let raf = 0
+    let pointerX = 0
+    let pointerY = 0
+    const update = () => {
+      raf = 0
       const rect = el.getBoundingClientRect()
       const cx = rect.left + rect.width / 2
       const cy = rect.top + rect.height / 2
-      const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / 420))
-      const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / 420))
+      const dx = Math.max(-1, Math.min(1, (pointerX - cx) / 420))
+      const dy = Math.max(-1, Math.min(1, (pointerY - cy) / 420))
       el.style.setProperty('--kinetic-skew', `${dx * 2.5}deg`)
       el.style.setProperty('--kinetic-lift', `${-dy * 3}px`)
     }
+    const onMove = (e: MouseEvent) => {
+      pointerX = e.clientX
+      pointerY = e.clientY
+      if (!raf) raf = window.requestAnimationFrame(update)
+    }
     window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (

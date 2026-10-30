@@ -18,7 +18,7 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
     : null
 
   return (
-    <section className="home-section relative sticky top-0 z-40 overflow-visible px-4 pb-6 pt-10 sm:px-6 md:px-8 md:pt-14 lg:px-10 xl:px-12">
+    <section className="home-section z-ironu relative sticky top-0 overflow-visible px-4 pb-6 pt-10 sm:px-6 md:px-8 md:pt-14 lg:px-10 xl:px-12">
       <div className="home-section-inner relative z-10 mx-auto grid w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(36rem,1.15fr)] lg:gap-16 xl:gap-24">
         <div className="max-w-[54rem] text-left">
           <h2 className="type-title text-[#A06B43]">

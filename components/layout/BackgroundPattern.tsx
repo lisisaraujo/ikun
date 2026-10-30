@@ -45,7 +45,7 @@ function Starburst({ n, r, jitter }: { n: number; r: number; jitter: readonly (r
 
 export default function BackgroundPattern() {
   return (
-    <div className="fixed inset-0 -z-50" aria-hidden="true">
+    <div className="z-site-background fixed inset-0" aria-hidden="true">
       {/* stone base the marks are "carved" into */}
       <div className="absolute inset-0 bg-[#4A3626]" />
 

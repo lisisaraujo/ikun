@@ -25,12 +25,12 @@ export default function CalendarPreview({ events }: CalendarPreviewProps) {
   }
 
   return (
-    <section className="home-section relative sticky top-0 z-30 flex flex-col justify-center overflow-hidden px-4 pb-6 pt-10 sm:px-6 md:px-8 md:pt-14 lg:px-10 xl:px-12">
+    <section className="home-section z-calendar relative sticky top-0 flex flex-col justify-start overflow-hidden px-4 pb-6 pt-6 sm:px-6 md:px-8 md:pt-8 lg:px-10 xl:px-12">
       <div className="absolute inset-0 -z-10 bg-[#1C2433]" aria-hidden="true" />
 
       <div className="mx-auto w-full max-w-[140rem]" aria-label="Upcoming events">
-        <div className="mb-2 text-[#8B5F3C] md:mb-3">
-          <h2 className="type-feature text-[#A06B43]">
+        <div className="mb-5 flex items-center gap-4 text-[#8B5F3C] md:mb-7">
+          <h2 className="type-label text-[#A06B43]">
             Upcoming
           </h2>
         </div>
@@ -64,28 +64,21 @@ export default function CalendarPreview({ events }: CalendarPreviewProps) {
               const loc = [event.city, event.country].filter(Boolean).join(', ')
               return (
                 <Reveal key={event._id} delay={i * 80}>
-                  <article
-                    className="spotlight-hover event-card-copy event-card-frame group grid gap-4 bg-[#0B0B0B]/10 px-5 py-4 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] md:grid-cols-[minmax(15rem,0.9fr)_minmax(0,1.45fr)_auto] md:items-center md:gap-10 md:px-7 md:py-4"
-                  >
-                    <div className="min-w-0">
-                      <div className="shrink-0">
-                        <time
-                          dateTime={event.date}
-                          className="type-feature block whitespace-nowrap text-[#A06B43]"
-                        >
-                          <span>{day}</span>
-                          <span className="ml-2 text-[0.5em] tracking-[0.12em] text-[#A06B43]/76">
-                            {monthYear}
-                          </span>
-                        </time>
-                      </div>
+                  <article className="spotlight-hover event-card-copy event-card-frame group relative grid gap-4 border-b border-[#A06B43]/16 px-1 py-5 md:grid-cols-[10rem_minmax(0,1fr)_auto] md:items-center md:gap-10 md:px-2 md:py-6">
+                    <div className="relative z-10 flex min-w-0 items-baseline gap-3 md:block">
+                      <time dateTime={event.date} className="type-display block whitespace-nowrap text-[clamp(1.8rem,3vw,3rem)] text-[#F3F1EB] transition-colors duration-500 group-hover:text-[#A06B43]">
+                        {day}
+                      </time>
+                      <span className="type-meta text-[#C9C9C9]/70 transition-colors duration-500 group-hover:text-[#A06B43]/76">
+                        {monthYear}
+                      </span>
                     </div>
 
-                    <div className="min-w-0">
-                      <h3 className="type-heading max-w-6xl text-[#A06B43]">
+                    <div className="relative z-10 min-w-0">
+                      <h3 className="type-heading max-w-6xl text-[#F3F1EB] transition-colors duration-500 group-hover:text-[#A06B43]">
                         {event.title}
                       </h3>
-                      <p className="type-small mt-1 max-w-[32rem] text-[#A06B43]/58">
+                      <p className="type-small mt-1 max-w-[32rem] text-[#C9C9C9]/68 transition-colors duration-500 group-hover:text-[#A06B43]/76">
                         {[event.venue, loc].filter(Boolean).join(' · ')}
                       </p>
                     </div>
@@ -95,7 +88,7 @@ export default function CalendarPreview({ events }: CalendarPreviewProps) {
                         href={event.ticketLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="type-label relative z-20 inline-flex w-fit items-center gap-3 px-5 py-3 font-semibold text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 sm:justify-self-end"
+                        className="type-label relative z-20 inline-flex w-fit items-center gap-3 py-2 font-semibold text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 sm:justify-self-end"
                         aria-label={`Tickets for ${event.title}`}
                       >
                         Tickets

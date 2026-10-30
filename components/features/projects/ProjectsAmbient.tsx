@@ -53,7 +53,7 @@ export default function ProjectsAmbient() {
         >
           <SpiralRings
             className="w-full h-full"
-            style={reducedMotion ? undefined : { animation: `spinSlow ${s.spin}s linear infinite` }}
+            style={reducedMotion || i > 0 ? undefined : { animation: `spinSlow ${s.spin}s linear infinite` }}
           />
         </div>
       ))}
