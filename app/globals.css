@@ -138,6 +138,311 @@
   --font-body:    'Gotham', sans-serif;
 }
 
+/* ── Type system ────────────────────────────────────────────────────────
+   Keep hierarchy consistent across the site. These are deliberately quieter
+   than the original section-by-section values so images and movement have
+   more room to lead. Components should use these semantic classes instead
+   of introducing their own responsive font-size values. */
+:root {
+  --type-display-size: clamp(2.35rem, 4vw, 4.5rem);
+  --type-title-size: clamp(1.85rem, 2.45vw, 2.75rem);
+  --type-heading-size: clamp(1.25rem, 1.6vw, 1.6rem);
+  --type-feature-size: clamp(1.05rem, 1.2vw, 1.3rem);
+  --type-body-size: clamp(0.98rem, 0.92vw, 1.08rem);
+  --type-small-size: clamp(0.8125rem, 0.85vw, 0.875rem);
+  --type-label-size: clamp(0.6875rem, 0.72vw, 0.8125rem);
+  --type-meta-size: clamp(0.625rem, 0.65vw, 0.75rem);
+  --type-display-leading: 0.94;
+  --type-title-leading: 0.98;
+  --type-heading-leading: 1.08;
+  --type-body-leading: 1.6;
+  --type-display-tracking: -0.015em;
+  --type-label-tracking: 0.2em;
+  --home-section-height: 66svh;
+  --home-section-gap: clamp(2.5rem, 5vw, 6rem);
+  --content-measure: 68ch;
+}
+
+@layer components {
+  .type-display,
+  .type-title,
+  .type-heading,
+  .type-feature {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .type-display {
+    font-size: var(--type-display-size);
+    line-height: var(--type-display-leading);
+    letter-spacing: var(--type-display-tracking);
+  }
+
+  .type-title {
+    font-size: var(--type-title-size);
+    line-height: var(--type-title-leading);
+    letter-spacing: var(--type-display-tracking);
+  }
+
+  .type-heading {
+    font-size: var(--type-heading-size);
+    line-height: var(--type-heading-leading);
+    letter-spacing: var(--type-display-tracking);
+  }
+
+  .type-feature {
+    font-size: var(--type-feature-size);
+    line-height: 1.12;
+    letter-spacing: var(--type-display-tracking);
+  }
+
+  .type-body {
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-leading);
+  }
+
+  .type-small {
+    font-size: var(--type-small-size);
+    line-height: 1.45;
+  }
+
+  .type-label,
+  .type-meta {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .type-label {
+    font-size: var(--type-label-size);
+    line-height: 1.25;
+    letter-spacing: var(--type-label-tracking);
+  }
+
+  .type-meta {
+    font-size: var(--type-meta-size);
+    line-height: 1.3;
+    letter-spacing: 0.22em;
+  }
+
+  .type-nav {
+    font-family: var(--font-heading);
+    font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .side-nav-label {
+    font-family: var(--font-heading);
+    font-size: clamp(0.62rem, 0.72vw, 0.76rem);
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .home-section {
+    min-height: var(--home-section-height);
+    padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .home-section-inner {
+    min-height: calc(var(--home-section-height) - 5rem);
+  }
+
+  /* The homepage is one continuous editorial sequence. Sections still keep
+     their own local backdrops, but share one measured rhythm at the edges. */
+  .home-flow-section {
+    scroll-margin-top: 1.5rem;
+  }
+
+  .home-section + .home-section,
+  .home-flow-section + .home-flow-section {
+    margin-top: var(--home-section-gap);
+  }
+
+  .home-section-about {
+    padding-top: clamp(1.5rem, 3vw, 3rem);
+    padding-bottom: clamp(2rem, 3vw, 3.5rem);
+  }
+
+  #about + #projects {
+    margin-top: clamp(1rem, 2vw, 2.5rem);
+  }
+
+  .home-section-projects {
+    padding-top: clamp(2rem, 4vw, 4rem);
+  }
+
+  .content-measure {
+    max-width: var(--content-measure);
+  }
+
+  /* Ikùn's interaction signature: focus arrives as a soft directional light
+     instead of a hard hover panel. Keep the effect behind the content so it
+     can be reused on cards without changing their layout. */
+  .spotlight-hover {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .spotlight-hover::before {
+    position: absolute;
+    inset: -25% -8%;
+    z-index: 0;
+    background: radial-gradient(ellipse 58% 88% at 16% 50%, rgba(160, 107, 67, 0.28) 0%, rgba(160, 107, 67, 0.12) 38%, transparent 74%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 500ms ease;
+    content: '';
+  }
+
+  .spotlight-hover:hover::before,
+  .spotlight-hover:focus::before,
+  .spotlight-hover:focus-within::before {
+    opacity: 1;
+  }
+
+  .spotlight-hover > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .editorial-frame {
+    clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+  }
+
+  .project-card-frame {
+    clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+  }
+
+  .event-card-frame {
+    clip-path: none;
+  }
+
+  .event-card-copy {
+    background: rgba(11, 11, 11, 0.1);
+    transition: background 500ms ease;
+  }
+
+  .event-card-copy:hover,
+  .event-card-copy:focus-within {
+    background: linear-gradient(135deg, rgba(160, 107, 67, 0.42) 0%, rgba(28, 36, 51, 0.78) 68%, rgba(160, 107, 67, 0.22) 100%);
+  }
+
+  .project-card-copy {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(135deg, rgba(28, 36, 51, 0.88) 0%, rgba(28, 36, 51, 0.7) 58%, rgba(160, 107, 67, 0.2) 100%);
+    backdrop-filter: blur(0.45rem);
+    width: 85%;
+    margin-left: auto;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 2% 100%);
+    transition: background 500ms ease;
+  }
+
+  .about-image-frame {
+    clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+    transform: rotate(-0.8deg);
+    transform-origin: center;
+  }
+
+  .about-image-tape {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.82;
+    background:
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) 0.7rem 0.7rem / 1.55rem 2px no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) 0.7rem 0.7rem / 2px 1.55rem no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) calc(100% - 0.7rem) 0.7rem / 1.55rem 2px no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) calc(100% - 0.7rem) 0.7rem / 2px 1.55rem no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) 0.7rem calc(100% - 0.7rem) / 1.55rem 2px no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) 0.7rem calc(100% - 0.7rem) / 2px 1.55rem no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) calc(100% - 0.7rem) calc(100% - 0.7rem) / 1.55rem 2px no-repeat,
+      linear-gradient(var(--color-ikun-brown), var(--color-ikun-brown)) calc(100% - 0.7rem) calc(100% - 0.7rem) / 2px 1.55rem no-repeat;
+  }
+
+  .group:hover .project-card-copy,
+  .group:focus .project-card-copy,
+  .group:focus-within .project-card-copy {
+    background: linear-gradient(135deg, rgba(160, 107, 67, 0.42) 0%, rgba(28, 36, 51, 0.78) 68%, rgba(160, 107, 67, 0.22) 100%);
+  }
+
+  .about-tab-focus {
+    position: relative;
+    overflow: visible;
+    text-shadow:
+      0 0 1rem rgba(160, 107, 67, 0.62),
+      0 0 3rem rgba(160, 107, 67, 0.48),
+      0 0 6.5rem rgba(160, 107, 67, 0.28);
+  }
+
+  .about-tab-focus::before {
+    position: absolute;
+    top: -130%;
+    z-index: 0;
+    width: 92%;
+    height: 360%;
+    border-radius: 9999px;
+    background: radial-gradient(ellipse at center, rgba(160, 107, 67, 0.32) 0%, rgba(160, 107, 67, 0.16) 42%, transparent 76%);
+    filter: blur(2.75rem);
+    pointer-events: none;
+    content: '';
+  }
+
+  .about-tab-focus-left::before {
+    left: -10%;
+  }
+
+  .about-tab-focus-right::before {
+    right: -10%;
+  }
+
+  .about-content-light {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .about-content-light::before {
+    position: absolute;
+    inset: -18% -10%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.78;
+    filter: blur(2.5rem);
+    content: '';
+  }
+
+  .about-content-light-company::before {
+    background:
+      radial-gradient(ellipse 72% 62% at 8% 0%, rgba(160, 107, 67, 0.18) 0%, rgba(160, 107, 67, 0.07) 44%, transparent 76%),
+      linear-gradient(135deg, rgba(160, 107, 67, 0.1) 0%, rgba(160, 107, 67, 0.035) 36%, transparent 72%);
+  }
+
+  .about-content-light-artist::before {
+    background:
+      radial-gradient(ellipse 72% 62% at 92% 0%, rgba(160, 107, 67, 0.18) 0%, rgba(160, 107, 67, 0.07) 44%, transparent 76%),
+      linear-gradient(225deg, rgba(160, 107, 67, 0.1) 0%, rgba(160, 107, 67, 0.035) 36%, transparent 72%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ── Base styles ──────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
@@ -193,6 +498,102 @@
 
 .prose-ikun p {
   margin-bottom: 1.25rem;
+}
+
+/* About copy is treated like an editorial composition: a quieter measure,
+   a larger opening paragraph, and small shifts in width keep the text from
+   reading as one oversized block around the floating image. */
+.about-editorial-text > p:first-child {
+  font-family: var(--font-body);
+  font-size: var(--type-body-size);
+  font-weight: 500;
+  line-height: var(--type-body-leading);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.about-editorial-text > p:nth-of-type(3n) {
+  max-width: 52ch;
+}
+
+.about-editorial-text > p:nth-of-type(3n + 2) {
+  max-width: 64ch;
+}
+
+/* Keeps the copy in its own stacking context for the image/text composition,
+   without adding another visible panel behind the text. */
+.about-editorial-copy {
+  position: relative;
+  isolation: isolate;
+}
+
+.about-editorial-copy::after {
+  position: absolute;
+  top: -1rem;
+  bottom: -1.5rem;
+  z-index: -1;
+  width: min(78%, 72rem);
+  background: linear-gradient(135deg, rgba(160, 107, 67, 0.13) 0%, rgba(28, 36, 51, 0.18) 72%, transparent 100%);
+  pointer-events: none;
+  content: '';
+}
+
+.about-editorial-copy-company::after {
+  left: 0;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(160, 107, 67, 0.17) 0%, rgba(28, 36, 51, 0.2) 72%, transparent 100%);
+  clip-path: polygon(0 0, 100% 0, 98% 100%, 0 100%);
+}
+
+.about-editorial-copy-artist::after {
+  right: 0;
+  width: 100%;
+  background: linear-gradient(270deg, rgba(160, 107, 67, 0.13) 0%, rgba(28, 36, 51, 0.18) 72%, transparent 100%);
+  clip-path: polygon(2% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* The portrait is a layer in the composition, not a column beside it. It
+   sits behind the copy with roughly half its surface exposed beyond the text
+   edge; the direction reverses with the selected tab. */
+.about-image-composition {
+  position: relative;
+}
+
+.about-layered-image {
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .about-layered-image {
+    position: relative;
+    top: auto;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --home-section-height: auto;
+    --home-section-gap: 3rem;
+  }
+
+  .home-section {
+    min-height: auto;
+    padding-block: 3.5rem;
+  }
+
+  .home-section-about {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .home-section-projects {
+    padding-top: 2rem;
+  }
+
+  .home-section-inner {
+    min-height: auto;
+  }
 }
 
 .prose-ikun h2 {

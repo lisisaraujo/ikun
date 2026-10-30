@@ -56,13 +56,15 @@ export default function Navbar() {
 
   const logoSrc = (isHome && overHero) || overFooter ? '/ikun-logo-white.png' : '/ikun-logo-black.png'
   const logoSizeClass = overFooter
-    ? 'h-56 md:h-64'
+    ? 'h-16 md:h-20'
     : isHome && overHero
-      ? 'h-56 md:h-64'
-      : 'h-28 md:h-32'
+      ? 'h-28 md:h-32'
+      : isHome
+        ? 'h-14 md:h-16'
+        : 'h-28 md:h-32'
 
   return (
-    <div className="fixed top-0 left-1/2 z-[65] pt-1 pointer-events-none -translate-x-1/2">
+    <div className="fixed -top-2 left-1/2 z-[65] pointer-events-none -translate-x-1/2">
       <Link
         href="/"
         aria-label="Home"

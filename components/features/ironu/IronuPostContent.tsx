@@ -40,17 +40,17 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
 
       <div className={`mx-auto max-w-2xl px-6 md:px-0 ${imageSrc ? '' : 'pt-28'}`}>
         {/* Section label */}
-        <p className="text-[10px] uppercase tracking-[0.2em] text-[#1C2433] mb-3 font-medium">
+        <p className="type-meta mb-3 font-medium text-[#1C2433]">
           Ìrònú
         </p>
 
         {/* Date */}
-        <p className="text-xs uppercase tracking-widest text-[#1C2433]/40 mb-6">
+        <p className="type-meta mb-6 text-[#1C2433]/40">
           {formatDate(post.date)}
         </p>
 
         {/* Title */}
-        <h1 className="font-[family-name:var(--font-heading)] text-3xl md:text-4xl lg:text-5xl font-800 text-[#1C2433] leading-tight mb-12">
+        <h1 className="type-title mb-12 font-extrabold text-[#1C2433]">
           {post.title}
         </h1>
 

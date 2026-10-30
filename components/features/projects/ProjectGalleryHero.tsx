@@ -131,7 +131,7 @@ export default function ProjectGalleryHero({
                 </span>
               )}
             </div>
-            <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-6xl lg:text-7xl font-800 text-[#F3F1EB] leading-tight">
+            <h1 className="type-display text-[#F3F1EB] font-extrabold">
               {title}
             </h1>
           </div>

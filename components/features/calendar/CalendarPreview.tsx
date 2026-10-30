@@ -1,53 +1,59 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { urlFor } from '@/lib/sanity/image'
 import Reveal from '@/components/ui/Reveal'
-import type { CalendarEvent, SanityImage } from '@/types/sanity'
+import type { CalendarEvent } from '@/types/sanity'
 
 interface CalendarPreviewProps {
   events: CalendarEvent[]
-  backgroundImage?: SanityImage
 }
 
 const PAGE_SIZE = 3
 
-export default function CalendarPreview({ events, backgroundImage }: CalendarPreviewProps) {
-  const [activeEventId, setActiveEventId] = useState<string | null>(null)
-  const visibleEvents = events.slice(0, PAGE_SIZE)
-  const activeEvent = visibleEvents.find((event) => event._id === activeEventId)
-  const activeBackgroundImage = activeEvent?.image ?? backgroundImage
+export default function CalendarPreview({ events }: CalendarPreviewProps) {
+  const [startIndex, setStartIndex] = useState(0)
+  const visibleEvents = events.slice(startIndex, startIndex + PAGE_SIZE)
+  const canGoEarlier = startIndex > 0
+  const hasMoreEvents = startIndex + PAGE_SIZE < events.length
+  const showWindowControls = events.length > PAGE_SIZE
+  function moveWindow(direction: -1 | 1) {
+    setStartIndex((index) => {
+      const nextIndex = index + direction
+      return Math.min(Math.max(nextIndex, 0), Math.max(events.length - PAGE_SIZE, 0))
+    })
+  }
 
   return (
-    <section className="relative sticky top-0 z-30 min-h-screen flex flex-col justify-center overflow-hidden px-4 pb-10 pt-32 sm:px-6 md:px-8 md:pt-36 lg:px-10 xl:px-12">
+    <section className="home-section relative sticky top-0 z-30 flex flex-col justify-center overflow-hidden px-4 pb-6 pt-10 sm:px-6 md:px-8 md:pt-14 lg:px-10 xl:px-12">
       <div className="absolute inset-0 -z-10 bg-[#1C2433]" aria-hidden="true" />
-      {activeBackgroundImage && (
-        <div className="absolute inset-0 -z-[5]" aria-hidden="true">
-          <Image
-            key={activeBackgroundImage.asset._ref}
-            src={urlFor(activeBackgroundImage).width(2200).height(1400).fit('crop').auto('format').url()}
-            alt=""
-            fill
-            className="object-cover object-[62%_center] opacity-35 grayscale transition-opacity duration-[900ms]"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,#1C2433_0%,rgba(28,36,51,0.86)_35%,rgba(28,36,51,0.28)_78%,#1C2433_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(0deg,#1C2433_0%,transparent_42%,rgba(28,36,51,0.55)_100%)]" />
-        </div>
-      )}
 
       <div className="mx-auto w-full max-w-[140rem]" aria-label="Upcoming events">
-        <div className="mb-6 flex items-end justify-between gap-6 text-[#8B5F3C] md:mb-9">
-          <p className="hidden pb-1 text-right text-xs font-semibold uppercase tracking-[0.3em] text-[#A06B43]/72 sm:block md:text-sm">
+        <div className="mb-2 text-[#8B5F3C] md:mb-3">
+          <h2 className="type-feature text-[#A06B43]">
             Upcoming
-          </p>
+          </h2>
         </div>
 
-        <div className="space-y-3">
+        {showWindowControls && (
+          <div className="mb-3 flex justify-center">
+            <button
+              type="button"
+              onClick={() => moveWindow(-1)}
+              disabled={!canGoEarlier}
+              className="inline-flex items-center justify-center text-[#A06B43] transition-opacity duration-200 hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60 disabled:pointer-events-none disabled:opacity-25"
+              aria-label="Show earlier events"
+            >
+              <svg viewBox="0 0 20 20" className="h-5 w-5 fill-none stroke-current stroke-2" aria-hidden="true">
+                <path d="M4 13l6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        <div key={startIndex} className="animate-fadeIn space-y-3">
           {events.length === 0 ? (
-            <p className="rounded-2xl bg-[#0B0B0B]/12 px-6 py-10 text-sm uppercase tracking-widest text-[#8B5F3C]/45">
+            <p className="editorial-frame bg-[#0B0B0B]/12 px-6 py-10 text-sm uppercase tracking-widest text-[#8B5F3C]/45">
               No upcoming events.
             </p>
           ) : (
@@ -59,34 +65,29 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
               return (
                 <Reveal key={event._id} delay={i * 80}>
                   <article
-                    className="group grid gap-5 rounded-2xl bg-[#0B0B0B]/10 px-5 py-5 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] transition-[background-color,transform] duration-500 hover:bg-[#A06B43]/[0.055] md:grid-cols-[minmax(11rem,0.34fr)_minmax(0,1fr)_auto] md:items-center md:gap-8 md:px-7 md:py-6"
-                    onMouseEnter={() => setActiveEventId(event._id)}
-                    onMouseLeave={() => setActiveEventId(null)}
-                    onFocus={() => setActiveEventId(event._id)}
-                    onBlur={() => setActiveEventId(null)}
+                    className="spotlight-hover event-card-copy event-card-frame group grid gap-4 bg-[#0B0B0B]/10 px-5 py-4 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] md:grid-cols-[minmax(15rem,0.9fr)_minmax(0,1.45fr)_auto] md:items-center md:gap-10 md:px-7 md:py-4"
                   >
                     <div className="min-w-0">
-                      <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#A06B43]/66">
-                        <span>{event.eventType}</span>
-                      </p>
-                      <time
-                        dateTime={event.date}
-                        className="block font-[family-name:var(--font-heading)] text-[clamp(2.4rem,4vw,5.2rem)] font-bold uppercase leading-[0.9] tracking-normal text-[#A06B43] transition-colors duration-500 group-hover:text-[#37C6F4]"
-                      >
-                        <span>{day}</span>
-                        <span className="ml-3 text-[0.46em] tracking-[0.12em] text-[#A06B43]/76 group-hover:text-[#37C6F4]/78">
-                          {monthYear}
-                        </span>
-                      </time>
-                      <p className="mt-2 text-xs text-[#A06B43]/58 md:text-sm">
-                        {[event.venue, loc].filter(Boolean).join(' · ')}
-                      </p>
+                      <div className="shrink-0">
+                        <time
+                          dateTime={event.date}
+                          className="type-feature block whitespace-nowrap text-[#A06B43]"
+                        >
+                          <span>{day}</span>
+                          <span className="ml-2 text-[0.5em] tracking-[0.12em] text-[#A06B43]/76">
+                            {monthYear}
+                          </span>
+                        </time>
+                      </div>
                     </div>
 
                     <div className="min-w-0">
-                      <h3 className="max-w-6xl font-[family-name:var(--font-heading)] text-3xl font-bold uppercase leading-[0.96] tracking-normal text-[#A06B43] transition-colors duration-500 group-hover:text-[#37C6F4] md:text-[clamp(2.2rem,3.4vw,4.4rem)]">
+                      <h3 className="type-heading max-w-6xl text-[#A06B43]">
                         {event.title}
                       </h3>
+                      <p className="type-small mt-1 max-w-[32rem] text-[#A06B43]/58">
+                        {[event.venue, loc].filter(Boolean).join(' · ')}
+                      </p>
                     </div>
 
                     {event.ticketLink && (
@@ -94,10 +95,13 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
                         href={event.ticketLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="relative z-20 inline-flex w-fit items-center gap-3 rounded-full bg-[#8B5F3C]/22 px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#A06B43] ring-1 ring-[#8B5F3C]/30 transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 sm:justify-self-end"
+                        className="type-label relative z-20 inline-flex w-fit items-center gap-3 px-5 py-3 font-semibold text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 sm:justify-self-end"
                         aria-label={`Tickets for ${event.title}`}
                       >
                         Tickets
+                        <svg viewBox="0 0 20 20" className="h-4 w-4 fill-none stroke-current stroke-2" aria-hidden="true">
+                          <path d="M4 10h11M10 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                       </a>
                     )}
                   </article>
@@ -107,14 +111,34 @@ export default function CalendarPreview({ events, backgroundImage }: CalendarPre
           )}
         </div>
 
-        <div className="mt-8 flex justify-center md:mt-10">
+        {showWindowControls && (
+          <div className="mt-3 flex justify-center">
+            <button
+              type="button"
+              onClick={() => moveWindow(1)}
+              disabled={!hasMoreEvents}
+              className="inline-flex items-center justify-center text-[#A06B43] transition-opacity duration-200 hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60 disabled:pointer-events-none disabled:opacity-25"
+              aria-label="Show later events"
+            >
+              <svg viewBox="0 0 20 20" className="h-5 w-5 fill-none stroke-current stroke-2" aria-hidden="true">
+                <path d="M4 7l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        <div className="mt-4 flex justify-end">
           <Link
-            href="/calendar"
-            className="group inline-flex h-14 w-full max-w-[24rem] items-center justify-center rounded-full bg-[#8B5F3C]/14 px-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#A06B43] ring-1 ring-[#8B5F3C]/24 transition-colors duration-300 hover:text-[#37C6F4] sm:w-[24rem] md:h-16 md:text-sm"
+            href="/calendar#past-events"
+            className="type-label inline-flex items-center gap-2 normal-case text-[#A06B43] transition-[color,opacity] duration-200 hover:text-[#37C6F4] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60"
           >
-            See all events
+            Past events
+            <svg viewBox="0 0 20 20" className="h-4 w-4 fill-none stroke-current stroke-2" aria-hidden="true">
+              <path d="M4 10h11M10 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </Link>
         </div>
+
       </div>
     </section>
   )

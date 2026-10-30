@@ -5,10 +5,10 @@ import { useState } from 'react'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const fieldClass =
-  'w-full bg-transparent border-0 border-b border-[#8B5F3C]/26 py-3 text-sm text-[#A06B43] placeholder-[#A06B43]/34 focus:outline-none focus:border-[#37C6F4] transition-colors duration-300'
+  'type-small w-full border-0 border-b border-[#8B5F3C]/26 bg-transparent py-3 text-[#A06B43] placeholder-[#A06B43]/34 transition-colors duration-300 focus:border-[#37C6F4] focus:outline-none'
 
 const labelClass =
-  'block text-[10px] font-semibold uppercase tracking-widest text-[#A06B43]/58 mb-1'
+  'type-meta mb-1 block text-[#A06B43]/58'
 
 export default function ContactForm() {
   const [status, setStatus]     = useState<Status>('idle')
@@ -43,7 +43,7 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <p className="border-b border-[#8B5F3C]/26 py-6 text-sm text-[#A06B43]">
+      <p className="type-small border-b border-[#8B5F3C]/26 py-6 text-[#A06B43]">
         Thank you — your message has been sent.
       </p>
     )
@@ -79,15 +79,20 @@ export default function ContactForm() {
       </div>
 
       {status === 'error' && (
-        <p className="text-red-400 text-xs">{errorMsg}</p>
+        <p className="type-small text-red-400">{errorMsg}</p>
       )}
 
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="rounded-full bg-[#8B5F3C]/22 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#A06B43] ring-1 ring-[#8B5F3C]/30 transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60 disabled:opacity-40"
+        className="type-label group inline-flex items-center gap-2 text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60 disabled:opacity-40"
       >
         {status === 'loading' ? 'Sending…' : 'Send Message'}
+        {status !== 'loading' && (
+          <svg viewBox="0 0 20 20" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">
+            <path d="M4 10h11M10 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
       </button>
     </form>
   )

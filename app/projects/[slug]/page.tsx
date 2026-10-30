@@ -175,10 +175,10 @@ export default async function ProjectPage({ params }: Props) {
             <div>
               {olderProject && (
                 <Link href={`/projects/${olderProject.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="type-meta mb-2 text-[#37C6F4] [@media(hover:hover)]:opacity-50 transition-opacity duration-200 group-hover:opacity-100">
                     ← Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base uppercase text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {olderProject.title}
                   </p>
                 </Link>
@@ -187,10 +187,10 @@ export default async function ProjectPage({ params }: Props) {
             <div className="text-right">
               {newerProject && (
                 <Link href={`/projects/${newerProject.slug.current}`} className="group block">
-                  <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-50 group-hover:opacity-100 transition-opacity duration-200 mb-2">
+                  <p className="type-meta mb-2 text-[#37C6F4] [@media(hover:hover)]:opacity-50 transition-opacity duration-200 group-hover:opacity-100">
                     Newer →
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="font-[family-name:var(--font-heading)] text-base uppercase text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
                     {newerProject.title}
                   </p>
                 </Link>

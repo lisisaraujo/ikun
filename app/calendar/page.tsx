@@ -32,9 +32,9 @@ function EventRow({
   return (
     <Reveal delay={delay}>
       <div className={`py-7 grid grid-cols-[80px_1fr_auto] gap-8 items-start ${past ? 'opacity-60' : ''}`}>
-        <p className="text-4xl font-light text-[#37C6F4] font-[family-name:var(--font-heading)] tabular-nums leading-none">
+        <p className="type-title font-light text-[#37C6F4] tabular-nums">
           {day}
-          <span className="block text-[11px] tracking-widest text-[#37C6F4]/50 mt-1 font-normal">{mon}.{yr}</span>
+          <span className="type-meta mt-1 block font-normal text-[#37C6F4]/50">{mon}.{yr}</span>
         </p>
         <div className="flex items-center gap-4">
           {event.image && (
@@ -49,9 +49,9 @@ function EventRow({
             </div>
           )}
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-[#37C6F4] mb-1">{event.eventType}</p>
-            <h3 className="font-[family-name:var(--font-heading)] text-xl font-light text-[#1C2433]">{event.title}</h3>
-            {loc && <p className="text-sm text-[#8B5F3C]/60 mt-1">{loc}</p>}
+            <p className="type-meta mb-1 text-[#37C6F4]">{event.eventType}</p>
+            <h3 className="type-heading font-light text-[#1C2433]">{event.title}</h3>
+            {loc && <p className="type-small mt-1 text-[#8B5F3C]/60">{loc}</p>}
           </div>
         </div>
         {!past && event.ticketLink && (
@@ -59,7 +59,7 @@ function EventRow({
             href={event.ticketLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] uppercase tracking-widest text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 transition-opacity mt-1"
+            className="type-label mt-1 text-[#37C6F4] [@media(hover:hover)]:opacity-60 transition-opacity hover:opacity-100"
           >
             Book
           </a>
@@ -84,7 +84,7 @@ export default async function CalendarPage() {
         <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16 pt-5">
           <Link
             href="/#calendar"
-            className="pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-[10px] uppercase tracking-widest transition-opacity duration-200"
+            className="type-meta pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 transition-opacity duration-200 hover:opacity-100"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none" strokeWidth={2} aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -106,18 +106,18 @@ export default async function CalendarPage() {
           >
             <SpiralRings className="w-full h-full" />
           </div>
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-medium mb-4">Every performance</p>
-          <KineticHeading as="h1" className="font-[family-name:var(--font-heading)] text-5xl md:text-7xl font-light text-[#1C2433] mb-5 leading-tight">Calendar</KineticHeading>
-          <p className="text-[#8B5F3C]/70 text-base md:text-lg leading-relaxed">
+          <p className="type-label mb-4 font-medium text-[#37C6F4]">Every performance</p>
+          <KineticHeading as="h1" className="type-display mb-5 font-light text-[#1C2433]">Calendar</KineticHeading>
+          <p className="type-body max-w-2xl text-[#8B5F3C]/70">
             Shows, workshops and talks — what&apos;s <span className="text-[#37C6F4]">coming up</span>, and a record of what&apos;s already happened.
           </p>
         </div>
 
         {/* Upcoming */}
         <section>
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[#37C6F4] font-semibold mb-2">Upcoming</p>
+          <p className="type-label mb-2 text-[#37C6F4]">Upcoming</p>
           {upcoming.length === 0 ? (
-            <p className="text-[#8B5F3C]/40 text-sm uppercase tracking-widest py-8">No upcoming events.</p>
+            <p className="type-label py-8 text-[#8B5F3C]/40">No upcoming events.</p>
           ) : (
             <div className="divide-y divide-[#8B5F3C]/15 border-b border-[#8B5F3C]/15">
               {upcoming.map((event, i) => (
@@ -129,8 +129,8 @@ export default async function CalendarPage() {
 
         {/* Past */}
         {past.length > 0 && (
-          <section className="mt-16 md:mt-20">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-[#8B5F3C]/50 font-semibold mb-2">Past</p>
+          <section id="past-events" className="mt-16 md:mt-20">
+            <p className="type-label mb-2 text-[#8B5F3C]/50">Past</p>
             <div className="divide-y divide-[#8B5F3C]/15 border-b border-[#8B5F3C]/15">
               {past.map((event) => (
                 <EventRow key={event._id} event={event} past />

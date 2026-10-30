@@ -32,8 +32,6 @@ export default async function HomePage() {
   const upcomingEvents = events
     .filter((e) => new Date(e.date) >= now)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  const calendarImage = upcomingEvents.find((event) => event.image)?.image
-
   const email = settings?.email ?? SITE_EMAIL
   const insta = settings?.instagramUrl
   const youtube = settings?.youtubeUrl
@@ -65,15 +63,14 @@ export default async function HomePage() {
             deeper in the page. This wrapper's offsetTop stays the true,
             stable document position, since it isn't sticky itself. */}
         <div id="about">
-          <section className="sticky top-0 z-10 min-h-screen flex flex-col justify-start pb-20 pt-16 md:pt-20">
+          <section className="home-section home-section-about home-flow-section relative z-10 flex flex-col justify-start">
             {about ? (
               <AboutContent
                 about={about}
                 companyText={homeData?.introText ?? []}
-                projects={projects}
               />
             ) : (
-              <p className="text-[#F3F1EB]/40 text-sm uppercase tracking-widest px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">About content coming soon.</p>
+              <p className="type-label px-4 text-[#F3F1EB]/40 sm:px-6 md:px-8 lg:px-10 xl:px-12">About content coming soon.</p>
             )}
           </section>
         </div>
@@ -85,7 +82,7 @@ export default async function HomePage() {
               top eats into the space justify-center doesn't know about. The
               extra top padding nudges the centered block down to sit in the
               middle of what's actually free below the logo. */}
-          <section className="relative sticky top-0 z-20 min-h-screen flex flex-col justify-start pt-28 pb-10 overflow-hidden md:pt-32">
+          <section className="home-section home-section-projects home-flow-section relative z-20 flex flex-col justify-start overflow-hidden">
             <ProjectsAmbient />
 
             <ProjectsCarousel projects={projects} />
@@ -95,7 +92,7 @@ export default async function HomePage() {
 
       {/* ── CALENDAR ─────────────────────────────────────────── */}
       <div id="calendar">
-        <CalendarPreview events={upcomingEvents} backgroundImage={calendarImage} />
+        <CalendarPreview events={upcomingEvents} />
       </div>
 
       <div className="relative isolate overflow-visible bg-[#1C2433]">
@@ -109,51 +106,51 @@ export default async function HomePage() {
         </div>
 
         {/* ── ÌRÒNÚ ────────────────────────────────────────────── */}
-        <div id="ironu" className="relative z-10 overflow-visible">
+        <div id="ironu" className="home-flow-section relative z-10 overflow-visible">
           <IronuPreview posts={ironuPosts} />
         </div>
 
         {/* ── CONTACT ──────────────────────────────────────────── */}
         <div id="contact" className="relative z-20 overflow-visible">
-          <section className="relative sticky top-0 z-50 min-h-screen overflow-visible px-4 pb-12 pt-32 sm:px-6 md:px-8 md:pt-36 lg:px-10 xl:px-12">
-            <div className="relative z-10 mx-auto grid min-h-[calc(100svh-10rem)] w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(32rem,0.95fr)] lg:gap-16 xl:gap-24">
+          <section className="home-section home-flow-section relative z-50 overflow-visible px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+            <div className="home-section-inner relative z-10 mx-auto grid w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(32rem,0.95fr)] lg:gap-16 xl:gap-24">
               <div className="max-w-[54rem] text-left">
-                <h2 className="font-[family-name:var(--font-heading)] text-[clamp(2.6rem,5.2vw,6.7rem)] font-bold uppercase leading-[0.9] tracking-normal text-[#A06B43]">
+                <h2 className="type-title text-[#A06B43]">
                   Get in touch
                 </h2>
-                <p className="mt-6 max-w-[42rem] text-base leading-[1.58] text-[#A06B43]/84 md:text-[1.08rem] xl:text-[1.16rem]">
+                <p className="type-body mt-6 max-w-[42rem] text-[#A06B43]/84">
                   For projects, workshops, collaborations, or invitations, reach out directly or leave a message.
                 </p>
                 <a
                   href={`mailto:${email}`}
-                  className="mt-9 block max-w-[44rem] break-words text-[clamp(1.35rem,2vw,2.45rem)] font-medium leading-[1.12] tracking-normal text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4]"
+                  className="type-feature mt-9 block max-w-[44rem] break-words font-medium text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4]"
                 >
                   {email}
                 </a>
                 <div className="mt-8 flex flex-wrap items-center gap-5 sm:gap-7">
                   {insta && (
                     <a href={insta} target="_blank" rel="noopener noreferrer"
-                      className="text-[11px] font-semibold uppercase tracking-widest text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
+                      className="type-label text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
                       Instagram
                     </a>
                   )}
                   {youtube && (
                     <a href={youtube} target="_blank" rel="noopener noreferrer"
-                      className="text-[11px] font-semibold uppercase tracking-widest text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
+                      className="type-label text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
                       YouTube
                     </a>
                   )}
                   {vimeo && (
                     <a href={vimeo} target="_blank" rel="noopener noreferrer"
-                      className="text-[11px] font-semibold uppercase tracking-widest text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
+                      className="type-label text-[#A06B43]/62 transition-colors duration-300 hover:text-[#37C6F4]">
                       Vimeo
                     </a>
                   )}
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-[#0B0B0B]/10 p-6 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] md:p-8 lg:p-10">
-                <p className="mb-7 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#A06B43]/62">Send a message</p>
+              <div className="editorial-frame bg-[#0B0B0B]/10 p-6 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] md:p-8 lg:p-10">
+                <p className="type-meta mb-7 text-[#A06B43]/62">Send a message</p>
                 <ContactForm />
               </div>
             </div>

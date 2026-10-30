@@ -43,7 +43,7 @@ export default async function IronuPostPage({ params }: Props) {
         <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16 pt-5">
           <Link
             href="/#ironu"
-            className="pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-[10px] uppercase tracking-widest transition-opacity duration-200"
+            className="type-meta pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 transition-opacity duration-200 hover:opacity-100"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none" strokeWidth={2} aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -71,7 +71,7 @@ export default async function IronuPostPage({ params }: Props) {
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
                     Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-xl font-bold uppercase leading-[1.05] tracking-normal text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4] md:text-2xl">
+                  <p className="type-heading text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
                     {prevPost.title}
                   </p>
                 </Link>
@@ -86,7 +86,7 @@ export default async function IronuPostPage({ params }: Props) {
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
                     Newer
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-xl font-bold uppercase leading-[1.05] tracking-normal text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4] md:text-2xl">
+                  <p className="type-heading text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
                     {nextPost.title}
                   </p>
                 </Link>

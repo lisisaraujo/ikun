@@ -33,7 +33,7 @@ export default async function Footer() {
       <div className="flex flex-1 flex-col items-center justify-center gap-10 py-16">
         {footerLogos.length > 0 && (
           <>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#F3F1EB]/46 md:text-base">
+            <p className="type-label text-[#F3F1EB]/46">
               Supported by
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-10 px-6">
@@ -51,7 +51,7 @@ export default async function Footer() {
                     className="object-contain max-h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
                   />
                 ) : (
-                  <span className="text-base text-[#F3F1EB]/48 transition-colors hover:text-[#F3F1EB]/75 md:text-lg">
+                  <span className="type-small text-[#F3F1EB]/48 transition-colors hover:text-[#F3F1EB]/75">
                     {partner.name}
                   </span>
                 )
@@ -78,7 +78,7 @@ export default async function Footer() {
 
       {/* ── Bottom: copyright + credit + privacy ────────── */}
       <Container className="border-t border-[#F3F1EB]/10 py-7">
-        <div className="flex flex-col items-center justify-between gap-3 text-center text-sm leading-relaxed text-[#F3F1EB]/52 md:flex-row md:text-left md:text-[15px]">
+        <div className="type-small flex flex-col items-center justify-between gap-3 text-center text-[#F3F1EB]/52 md:flex-row md:text-left">
           <p>© {year} {SITE_NAME}. All rights reserved.</p>
           <p>Brand Identity by Qusay Awad · Designed &amp; Developed by Lísis Araújo</p>
           <Link href="/privacy" className="font-medium text-[#F3F1EB]/58 transition-colors duration-200 hover:text-[#37C6F4]">
