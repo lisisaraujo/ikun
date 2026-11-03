@@ -61,7 +61,7 @@ export default function YoutubeEmbed({ url, title }: YoutubeEmbedProps) {
 
       {/* Title label at bottom */}
       <div className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-gradient-to-t from-black/60 to-transparent">
-        <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.15em] text-[#F3F1EB]/70">
+        <p className="font-[family-name:var(--font-body)] text-xs uppercase tracking-[0.15em] text-[#A06B43]/70">
           {title}
         </p>
       </div>

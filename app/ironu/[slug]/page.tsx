@@ -36,11 +36,10 @@ export default async function IronuPostPage({ params }: Props) {
   const nextPost = idx > 0                    ? allPosts[idx - 1] : null
 
   return (
-    <div className="bg-[#8B5F3C] min-h-screen">
-      {/* Back link — floats above content. Sits below the fixed logo's
-          ~112px band on mobile, where the two would otherwise overlap. */}
-      <div className="fixed top-28 md:top-16 left-0 right-0 z-40 pointer-events-none">
-        <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16 pt-5">
+    <div className="detail-page bg-[#8B5F3C] min-h-screen">
+      {/* Back link shares the top navigation row with the logo and menu. */}
+      <div className="fixed left-0 right-0 top-5 z-40 pointer-events-none md:top-4">
+        <div className="mx-auto max-w-6xl px-6 md:px-10 lg:px-16">
           <Link
             href="/#ironu"
             className="type-meta pointer-events-auto inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 transition-opacity duration-200 hover:opacity-100"
@@ -60,33 +59,33 @@ export default async function IronuPostPage({ params }: Props) {
 
       {/* Prev / Next */}
       <div className="border-t border-[#1C2433]/20 mt-20">
-        <Container className="py-16">
-          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-5 sm:flex-row sm:gap-8">
-            <div className="w-full sm:w-[min(22rem,50%)]">
+        <Container className="py-14 md:py-16">
+          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
+            <div className="w-full">
               {prevPost && (
                 <Link
                   href={`/ironu/${prevPost.slug.current}`}
-                  className="group block rounded-2xl bg-[#8B5F3C]/10 px-6 py-5 text-center transition-colors duration-300 hover:bg-[#8B5F3C]/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+                  className="group block border-t border-[#1C2433]/25 px-1 py-5 transition-colors duration-300 hover:border-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
                 >
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
                     Older
                   </p>
-                  <p className="type-heading text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
+                  <p className="type-heading text-[#1C2433] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
                     {prevPost.title}
                   </p>
                 </Link>
               )}
             </div>
-            <div className="w-full sm:w-[min(22rem,50%)]">
+            <div className="w-full text-left sm:text-right">
               {nextPost && (
                 <Link
                   href={`/ironu/${nextPost.slug.current}`}
-                  className="group block rounded-2xl bg-[#8B5F3C]/10 px-6 py-5 text-center transition-colors duration-300 hover:bg-[#8B5F3C]/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
+                  className="group block border-t border-[#1C2433]/25 px-1 py-5 transition-colors duration-300 hover:border-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/60"
                 >
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#A06B43]/70 transition-colors duration-200 group-hover:text-[#37C6F4] md:text-sm">
                     Newer
                   </p>
-                  <p className="type-heading text-[#A06B43] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
+                  <p className="type-heading text-[#1C2433] transition-colors duration-200 line-clamp-2 group-hover:text-[#37C6F4]">
                     {nextPost.title}
                   </p>
                 </Link>

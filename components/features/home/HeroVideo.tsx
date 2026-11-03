@@ -107,7 +107,7 @@ export default function HeroVideo({ playbackId }: HeroVideoProps) {
         <button
           onClick={togglePlay}
           aria-label={playing ? 'Pause video' : 'Play video'}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-[#F3F1EB] hover:bg-black/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-black/40 text-[#A06B43] hover:bg-black/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70"
         >
           {playing ? (
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current" aria-hidden="true">

@@ -8,6 +8,7 @@ import YoutubeEmbed from '@/components/features/projects/YoutubeEmbed'
 import ProjectGalleryHero from '@/components/features/projects/ProjectGalleryHero'
 import Container from '@/components/layout/Container'
 import type { ProjectPerformanceDate } from '@/types/sanity'
+import { SITE_EMAIL } from '@/constants/site'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -60,7 +61,7 @@ export default async function ProjectPage({ params }: Props) {
   const newerProject = idx > 0                       ? allProjects[idx - 1] : null
 
   return (
-    <div className="bg-[#8B5F3C] min-h-screen">
+    <div className="detail-page bg-[#8B5F3C] min-h-screen">
       {/* Hero — clickable cover that opens gallery lightbox */}
       <ProjectGalleryHero
         title={project.title}
@@ -71,25 +72,34 @@ export default async function ProjectPage({ params }: Props) {
       />
 
       {/* Body */}
-      <Container className="py-16 md:py-24">
-        <header className="mb-14 md:mb-20">
+      <Container className="project-detail-content py-20 md:py-28">
+        <header className="project-detail-header mb-14 grid gap-5 border-b border-[#1C2433]/20 pb-10 md:mb-20 md:grid-cols-[10rem_minmax(0,1fr)] md:gap-10 md:pb-14">
           {project.year && (
-            <p className="type-meta mb-4 text-[#1C2433]/70">
+            <p className="type-meta pt-2 text-[#1C2433]/70">
               {project.year}
             </p>
           )}
-          <h1 className="type-display text-[#1C2433] font-extrabold">
+          <h1 className="type-display max-w-5xl text-[#1C2433]">
             {project.title}
           </h1>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:col-start-2">
+            <p className="type-meta text-[#1C2433]/58">Selected work / {project.year}</p>
+            <a
+              href={`mailto:${SITE_EMAIL}?subject=${encodeURIComponent(`Enquiry about ${project.title}`)}`}
+              className="type-label text-[#1C2433] transition-colors duration-200 hover:text-[#37C6F4]"
+            >
+              Enquire about this work <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,1.55fr)_minmax(15rem,0.7fr)] lg:gap-20">
           {/* Main column */}
           <div className="lg:col-span-2 space-y-12">
             {/* Featured note — a highlighted recognition (e.g. an Aerowaves
                 selection), set apart from the main description below it */}
             {project.featuredNote && (
-              <div className="border-l-2 border-[#37C6F4] pl-5 text-[#1C2433]/80 italic">
+              <div className="border-l-2 border-[#37C6F4] pl-5 type-body italic text-[#1C2433]/80">
                 <PortableText
                   value={project.featuredNote}
                   className="[&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
@@ -100,13 +110,13 @@ export default async function ProjectPage({ params }: Props) {
             {/* Description */}
             <PortableText
               value={project.description}
-              className="text-[#1C2433]/80 text-lg [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+              className="type-body text-[#1C2433]/80 [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
             />
 
             {/* Video */}
             {project.videoUrl && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
+                <h2 className="type-label mb-6 text-[#1C2433]">
                   Video
                 </h2>
                 <YoutubeEmbed url={project.videoUrl} title={project.title} />
@@ -116,20 +126,20 @@ export default async function ProjectPage({ params }: Props) {
             {/* Performance dates */}
             {project.performanceDates && project.performanceDates.length > 0 && (
               <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
+                <h2 className="type-label mb-6 text-[#1C2433]">
                   Performance Dates
                 </h2>
                 <ul className="divide-y divide-[#1C2433]/20">
                   {project.performanceDates.map((pd) => (
                     <li key={pd._key} className="py-4">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                        <span className="text-[#1C2433] font-medium">{pd.label}</span>
-                        <time className="text-sm text-[#1C2433]/40 tabular-nums whitespace-nowrap">
+                        <span className="type-feature text-[#1C2433]">{pd.label}</span>
+                        <time className="type-small whitespace-nowrap text-[#1C2433]/55 tabular-nums">
                           {formatPerformanceDate(pd)}
                         </time>
                       </div>
                       {(pd.venue || pd.city || pd.country) && (
-                        <p className="mt-1 text-sm text-[#1C2433]/60">
+                        <p className="type-small mt-1 text-[#1C2433]/60">
                           {[pd.venue, pd.city, pd.country].filter(Boolean).join(' · ')}
                         </p>
                       )}
@@ -144,17 +154,17 @@ export default async function ProjectPage({ params }: Props) {
           <aside className="lg:col-span-1 space-y-10">
             {/* Credits */}
             {project.credits && project.credits.length > 0 && (
-              <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
+              <section className="border-t border-[#1C2433]/20 pt-6">
+                <h2 className="type-label mb-6 text-[#1C2433]">
                   Credits
                 </h2>
                 <dl className="space-y-3">
                   {project.credits.map((credit) => (
                     <div key={credit._key} className="flex flex-col gap-0.5">
-                      <dt className="text-xs uppercase tracking-widest text-[#1C2433]/40 font-medium">
+                      <dt className="type-meta text-[#1C2433]/50">
                         {credit.role}
                       </dt>
-                      <dd className="text-sm text-[#1C2433]">{credit.name}</dd>
+                      <dd className="type-small text-[#1C2433]">{credit.name}</dd>
                     </div>
                   ))}
                 </dl>
@@ -163,13 +173,13 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* Commissioned / produced by */}
             {project.commissionedBy && (
-              <section>
-                <h2 className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-[#1C2433] mb-6">
+              <section className="border-t border-[#1C2433]/20 pt-6">
+                <h2 className="type-label mb-6 text-[#1C2433]">
                   Commissioned / Produced By
                 </h2>
                 <PortableText
                   value={project.commissionedBy}
-                  className="text-[#1C2433]/70 text-sm [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+                  className="type-small text-[#1C2433]/70 [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
                 />
               </section>
             )}
@@ -179,16 +189,16 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* Prev / Next — same pattern as the Ìrònú detail page, in place of a
           redundant second "back" link (the hero above already has one). */}
-      <div className="border-t border-[#1C2433]/20 mt-4">
+      <div className="mt-4 bg-[#8B5F3C] text-[#1C2433]">
         <Container className="py-14">
-          <div className="grid grid-cols-2 gap-8">
+          <div className="project-detail-nav grid grid-cols-2 gap-8">
             <div>
               {olderProject && (
-                <Link href={`/projects/${olderProject.slug.current}`} className="group block">
-                  <p className="type-meta mb-2 text-[#37C6F4] [@media(hover:hover)]:opacity-50 transition-opacity duration-200 group-hover:opacity-100">
+                <Link href={`/projects/${olderProject.slug.current}`} className="group block pt-4 transition-colors duration-200">
+                  <p className="type-meta mb-2 text-[#1C2433]/65 transition-colors duration-200 group-hover:text-[#37C6F4]">
                     ← Older
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base uppercase text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="type-heading text-[#1C2433] transition-colors duration-200 group-hover:text-[#F3F1EB] line-clamp-2">
                     {olderProject.title}
                   </p>
                 </Link>
@@ -196,11 +206,11 @@ export default async function ProjectPage({ params }: Props) {
             </div>
             <div className="text-right">
               {newerProject && (
-                <Link href={`/projects/${newerProject.slug.current}`} className="group block">
-                  <p className="type-meta mb-2 text-[#37C6F4] [@media(hover:hover)]:opacity-50 transition-opacity duration-200 group-hover:opacity-100">
+                <Link href={`/projects/${newerProject.slug.current}`} className="group block pt-4 transition-colors duration-200">
+                  <p className="type-meta mb-2 text-[#1C2433]/65 transition-colors duration-200 group-hover:text-[#37C6F4]">
                     Newer →
                   </p>
-                  <p className="font-[family-name:var(--font-heading)] text-base uppercase text-[#37C6F4] [@media(hover:hover)]:opacity-70 group-hover:opacity-100 transition-opacity duration-200 line-clamp-2 leading-snug">
+                  <p className="type-heading text-[#1C2433] transition-colors duration-200 group-hover:text-[#F3F1EB] line-clamp-2">
                     {newerProject.title}
                   </p>
                 </Link>

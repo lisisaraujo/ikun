@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import { getHomePage, getAboutPage, getAllProjects, getAllIronuPosts, getAllEvents, getGlobalSettings } from '@/lib/sanity/queries'
+import { getHomePage, getAboutPage, getAllProjects, getAllIronuPosts, getAllEvents, getGlobalSettings, getOtherInfos } from '@/lib/sanity/queries'
 import DigestiveSpiral from '@/components/features/home/DigestiveSpiral'
 import HeroStack from '@/components/features/home/HeroStack'
 import AboutContent from '@/components/features/about/AboutContent'
 import CalendarPreview from '@/components/features/calendar/CalendarPreview'
 import ContactForm from '@/components/features/contact/ContactForm'
+import PressLinks from '@/components/features/contact/PressLinks'
 import ProjectsCarousel from '@/components/features/projects/ProjectsCarousel'
 import ProjectsAmbient from '@/components/features/projects/ProjectsAmbient'
 import IronuPreview from '@/components/features/ironu/IronuPreview'
@@ -16,13 +17,14 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [homeData, about, projects, ironuPosts, events, settings] = await Promise.all([
+  const [homeData, about, projects, ironuPosts, events, settings, otherInfos] = await Promise.all([
     getHomePage(),
     getAboutPage(),
     getAllProjects(),
     getAllIronuPosts(),
     getAllEvents(),
     getGlobalSettings(),
+    getOtherInfos(),
   ])
 
   const now = new Date(); now.setHours(0, 0, 0, 0)
@@ -41,7 +43,7 @@ export default async function HomePage() {
     <div className="block">
 
       <div className="relative isolate bg-[#1C2433]">
-        <div className="pointer-events-none absolute left-1/2 top-[92svh] z-0 h-[1500px] w-[1500px] -translate-x-1/2 opacity-[0.13] md:left-[56%] md:top-[86svh] md:h-[1700px] md:w-[1700px]" aria-hidden="true">
+        <div className="pointer-events-none absolute left-1/2 top-[92svh] z-0 h-[1500px] w-[1500px] -translate-x-1/2 opacity-[0.06] md:left-[56%] md:top-[86svh] md:h-[1700px] md:w-[1700px]" aria-hidden="true">
           <div className="h-full w-full animate-spin-slower">
             <DigestiveSpiral className="h-full w-full" variant="simple" />
             {/* <DigestiveSpiral className="h-full w-full" variant="segmented" /> */}
@@ -50,10 +52,9 @@ export default async function HomePage() {
         </div>
 
         {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
-        <HeroStack
-          playbackId={homeData?.heroMuxPlaybackId ?? null}
-          introText={homeData?.introText ?? []}
-        />
+        <div className="relative z-30 h-[162svh]">
+          <HeroStack playbackId={homeData?.heroMuxPlaybackId ?? null} />
+        </div>
 
         {/* ── ABOUT ────────────────────────────────────────────── */}
         {/* Wrapped in a plain, non-sticky div carrying the id: a `position:
@@ -62,15 +63,15 @@ export default async function HomePage() {
             quirk), which breaks SideNav's scrollTo-based jump once you're
             deeper in the page. This wrapper's offsetTop stays the true,
             stable document position, since it isn't sticky itself. */}
-        <div id="about">
-          <section className="home-section home-section-about home-flow-section z-section-content relative flex flex-col justify-start">
+        <div id="about" className="relative z-20 -mt-[100svh]">
+          <section className="home-section home-section-about home-flow-section relative flex flex-col justify-start">
             {about ? (
               <AboutContent
                 about={about}
                 companyText={homeData?.introText ?? []}
               />
             ) : (
-              <p className="type-label px-4 text-[#F3F1EB]/40 sm:px-6 md:px-8 lg:px-10 xl:px-12">About content coming soon.</p>
+              <p className="type-label px-4 text-[#A06B43]/70 sm:px-6 md:px-8 lg:px-10 xl:px-12">About content coming soon.</p>
             )}
           </section>
         </div>
@@ -97,7 +98,7 @@ export default async function HomePage() {
 
       <div className="relative isolate overflow-visible bg-[#1C2433]">
         <div
-          className="pointer-events-none absolute right-[-34rem] top-[6rem] z-0 h-[1400px] w-[1400px] opacity-[0.11] md:right-[-42rem] md:top-[2rem] md:h-[1650px] md:w-[1650px]"
+          className="pointer-events-none absolute right-[-34rem] top-[6rem] z-0 h-[1400px] w-[1400px] opacity-[0.05] md:right-[-42rem] md:top-[2rem] md:h-[1650px] md:w-[1650px]"
           aria-hidden="true"
         >
           <div className="h-full w-full">
@@ -119,11 +120,11 @@ export default async function HomePage() {
                   Get in touch
                 </h2>
                 <p className="type-body mt-6 max-w-[42rem] text-[#F3F1EB]/84">
-                  For projects, workshops, collaborations, or invitations, reach out directly or leave a message.
+                  For bookings, touring, workshops, press, collaborations, or invitations, reach out directly or leave a message.
                 </p>
                 <a
                   href={`mailto:${email}`}
-                  className="type-feature mt-9 block max-w-[44rem] break-words font-medium text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4]"
+                  className="contact-email type-feature mt-9 block max-w-[44rem] break-words font-medium text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4]"
                 >
                   {email}
                 </a>
@@ -147,6 +148,7 @@ export default async function HomePage() {
                     </a>
                   )}
                 </div>
+                <PressLinks items={otherInfos?.pressItems} />
               </div>
 
               <div className="editorial-frame bg-[#0B0B0B]/10 p-6 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] md:p-8 lg:p-10">

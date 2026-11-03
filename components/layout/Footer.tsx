@@ -22,7 +22,7 @@ export default async function Footer() {
     // own sticky sections (see app/page.tsx) so this reads as one more beat
     // of that same composition rather than a bolted-on strip: same backdrop
     // recipe (SectionBackdrop, same navy/blue as `contact`), same scale.
-    <footer id="footer" className="relative isolate flex min-h-screen flex-col overflow-hidden text-[#C9C9C9]">
+    <footer id="footer" className="site-footer relative isolate flex min-h-screen flex-col overflow-hidden text-[#F3F1EB]">
       <SectionBackdrop color="#1C2433" />
 
    
@@ -33,7 +33,7 @@ export default async function Footer() {
       <div className="flex flex-1 flex-col items-center justify-center gap-10 py-16">
         {footerLogos.length > 0 && (
           <>
-            <p className="type-label text-[#F3F1EB]/46">
+            <p className="type-label text-[#A06B43]">
               Supported by
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-10 px-6">
@@ -51,7 +51,7 @@ export default async function Footer() {
                     className="object-contain max-h-12 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-90 transition-all duration-400"
                   />
                 ) : (
-                  <span className="type-small text-[#F3F1EB]/48 transition-colors hover:text-[#F3F1EB]/75">
+                    <span className="type-small text-[#F3F1EB]/70 transition-colors hover:text-[#A06B43]">
                     {partner.name}
                   </span>
                 )
@@ -78,10 +78,10 @@ export default async function Footer() {
 
       {/* ── Bottom: copyright + credit + privacy ────────── */}
       <Container className="border-t border-[#F3F1EB]/10 py-7">
-        <div className="type-small flex flex-col items-center justify-between gap-3 text-center text-[#F3F1EB]/52 md:flex-row md:text-left">
+        <div className="type-small flex flex-col items-center justify-between gap-3 text-center text-[#F3F1EB]/62 md:flex-row md:text-left">
           <p>© {year} {SITE_NAME}. All rights reserved.</p>
           <p>Brand Identity by Qusay Awad · Designed &amp; Developed by Lísis Araújo</p>
-          <Link href="/privacy" className="font-medium text-[#F3F1EB]/58 transition-colors duration-200 hover:text-[#37C6F4]">
+          <Link href="/privacy" className="font-medium text-[#F3F1EB]/72 transition-colors duration-200 hover:text-[#A06B43]">
             Privacy Policy
           </Link>
         </div>

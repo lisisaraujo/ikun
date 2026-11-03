@@ -5,6 +5,7 @@ import SideNav from '@/components/layout/SideNav'
 import BackgroundPattern from '@/components/layout/BackgroundPattern'
 import CursorGlow from '@/components/layout/CursorGlow'
 import Footer from '@/components/layout/Footer'
+import FooterVisibility from '@/components/layout/FooterVisibility'
 import { SITE_NAME, SITE_TAGLINE } from '@/constants/site'
 
 export const metadata: Metadata = {
@@ -29,7 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
         <SideNav />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <FooterVisibility>
+          <Footer />
+        </FooterVisibility>
       </body>
     </html>
   )

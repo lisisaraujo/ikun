@@ -34,6 +34,7 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
             <>
               <Link
                 href={`/ironu/${latestPost.slug.current}`}
+                data-cursor-tone="warm"
                 className="spotlight-hover editorial-frame group block w-full bg-[#0B0B0B]/10 shadow-[0_24px_80px_-72px_rgba(160,107,67,0.7)] transition-transform duration-500 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37C6F4]/70"
                 aria-label={`Read latest Ìrònú post: ${latestPost.title}`}
               >
@@ -45,7 +46,7 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
                     <h3 className="type-title text-[#F3F1EB] transition-colors duration-500 group-hover:text-[#A06B43]">
                       {latestPost.title}
                     </h3>
-                    <p className="type-label mt-5 inline-flex items-center gap-3 text-[#A06B43]/76 transition-colors duration-300 group-hover:text-[#37C6F4]">
+                    <p className="type-label mt-5 inline-flex items-center gap-3 text-[#A06B43]/86 transition-colors duration-300 group-hover:text-[#F3F1EB]">
                       Read
                     </p>
                   </div>
@@ -73,7 +74,8 @@ export default function IronuPreview({ posts }: IronuPreviewProps) {
               <div className="mt-6 flex justify-end">
                 <Link
                   href="/ironu"
-                  className="type-label group inline-flex items-center gap-2 text-[#A06B43] transition-colors duration-300 hover:text-[#37C6F4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60"
+                  data-cursor-tone="warm"
+                  className="type-label group inline-flex items-center gap-2 text-[#A06B43] transition-colors duration-300 hover:text-[#F3F1EB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A06B43]/60"
                 >
                   See all posts
                   <svg viewBox="0 0 20 20" className="h-4 w-4 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">

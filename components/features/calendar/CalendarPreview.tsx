@@ -64,21 +64,21 @@ export default function CalendarPreview({ events }: CalendarPreviewProps) {
               const loc = [event.city, event.country].filter(Boolean).join(', ')
               return (
                 <Reveal key={event._id} delay={i * 80}>
-                  <article className="spotlight-hover event-card-copy event-card-frame group relative grid gap-4 border-b border-[#A06B43]/16 px-1 py-5 md:grid-cols-[10rem_minmax(0,1fr)_auto] md:items-center md:gap-10 md:px-2 md:py-6">
+                  <article className="spotlight-hover event-card-copy event-card-frame relative grid gap-4 border-b border-[#A06B43]/16 px-1 py-5 md:grid-cols-[10rem_minmax(0,1fr)_auto] md:items-center md:gap-10 md:px-2 md:py-6">
                     <div className="relative z-10 flex min-w-0 items-baseline gap-3 md:block">
-                      <time dateTime={event.date} className="type-display block whitespace-nowrap text-[clamp(1.8rem,3vw,3rem)] text-[#F3F1EB] transition-colors duration-500 group-hover:text-[#A06B43]">
+                      <time dateTime={event.date} className="type-display block whitespace-nowrap text-[clamp(1.8rem,3vw,3rem)] text-[#F3F1EB]">
                         {day}
                       </time>
-                      <span className="type-meta text-[#C9C9C9]/70 transition-colors duration-500 group-hover:text-[#A06B43]/76">
+                      <span className="type-meta text-[#C9C9C9]/76">
                         {monthYear}
                       </span>
                     </div>
 
                     <div className="relative z-10 min-w-0">
-                      <h3 className="type-heading max-w-6xl text-[#F3F1EB] transition-colors duration-500 group-hover:text-[#A06B43]">
+                      <h3 className="type-heading max-w-6xl text-[#F3F1EB]">
                         {event.title}
                       </h3>
-                      <p className="type-small mt-1 max-w-[32rem] text-[#C9C9C9]/68 transition-colors duration-500 group-hover:text-[#A06B43]/76">
+                      <p className="type-small mt-1 max-w-[32rem] text-[#C9C9C9]/76">
                         {[event.venue, loc].filter(Boolean).join(' · ')}
                       </p>
                     </div>

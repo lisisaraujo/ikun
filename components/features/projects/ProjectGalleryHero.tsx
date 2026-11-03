@@ -89,13 +89,11 @@ export default function ProjectGalleryHero({
           />
         )}
 
-        {/* Back link — top left, above gallery button. Pushed down below the
-            fixed logo's ~112px band on mobile, where the two would otherwise
-            visually collide in that top-left corner. */}
-        <div className="absolute top-28 left-6 md:top-6 md:left-10 lg:left-16 z-30">
+        {/* Back link shares the top navigation row with the logo and menu. */}
+        <div className="absolute left-6 top-5 z-30 md:left-10 md:top-4 lg:left-16">
           <Link
             href={backHref}
-            className="inline-flex items-center gap-2 text-[#37C6F4] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-opacity duration-200"
+            className="inline-flex items-center gap-2 text-[#A06B43] [@media(hover:hover)]:opacity-60 hover:opacity-100 text-xs uppercase tracking-widest transition-colors duration-200 hover:text-[#F3F1EB]"
           >
             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2" aria-hidden="true">
               <path d="M19 12H5M12 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
@@ -106,7 +104,7 @@ export default function ProjectGalleryHero({
 
         {/* Gallery indicator — bottom right */}
         {hasGallery && (
-          <div className="absolute bottom-20 right-6 md:right-8 z-20 pointer-events-none flex items-center gap-2 bg-black/40 backdrop-blur-sm rounded px-3 py-1.5 text-[#F3F1EB]/80 text-xs uppercase tracking-widest">
+          <div className="absolute bottom-20 right-6 md:right-8 z-20 pointer-events-none flex items-center gap-2 bg-black/40 backdrop-blur-sm rounded px-3 py-1.5 text-[#A06B43] text-xs uppercase tracking-widest">
             <svg viewBox="0 0 20 20" className="w-3.5 h-3.5 fill-current flex-shrink-0" aria-hidden="true">
               <rect x="1" y="1" width="8" height="8" rx="0.5" />
               <rect x="11" y="1" width="8" height="8" rx="0.5" />
@@ -135,7 +133,7 @@ export default function ProjectGalleryHero({
             <button
               onClick={() => setOpen(false)}
               aria-label="Close gallery"
-              className="text-[#F3F1EB]/60 hover:text-[#37C6F4] transition-colors duration-200"
+              className="text-[#A06B43] hover:text-[#F3F1EB] transition-colors duration-200"
             >
               <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-current fill-none stroke-2" aria-hidden="true">
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
@@ -162,7 +160,7 @@ export default function ProjectGalleryHero({
               <button
                 onClick={prev}
                 aria-label="Previous photo"
-                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-opacity duration-200"
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-[#A06B43] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-colors duration-200 hover:text-[#F3F1EB]"
               >
                 <svg viewBox="0 0 24 24" className="w-8 h-8 stroke-current fill-none stroke-2" aria-hidden="true">
                   <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -175,7 +173,7 @@ export default function ProjectGalleryHero({
               <button
                 onClick={next}
                 aria-label="Next photo"
-                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-[#37C6F4] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-opacity duration-200"
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-[#A06B43] [@media(hover:hover)]:opacity-70 hover:opacity-100 transition-colors duration-200 hover:text-[#F3F1EB]"
               >
                 <svg viewBox="0 0 24 24" className="w-8 h-8 stroke-current fill-none stroke-2" aria-hidden="true">
                   <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />

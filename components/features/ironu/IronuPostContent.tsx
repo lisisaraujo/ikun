@@ -38,19 +38,19 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
         </div>
       )}
 
-      <div className={`mx-auto max-w-2xl px-6 md:px-0 ${imageSrc ? '' : 'pt-28'}`}>
+      <div className={`mx-auto max-w-3xl px-6 md:px-0 ${imageSrc ? '' : 'pt-28'}`}>
         {/* Section label */}
-        <p className="type-meta mb-3 font-medium text-[#1C2433]">
+        <p className="type-label mb-3 text-[#1C2433]">
           Ìrònú
         </p>
 
         {/* Date */}
-        <p className="type-meta mb-6 text-[#1C2433]/40">
+        <p className="type-meta mb-6 text-[#1C2433]/55">
           {formatDate(post.date)}
         </p>
 
         {/* Title */}
-        <h1 className="type-title mb-12 font-extrabold text-[#1C2433]">
+        <h1 className="type-display mb-12 max-w-5xl text-[#1C2433]">
           {post.title}
         </h1>
 
@@ -58,7 +58,7 @@ export default function IronuPostContent({ post }: IronuPostContentProps) {
         {post.body && (
           <PortableText
             value={post.body}
-            className="text-[#1C2433] [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
+            className="type-body text-[#1C2433] [&_a]:text-[#1C2433] [&_strong]:text-[#1C2433] [&_blockquote]:border-[#1C2433]"
           />
         )}
 

@@ -10,8 +10,8 @@ import SpiralRings from './SpiralRings'
 // section background is otherwise plain, with motion coming from this
 // lightweight ambient layer.
 const FLOATING_SPIRALS = [
-  { top: '6%', left: '7%', size: 60, opacity: 0.16, spin: 75 },
-  { top: '80%', right: '6%', size: 66, opacity: 0.18, spin: 95 },
+  { top: '6%', left: '7%', size: 60, opacity: 0.08, spin: 75 },
+  { top: '80%', right: '6%', size: 66, opacity: 0.09, spin: 95 },
 ]
 
 export default function ProjectsAmbient() {

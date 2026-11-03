@@ -246,6 +246,20 @@
     text-transform: uppercase;
   }
 
+  /* Contact details should remain literal and easy to scan. The heading font
+     gives the @ glyph a decorative shape that makes the address ambiguous. */
+  .contact-email {
+    font-family: var(--font-body);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .project-card-title {
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
   .side-nav-label {
     font-family: var(--font-heading);
     font-size: clamp(0.78rem, 0.9vw, 1rem);
@@ -450,7 +464,7 @@
     inset: -18% -10%;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.78;
+    opacity: 0.35;
     filter: blur(1.75rem);
     content: '';
   }
@@ -477,6 +491,38 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Detail pages keep the legal/credit row, but not the homepage's open space
+   reserved for future partner content. */
+.footer-detail-shell .site-footer {
+  min-height: auto;
+  background: var(--color-ikun-brown);
+  color: var(--color-ikun-navy);
+}
+
+.footer-detail-shell .site-footer > .absolute {
+  background-color: var(--color-ikun-brown) !important;
+}
+
+.footer-detail-shell .site-footer > .flex-1 {
+  display: none;
+}
+
+.footer-detail-shell .site-footer .border-t {
+  border-color: rgba(28, 36, 51, 0.2);
+}
+
+.footer-detail-shell .site-footer .type-small {
+  color: rgba(28, 36, 51, 0.7);
+}
+
+.footer-detail-shell .site-footer a {
+  color: rgba(28, 36, 51, 0.82);
+}
+
+.footer-detail-shell .site-footer a:hover {
+  color: var(--color-ikun-cyan);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -583,7 +629,7 @@
   bottom: -1.5rem;
   z-index: -1;
   width: min(78%, 72rem);
-  background: linear-gradient(135deg, rgba(160, 107, 67, 0.13) 0%, rgba(28, 36, 51, 0.18) 72%, transparent 100%);
+  background: linear-gradient(135deg, rgba(160, 107, 67, 0.08) 0%, rgba(28, 36, 51, 0.12) 72%, transparent 100%);
   pointer-events: none;
   content: '';
 }
@@ -591,14 +637,14 @@
 .about-editorial-copy-company::after {
   left: 0;
   width: 100%;
-  background: linear-gradient(90deg, rgba(160, 107, 67, 0.17) 0%, rgba(28, 36, 51, 0.2) 72%, transparent 100%);
+  background: linear-gradient(90deg, rgba(160, 107, 67, 0.1) 0%, rgba(28, 36, 51, 0.14) 72%, transparent 100%);
   clip-path: polygon(0 0, 100% 0, 98% 100%, 0 100%);
 }
 
 .about-editorial-copy-artist::after {
   right: 0;
   width: 100%;
-  background: linear-gradient(270deg, rgba(160, 107, 67, 0.13) 0%, rgba(28, 36, 51, 0.18) 72%, transparent 100%);
+  background: linear-gradient(270deg, rgba(160, 107, 67, 0.08) 0%, rgba(28, 36, 51, 0.12) 72%, transparent 100%);
   clip-path: polygon(2% 0, 100% 0, 100% 100%, 0 100%);
 }
 
@@ -623,8 +669,31 @@
 
 @media (max-width: 767px) {
   :root {
+    --type-display-size: clamp(2rem, 10vw, 3.25rem);
+    --type-title-size: clamp(1.65rem, 7.5vw, 2.25rem);
+    --type-heading-size: clamp(1.15rem, 5.2vw, 1.45rem);
+    --type-feature-size: clamp(1rem, 4.5vw, 1.2rem);
+    --type-body-size: 1rem;
     --home-section-height: auto;
     --home-section-gap: 3rem;
+  }
+
+  /* Keep the identity's oversized mark, but leave a little more usable
+     viewport for the menu and the page's first action on small screens. */
+  .z-navbar > a > div {
+    height: min(26vw, 6.25rem) !important;
+  }
+
+  .z-navbar {
+    top: -0.5rem;
+  }
+
+  /* The home composition is editorial on desktop; on phones it should read
+     as a natural scroll instead of competing sticky layers. */
+  .home-section.sticky {
+    /* Keep a local containing block for each section's -z-10 backdrop while
+       removing sticky behavior on small screens. */
+    position: relative;
   }
 
   .home-section {
@@ -643,6 +712,64 @@
 
   .home-section-inner {
     min-height: auto;
+  }
+
+  .content-measure,
+  .prose-ikun,
+  .prose-ikun-editorial {
+    max-width: 100%;
+  }
+
+  .about-editorial-text > p,
+  .about-editorial-text > p:nth-of-type(3n),
+  .about-editorial-text > p:nth-of-type(3n + 2) {
+    max-width: none;
+  }
+
+  .about-editorial-copy::after {
+    inset: -0.75rem -0.5rem;
+    width: auto;
+  }
+
+  .about-image-frame {
+    max-width: 12rem;
+    margin-inline: auto;
+  }
+
+  .prose-ikun-editorial blockquote {
+    margin-inline: 0;
+    font-size: 1.35rem;
+  }
+
+  .calendar-event-row {
+    grid-template-columns: minmax(4rem, auto) minmax(0, 1fr);
+    gap: 0.75rem 1rem;
+  }
+
+  .calendar-event-ticket {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: -0.25rem;
+  }
+
+  .project-detail-content {
+    padding-block: 3.5rem;
+  }
+
+  .project-detail-header {
+    margin-bottom: 3rem;
+  }
+
+  .project-detail-header h1 {
+    overflow-wrap: anywhere;
+  }
+
+  .project-detail-nav {
+    gap: 1.25rem;
+  }
+
+  .project-detail-nav a {
+    min-height: 2.75rem;
   }
 }
 

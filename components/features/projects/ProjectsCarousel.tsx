@@ -46,7 +46,7 @@ function FittedProjectTitle({ title }: { title: string }) {
   return (
     <h3
       ref={titleRef}
-      className="type-feature min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap font-black text-[#F3F1EB] transition-colors duration-300 group-hover:text-[#A06B43]"
+      className="project-card-title type-feature min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[#F3F1EB] transition-colors duration-300 group-hover:text-[#A06B43]"
     >
       {title}
     </h3>
@@ -102,6 +102,9 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       onWheel={handleWheel}
     >
       <div className="relative">
+        <div className="mb-7 flex items-end justify-between gap-6">
+          <p className="type-meta text-[#A06B43]/78">Selected work</p>
+        </div>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-8 lg:gap-10">
           {visibleProjects.map((project) => {
             const coverUrl = project.coverImage
