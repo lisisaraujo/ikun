@@ -115,10 +115,10 @@ export default async function HomePage() {
           <section className="home-section home-flow-section z-contact relative overflow-visible px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
             <div className="home-section-inner relative z-10 mx-auto grid w-full max-w-[140rem] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(32rem,0.95fr)] lg:gap-16 xl:gap-24">
               <div className="max-w-[54rem] text-left">
-                <h2 className="type-title text-[#A06B43]">
+                <h2 className="type-title text-[#F3F1EB]">
                   Get in touch
                 </h2>
-                <p className="type-body mt-6 max-w-[42rem] text-[#A06B43]/84">
+                <p className="type-body mt-6 max-w-[42rem] text-[#F3F1EB]/84">
                   For projects, workshops, collaborations, or invitations, reach out directly or leave a message.
                 </p>
                 <a

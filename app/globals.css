@@ -351,6 +351,11 @@
     background: transparent;
   }
 
+  .event-card-copy.spotlight-hover::before {
+    inset: -42% -5%;
+    background: radial-gradient(ellipse 68% 108% at 30% 50%, rgba(160, 107, 67, 0.28) 0%, rgba(160, 107, 67, 0.12) 48%, transparent 82%);
+  }
+
   .project-card-copy {
     position: relative;
     isolation: isolate;

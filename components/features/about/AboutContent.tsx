@@ -75,7 +75,7 @@ export default function AboutContent({ about, companyText = [] }: AboutContentPr
 
   function renderCompanyText() {
     return (
-      <div className="about-editorial-copy about-editorial-text type-body !max-w-none text-left text-[#A06B43]/90 md:order-1 md:self-start">
+      <div className="about-editorial-copy about-editorial-text type-body !max-w-none text-left text-[#F3F1EB]/86 md:order-1 md:self-start">
         {displayed.content.map((block, blockIndex) => {
           if (block._type !== 'block') return null
 
@@ -165,7 +165,7 @@ export default function AboutContent({ about, companyText = [] }: AboutContentPr
           >
             {displayed.content.length > 0 ? (
               displayed.id === 'artist' && displayed.image ? (
-                <div className="about-image-composition about-image-composition-artist type-body text-right text-[#A06B43]/90 md:grid md:grid-cols-[minmax(10rem,14rem)_minmax(0,1fr)] md:items-start md:gap-4 lg:gap-6 [&_p]:mb-6 [&_p:last-child]:mb-0">
+                <div className="about-image-composition about-image-composition-artist type-body text-right text-[#F3F1EB]/86 md:grid md:grid-cols-[minmax(10rem,14rem)_minmax(0,1fr)] md:items-start md:gap-4 lg:gap-6 [&_p]:mb-6 [&_p:last-child]:mb-0">
                   <div className="about-image-frame about-image-frame-artist relative mb-6 aspect-[4/5] w-full max-w-48 overflow-hidden bg-[#0B0B0B] shadow-[0_28px_72px_-40px_rgba(11,11,11,0.9)] ring-1 ring-[#8B5F3C]/20 md:mb-0 md:w-full md:max-w-none md:-translate-y-2 md:translate-x-12 lg:translate-x-16">
                     <Image
                       src={urlFor(displayed.image).width(640).height(800).fit('crop').auto('format').url()}
@@ -205,7 +205,7 @@ export default function AboutContent({ about, companyText = [] }: AboutContentPr
                 ) : (
                   <PortableText
                     value={displayed.content}
-                    className={`type-body !max-w-none ${expandedAlignment} text-[#A06B43]/90 [&_p]:mb-6 [&_p:last-child]:mb-0 [&_p]:ml-auto [&_p]:max-w-[96rem]`}
+                    className={`type-body !max-w-none ${expandedAlignment} text-[#F3F1EB]/86 [&_p]:mb-6 [&_p:last-child]:mb-0 [&_p]:ml-auto [&_p]:max-w-[96rem]`}
                   />
                 )
               )

@@ -5,7 +5,7 @@ import { useState } from 'react'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const fieldClass =
-  'type-small w-full border-0 border-b border-[#8B5F3C]/26 bg-transparent py-3 text-[#A06B43] placeholder-[#A06B43]/34 transition-colors duration-300 focus:border-[#37C6F4] focus:outline-none'
+  'type-small w-full border-0 border-b border-[#8B5F3C]/26 bg-transparent py-3 text-[#F3F1EB] placeholder-[#A06B43]/55 transition-colors duration-300 focus:border-[#37C6F4] focus:outline-none'
 
 const labelClass =
   'type-meta mb-1 block text-[#A06B43]/58'
@@ -43,7 +43,7 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <p className="type-small border-b border-[#8B5F3C]/26 py-6 text-[#A06B43]">
+      <p className="type-small border-b border-[#8B5F3C]/26 py-6 text-[#F3F1EB]/86">
         Thank you — your message has been sent.
       </p>
     )

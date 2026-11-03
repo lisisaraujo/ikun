@@ -28,7 +28,7 @@ export default function CalendarPreview({ events }: CalendarPreviewProps) {
     <section className="home-section z-calendar relative sticky top-0 flex flex-col justify-start overflow-hidden px-4 pb-6 pt-6 sm:px-6 md:px-8 md:pt-8 lg:px-10 xl:px-12">
       <div className="absolute inset-0 -z-10 bg-[#1C2433]" aria-hidden="true" />
 
-      <div className="mx-auto w-full max-w-[140rem]" aria-label="Upcoming events">
+      <div className="mx-auto w-full max-w-[78rem]" aria-label="Upcoming events">
         <div className="mb-5 flex items-center gap-4 text-[#8B5F3C] md:mb-7">
           <h2 className="type-label text-[#A06B43]">
             Upcoming
