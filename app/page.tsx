@@ -52,7 +52,7 @@ export default async function HomePage() {
         </div>
 
         {/* ── HERO + INTRO TEXT ────────────────────────────────── */}
-        <div className="relative z-30 h-[162svh]">
+        <div className="pointer-events-none relative z-30 h-[162svh]">
           <HeroStack playbackId={homeData?.heroMuxPlaybackId ?? null} />
         </div>
 

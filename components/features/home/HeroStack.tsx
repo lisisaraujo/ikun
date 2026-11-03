@@ -12,7 +12,15 @@ export default function HeroStack({ playbackId }: HeroStackProps) {
   const heroRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      const hero = heroRef.current
+      if (hero) {
+        hero.style.position = 'relative'
+        hero.style.zIndex = '10'
+      }
+      return
+    }
 
     let frame = 0
     const updateCover = () => {
@@ -26,6 +34,8 @@ export default function HeroStack({ playbackId }: HeroStackProps) {
 
       hero.style.transform = `translate3d(0, ${lift}%, 0) scale(${scale})`
       hero.style.opacity = `${1 - progress * 0.08}`
+      hero.style.zIndex = progress < 0.48 ? '30' : '10'
+      hero.style.pointerEvents = progress < 0.48 ? 'auto' : 'none'
     }
 
     const onScroll = () => {

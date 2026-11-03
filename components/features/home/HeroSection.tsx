@@ -5,7 +5,7 @@ const HeroSection = forwardRef<HTMLElement, { children: ReactNode }>(function He
     <section
       ref={ref}
       id="hero"
-      className="sticky top-0 z-30 h-[min(100svh,52rem)] bg-[#0B0B0B] will-change-[transform]"
+      className="pointer-events-auto sticky top-0 z-30 h-[min(100svh,52rem)] bg-[#0B0B0B] will-change-[transform]"
     >
       {children}
     </section>
